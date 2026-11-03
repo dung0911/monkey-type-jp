@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KanaType — luyện gõ Hiragana & Katakana</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&family=Noto+Sans+JP:wght@400;500&family=Zen+Maru+Gothic:wght@500&family=Klee+One:wght@600&family=Shippori+Mincho:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#323437; --sub-alt:#2c2e31; --main:#e2b714; --text:#d1d0c5; --sub:#646669; --err:#ca4754;
+  --kana-font:'Noto Sans JP'; --kana-size:2.4rem;
+}
+[data-theme=sakura]{--bg:#fbeff1; --sub-alt:#f3dde2; --main:#d14d7f; --text:#4b3a41; --sub:#b8939d; --err:#c0392b}
+[data-theme=paper]{--bg:#eeebe2; --sub-alt:#e1ddd1; --main:#3d3d3d; --text:#1f1f1f; --sub:#a09d94; --err:#c4302b}
+[data-theme=matcha]{--bg:#1f2a24; --sub-alt:#19221d; --main:#a8c96f; --text:#dfe6d6; --sub:#5c7062; --err:#e57262}
+[data-theme=night]{--bg:#111426; --sub-alt:#181c33; --main:#7aa2f7; --text:#c0caf5; --sub:#4c547a; --err:#f7768e}
+
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:'Roboto Mono',ui-monospace,monospace;transition:background .25s,color .25s}
+body{min-height:100vh}
+button,select,textarea{font:inherit;color:inherit}
+.app{max-width:1080px;margin:0 auto;padding:26px 28px 18px;min-height:100vh;display:flex;flex-direction:column}
+
+header{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:12px;user-select:none;cursor:pointer}
+.logo .mark{font-family:var(--kana-font),'Noto Sans JP',sans-serif;color:var(--main);font-size:1.9rem;line-height:1}
+.logo .name{font-size:1.6rem;font-weight:700;letter-spacing:-.03em;line-height:1}
+.logo .name span{color:var(--main)}
+.logo small{display:block;font-size:.66rem;color:var(--sub);font-weight:400;letter-spacing:0;margin-top:4px}
+.tabs{display:flex;gap:4px;background:var(--sub-alt);border-radius:10px;padding:4px}
+.tabs button{background:none;border:0;color:var(--sub);padding:7px 14px;border-radius:7px;cursor:pointer;font-size:.8rem;transition:all .15s}
+.tabs button:hover{color:var(--text)}
+.tabs button.on{background:var(--main);color:var(--bg)}
+.tabs .jp{font-family:var(--kana-font),'Noto Sans JP',sans-serif;margin-right:6px}
+.iconbtn{background:none;border:0;color:var(--sub);cursor:pointer;padding:8px 10px;border-radius:8px;display:flex;align-items:center;gap:8px;font-size:.8rem;transition:color .15s}
+.iconbtn:hover{color:var(--text)}
+.iconbtn svg{width:18px;height:18px}
+
+.bars{margin-top:22px;display:flex;flex-direction:column;align-items:center;gap:8px;transition:opacity .25s}
+.focus .bars,.focus header .iconbtn,.focus header .tabs,.focus footer{opacity:0;pointer-events:none}
+.bar{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:2px 2px;background:var(--sub-alt);border-radius:10px;padding:4px 10px;font-size:.78rem;max-width:100%}
+.opt{background:none;border:0;color:var(--sub);padding:5px 8px;border-radius:6px;cursor:pointer;transition:color .12s;white-space:nowrap}
+.opt:hover{color:var(--text)}
+.opt.on{color:var(--main)}
+.opt.dis{opacity:.35;cursor:not-allowed}
+.opt.dis:hover{color:var(--sub)}
+.opt .jp{font-family:var(--kana-font),'Noto Sans JP',sans-serif}
+.sep{width:4px;height:18px;border-radius:2px;background:var(--bg);margin:0 6px}
+.count{color:var(--sub);padding:5px 6px}
+.sel{background:var(--bg);border:0;border-radius:6px;padding:5px 8px;color:var(--text);font-size:.76rem;max-width:260px;cursor:pointer}
+.tag{display:inline-flex;align-items:center;gap:8px;background:var(--main);color:var(--bg);border-radius:6px;padding:3px 6px 3px 10px;font-size:.75rem}
+.tag button{background:none;border:0;color:inherit;cursor:pointer;padding:0 4px;font-size:.85rem}
+
+.stage{flex:1;display:flex;flex-direction:column;justify-content:center;padding:30px 0 18px;position:relative;min-height:380px}
+.live{height:2.3rem;display:flex;gap:22px;align-items:baseline;color:var(--main);font-size:1.6rem}
+.live .dim{font-size:.95rem;color:var(--sub)}
+.wrap{position:relative;overflow:hidden;cursor:text}
+#words{display:flex;flex-wrap:wrap;column-gap:clamp(14px,1.5vw,24px);row-gap:12px;transition:transform .16s ease;position:relative}
+.text-mode #words{column-gap:clamp(16px,1.8vw,28px)}
+.word{display:flex;flex-direction:column;align-items:flex-start}
+.word .kj{font-family:var(--kana-font),'Noto Sans JP',sans-serif;font-size:.95rem;height:1.45em;line-height:1.45em;color:var(--sub);white-space:nowrap;opacity:.9;padding-left:2px}
+.word .wt{display:flex}
+.tok{display:flex;flex-direction:column;align-items:center;min-width:1.1em}
+.tok .k{font-family:var(--kana-font),'Noto Sans JP',sans-serif;font-size:var(--kana-size);line-height:1.32;color:var(--sub);position:relative;transition:color .08s;white-space:nowrap}
+.text-mode .tok .k{font-size:calc(var(--kana-size)*.8)}
+.tok .r{font-size:.82rem;height:1.3em;line-height:1.3em;color:var(--sub);white-space:nowrap;letter-spacing:.02em}
+.text-mode .tok .r{font-size:.74rem}
+.tok.cur .k{color:var(--text)}
+.tok.cur .k::after{content:'';position:absolute;left:6%;right:6%;bottom:0;height:3px;border-radius:2px;background:var(--main);animation:blink 1.05s step-end infinite}
+.typing .tok.cur .k::after{animation:none}
+.tok.ok .k{color:var(--text)}
+.tok.err .k{color:var(--err)}
+.tok.p .k{color:var(--sub);opacity:.7}
+.tok.p.ok .k{color:var(--text);opacity:.6}
+.tok .r.buf{color:var(--main)}
+.tok .r.hint{color:var(--sub)}
+.tok .r.hint b{color:var(--main);font-weight:400}
+.tok .r.bad{color:var(--err);opacity:.85}
+.tok.shake .k{animation:shake .2s;color:var(--err)}
+@keyframes blink{50%{opacity:0}}
+@keyframes shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+#hid{position:absolute;top:0;left:0;width:1px;height:1px;opacity:0;border:0;padding:0;pointer-events:none}
+.trans{margin-top:22px;background:var(--sub-alt);border-radius:10px;padding:12px 16px;font-size:.8rem;line-height:1.7;color:var(--sub)}
+.trans b{color:var(--text);font-weight:500;margin-right:8px}
+.trans .lv{display:inline-block;font-size:.66rem;color:var(--bg);background:var(--sub);border-radius:4px;padding:0 6px;margin-right:8px;vertical-align:1px}
+.note{color:var(--sub);font-size:.76rem;text-align:center;margin-top:22px;line-height:1.7}
+.warn{display:none;margin:0 auto 18px;max-width:640px;background:var(--sub-alt);border-left:3px solid var(--err);color:var(--text);padding:10px 14px;border-radius:6px;font-size:.8rem;line-height:1.6}
+.warn.show{display:block}
+.empty{color:var(--sub);text-align:center;font-size:.9rem;padding:40px 0;width:100%}
+
+/* results */
+.res{display:none;animation:fade .25s}
+.res.show{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+.res-top{display:grid;grid-template-columns:auto 1fr;gap:30px;align-items:center}
+.big .lbl,.stat .lbl,.sec-lbl{color:var(--sub);font-size:.85rem}
+.big .val{color:var(--main);font-size:3.6rem;line-height:1.05}
+.big + .big{margin-top:12px}
+.chart{width:100%;height:auto;display:block}
+.chart .grid{stroke:var(--sub);stroke-opacity:.25;stroke-width:1}
+.chart .lab{fill:var(--sub);font-size:11px;font-family:'Roboto Mono',monospace}
+.chart .l-main{fill:none;stroke:var(--main);stroke-width:2.5;stroke-linejoin:round}
+.chart .l-raw{fill:none;stroke:var(--sub);stroke-width:2;stroke-linejoin:round}
+.chart .area{fill:var(--main);fill-opacity:.08}
+.chart .e{fill:var(--err)}
+.legend{display:flex;gap:16px;font-size:.72rem;color:var(--sub);justify-content:flex-end;margin-top:2px}
+.legend i{display:inline-block;width:12px;height:3px;border-radius:2px;vertical-align:middle;margin-right:6px}
+.stats{display:flex;flex-wrap:wrap;gap:16px 40px;margin-top:26px}
+.stat .val{color:var(--main);font-size:1.5rem;margin-top:2px}
+.stat .val small{font-size:.85rem;color:var(--sub)}
+.stat .val .bad{color:var(--err)}
+.pb{color:var(--main);font-size:.8rem;margin-top:6px}
+.miss{margin-top:26px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.mchip{background:var(--sub-alt);border-radius:8px;padding:6px 10px;display:flex;align-items:baseline;gap:8px}
+.mchip .k{font-family:var(--kana-font),'Noto Sans JP',sans-serif;font-size:1.25rem;color:var(--text)}
+.mchip .r{color:var(--main);font-size:.8rem}
+.mchip .n{color:var(--err);font-size:.75rem}
+.passage{margin-top:26px;background:var(--sub-alt);border-radius:10px;padding:14px 18px}
+.passage .jpt{font-family:var(--kana-font),'Noto Sans JP',sans-serif;font-size:1.05rem;line-height:1.9;color:var(--text);margin-top:6px}
+.passage .vit{font-size:.8rem;line-height:1.7;color:var(--sub);margin-top:8px}
+.btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:30px;justify-content:center}
+.btn{background:var(--sub-alt);border:0;color:var(--text);padding:10px 18px;border-radius:8px;cursor:pointer;font-size:.85rem;transition:background .15s,color .15s}
+.btn:hover{background:var(--text);color:var(--bg)}
+.btn.pri{color:var(--main)}
+.btn.pri:hover{background:var(--main);color:var(--bg)}
+
+/* modal */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:flex-start;justify-content:center;padding:5vh 16px;z-index:10}
+.modal.show{display:flex}
+.panel{background:var(--bg);border-radius:12px;max-width:820px;width:100%;max-height:90vh;overflow:auto;padding:24px 26px;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+.panel h2{margin:0 0 4px;font-size:1.05rem;color:var(--text)}
+.panel h3{font-size:.8rem;color:var(--sub);font-weight:400;margin:26px 0 10px;text-transform:lowercase;letter-spacing:.04em}
+.panel p{font-size:.78rem;color:var(--sub);line-height:1.7}
+.panel p code{color:var(--main);font-family:inherit}
+.ph{display:flex;justify-content:space-between;align-items:center}
+.grp{background:var(--sub-alt);border-radius:10px;padding:12px 14px;margin-bottom:10px}
+.grp.off{opacity:.55}
+.grp-h{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.grp-h .t{font-size:.85rem;color:var(--text)}
+.grp-h .t .jp{font-family:var(--kana-font),'Noto Sans JP',sans-serif;color:var(--sub);margin-left:6px}
+.grp-h .sp{flex:1}
+.mini{background:none;border:0;color:var(--sub);cursor:pointer;font-size:.72rem;padding:3px 6px;border-radius:5px}
+.mini:hover{color:var(--text)}
+.sw{width:34px;height:18px;border-radius:10px;background:var(--bg);position:relative;cursor:pointer;border:0;flex:none}
+.sw::after{content:'';position:absolute;top:3px;left:3px;width:12px;height:12px;border-radius:50%;background:var(--sub);transition:all .15s}
+.sw.on::after{left:19px;background:var(--main)}
+.rows{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.rchip{background:var(--bg);border:1px solid transparent;color:var(--sub);border-radius:7px;padding:5px 9px;cursor:pointer;font-family:var(--kana-font),'Noto Sans JP',sans-serif;font-size:.95rem;transition:all .12s}
+.rchip:hover{color:var(--text)}
+.rchip.on{color:var(--text);border-color:var(--main)}
+.knote{font-size:.72rem;color:var(--sub);margin-left:4px}
+.setrow{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:9px 0;flex-wrap:wrap}
+.setrow .d{font-size:.82rem}
+.setrow .d small{display:block;color:var(--sub);font-size:.72rem;margin-top:3px;max-width:420px;line-height:1.5}
+.seg{display:flex;background:var(--sub-alt);border-radius:8px;padding:3px;gap:2px;flex-wrap:wrap}
+.seg button{background:none;border:0;color:var(--sub);padding:6px 11px;border-radius:6px;cursor:pointer;font-size:.76rem}
+.seg button:hover{color:var(--text)}
+.seg button.on{background:var(--main);color:var(--bg)}
+.num{background:var(--sub-alt);border:0;color:var(--text);border-radius:6px;padding:7px 10px;width:90px;font:inherit;font-size:.8rem}
+.ta{width:100%;min-height:170px;background:var(--sub-alt);border:0;border-radius:8px;padding:12px 14px;color:var(--text);font-family:var(--kana-font),'Noto Sans JP',sans-serif;font-size:1rem;line-height:1.7;resize:vertical}
+.themes{display:flex;gap:8px;flex-wrap:wrap}
+.th{border:2px solid transparent;border-radius:8px;padding:6px 10px;cursor:pointer;font-size:.75rem;display:flex;align-items:center;gap:6px}
+.th.on{border-color:var(--main)}
+.th i{width:10px;height:10px;border-radius:50%;display:inline-block}
+.fonts button{font-size:1rem}
+.ref{font-size:.76rem;color:var(--sub);line-height:1.9;columns:2;column-gap:30px}
+.ref b{color:var(--text);font-weight:400;font-family:var(--kana-font),'Noto Sans JP',sans-serif}
+.ref code{color:var(--main);font-family:inherit}
+
+footer{color:var(--sub);font-size:.72rem;display:flex;flex-wrap:wrap;justify-content:center;gap:6px 20px;padding-top:12px;transition:opacity .25s}
+kbd{background:var(--sub);color:var(--bg);border-radius:4px;padding:1px 6px;font:inherit;font-size:.68rem}
+
+@media (max-width:680px){
+  .app{padding:18px 14px}
+  .tok .k{font-size:calc(var(--kana-size)*.78)}
+  .text-mode .tok .k{font-size:calc(var(--kana-size)*.66)}
+  .res-top{grid-template-columns:1fr}
+  .big .val{font-size:2.8rem}
+  .ref{columns:1}
+}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <header>
+    <div class="logo" id="logo" title="Bài mới">
+      <div class="mark">かな</div>
+      <div><div class="name">kana<span>type</span></div><small>luyện gõ hiragana · katakana</small></div>
+    </div>
+    <div class="tabs" id="tabs">
+      <button data-app="kana"><span class="jp">あ</span>chữ cái</button>
+      <button data-app="text"><span class="jp">文</span>đoạn văn</button>
+    </div>
+    <button class="iconbtn" id="openSet" title="Cài đặt">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+      <span>cài đặt</span>
+    </button>
+  </header>
+
+  <div class="bars">
+    <div class="bar" id="bar1"></div>
+    <div class="bar" id="bar2"></div>
+    <div id="tagbox"></div>
+  </div>
+
+  <main class="stage" id="stage">
+    <div class="warn" id="warn"></div>
+    <div id="test">
+      <div class="live" id="live"></div>
+      <div class="wrap" id="wrap"><div id="words"></div></div>
+      <input id="hid" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" aria-label="ô gõ">
+      <div class="trans" id="trans" style="display:none"></div>
+      <div class="note" id="note"></div>
+    </div>
+    <div class="res" id="res"></div>
+  </main>
+
+  <footer>
+    <span><kbd>tab</kbd> bài mới</span>
+    <span><kbd>esc</kbd> kết thúc sớm</span>
+    <span><kbd>space</kbd> bỏ qua / xem gợi ý</span>
+    <span><kbd>backspace</kbd> xoá ký tự</span>
+  </footer>
+</div>
+
+<div class="modal" id="modal"><div class="panel" id="panel"></div></div>
+
+<script>
+/* ============ storage ============ */
+const store={
+  get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},
+  set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+};
+
+/* ============ data: bảng chữ ============ */
+// [rowId, label, [[kana, romaji options...], ...]]  — option đầu tiên dùng làm gợi ý
+const SEION=[
+ ['a','あ',[['あ','a'],['い','i'],['う','u'],['え','e'],['お','o']]],
+ ['ka','か',[['か','ka'],['き','ki'],['く','ku'],['け','ke'],['こ','ko']]],
+ ['sa','さ',[['さ','sa'],['し','shi','si'],['す','su'],['せ','se'],['そ','so']]],
+ ['ta','た',[['た','ta'],['ち','chi','ti'],['つ','tsu','tu'],['て','te'],['と','to']]],
+ ['na','な',[['な','na'],['に','ni'],['ぬ','nu'],['ね','ne'],['の','no']]],
+ ['ha','は',[['は','ha'],['ひ','hi'],['ふ','fu','hu'],['へ','he'],['ほ','ho']]],
+ ['ma','ま',[['ま','ma'],['み','mi'],['む','mu'],['め','me'],['も','mo']]],
+ ['ya','や',[['や','ya'],['ゆ','yu'],['よ','yo']]],
+ ['ra','ら',[['ら','ra'],['り','ri'],['る','ru'],['れ','re'],['ろ','ro']]],
+ ['wa','わ',[['わ','wa'],['を','wo','o']]],
+ ['n','ん',[['ん','n','nn',"n'"]]],
+];
+const DAKUON=[
+ ['ga','が',[['が','ga'],['ぎ','gi'],['ぐ','gu'],['げ','ge'],['ご','go']]],
+ ['za','ざ',[['ざ','za'],['じ','ji','zi'],['ず','zu'],['ぜ','ze'],['ぞ','zo']]],
+ ['da','だ',[['だ','da'],['ぢ','ji','di'],['づ','zu','du'],['で','de'],['ど','do']]],
+ ['ba','ば',[['ば','ba'],['び','bi'],['ぶ','bu'],['べ','be'],['ぼ','bo']]],
+];
+const HANDAKU=[['pa','ぱ',[['ぱ','pa'],['ぴ','pi'],['ぷ','pu'],['ぺ','pe'],['ぽ','po']]]];
+const YOON=[
+ ['kya','きゃ',[['きゃ','kya'],['きゅ','kyu'],['きょ','kyo']]],
+ ['sha','しゃ',[['しゃ','sha','sya'],['しゅ','shu','syu'],['しょ','sho','syo']]],
+ ['cha','ちゃ',[['ちゃ','cha','cya','tya'],['ちゅ','chu','cyu','tyu'],['ちょ','cho','cyo','tyo']]],
+ ['nya','にゃ',[['にゃ','nya'],['にゅ','nyu'],['にょ','nyo']]],
+ ['hya','ひゃ',[['ひゃ','hya'],['ひゅ','hyu'],['ひょ','hyo']]],
+ ['mya','みゃ',[['みゃ','mya'],['みゅ','myu'],['みょ','myo']]],
+ ['rya','りゃ',[['りゃ','rya'],['りゅ','ryu'],['りょ','ryo']]],
+];
+const YOON_D=[
+ ['gya','ぎゃ',[['ぎゃ','gya'],['ぎゅ','gyu'],['ぎょ','gyo']]],
+ ['ja','じゃ',[['じゃ','ja','jya','zya'],['じゅ','ju','jyu','zyu'],['じょ','jo','jyo','zyo']]],
+ ['bya','びゃ',[['びゃ','bya'],['びゅ','byu'],['びょ','byo']]],
+ ['pya','ぴゃ',[['ぴゃ','pya'],['ぴゅ','pyu'],['ぴょ','pyo']]],
+];
+const SOKU=[
+ ['k','っか',[['か','ka'],['き','ki'],['く','ku'],['け','ke'],['こ','ko']]],
+ ['s','っさ',[['さ','sa'],['し','shi','si'],['す','su'],['せ','se'],['そ','so']]],
+ ['t','った',[['た','ta'],['ち','chi','ti'],['つ','tsu','tu'],['て','te'],['と','to']]],
+ ['p','っぱ',[['ぱ','pa'],['ぴ','pi'],['ぷ','pu'],['ぺ','pe'],['ぽ','po']]],
+ ['y','っきゃ',[['きゃ','kya'],['きょ','kyo'],['しゃ','sha','sya'],['しょ','sho','syo'],['ちゃ','cha','cya','tya'],['ちょ','cho','cyo','tyo']]],
+];
+const SOKU_PRE=[['か','ka'],['き','ki'],['こ','ko'],['さ','sa'],['し','shi','si'],['あ','a'],['い','i'],['お','o'],['ま','ma'],['も','mo'],['は','ha'],['ひ','hi'],['ろ','ro'],['の','no'],['よ','yo'],['ら','ra'],['ね','ne'],['ち','chi','ti']];
+const flat=rows=>rows.flatMap(r=>r[2]);
+const CHOON=[
+ ['basic','アー',flat(SEION).filter(i=>i[0]!=='ん'&&i[0]!=='を')],
+ ['daku','ガー',flat([...DAKUON,...HANDAKU]).filter(i=>i[0]!=='ぢ'&&i[0]!=='づ')],
+ ['yoon','キャー',flat([...YOON,...YOON_D])],
+];
+const GAIRAI=[
+ ['f','ファ',[['ファ','fa'],['フィ','fi'],['フェ','fe'],['フォ','fo'],['フュ','fyu']]],
+ ['v','ヴァ',[['ヴァ','va'],['ヴィ','vi'],['ヴ','vu'],['ヴェ','ve'],['ヴォ','vo']]],
+ ['td','ティ',[['ティ','ti','thi'],['ディ','di','dhi'],['トゥ','tu','twu'],['ドゥ','du','dwu'],['デュ','dyu','dhu']]],
+ ['w','ウィ',[['ウィ','wi','whi'],['ウェ','we','whe'],['ウォ','wo','who']]],
+ ['e','シェ',[['シェ','she','sye'],['ジェ','je','jye','zye'],['チェ','che','cye','tye'],['イェ','ye']]],
+ ['ts','ツァ',[['ツァ','tsa'],['ツィ','tsi'],['ツェ','tse'],['ツォ','tso']]],
+];
+const GROUPS=[
+ {id:'seion',  name:'cơ bản',    full:'Âm cơ bản',              jp:'清音', rows:SEION},
+ {id:'daku',   name:'đục',       full:'Âm đục',                 jp:'濁音', rows:DAKUON},
+ {id:'handaku',name:'bán đục',   full:'Âm bán đục',             jp:'半濁音', rows:HANDAKU},
+ {id:'yoon',   name:'ghép',      full:'Âm ghép',                jp:'拗音', rows:YOON},
+ {id:'yoond',  name:'ghép đục',  full:'Âm ghép đục / bán đục',  jp:'拗音・濁', rows:YOON_D},
+ {id:'soku',   name:'ngắt っ',    full:'Âm ngắt (っ)',           jp:'促音', rows:SOKU, kind:'soku'},
+ {id:'choon',  name:'trường âm ー',full:'Trường âm (ー)',        jp:'長音', rows:CHOON, kind:'choon', kata:true},
+ {id:'gairai', name:'ngoại lai', full:'Âm ngoại lai (ファ, ティ…)',jp:'外来音', rows:GAIRAI, kata:true, raw:true},
+].map(g=>({...g,rows:g.rows.map(([id,label,items])=>({id:g.id+'.'+id,label,items}))}));
+
+const toKata=s=>s.replace(/[ぁ-ゖ]/g,c=>String.fromCharCode(c.charCodeAt(0)+0x60));
+
+/* ============ data: đoạn văn ============
+   {漢字|よみ} = kanji kèm cách đọc (gõ theo cách đọc) · ^は ^へ = trợ từ (gõ wa / e) · dấu cách = ranh giới từ */
+const TEXTS=[
+ {id:'p01',lv:'n5',title:'Tự giới thiệu',
+  jp:'はじめまして。 {私|わたし}^は グエンです。 ベトナムから {来|き}ました。 {今|いま}、 ハノイの {会社|かいしゃ}で エンジニアを して います。 どうぞ よろしく おねがいします。',
+  vi:'Rất vui được gặp bạn. Tôi là Nguyễn. Tôi đến từ Việt Nam. Hiện tôi đang làm kỹ sư ở một công ty tại Hà Nội. Rất mong được giúp đỡ.'},
+ {id:'p02',lv:'n5',title:'Gia đình',
+  jp:'{私|わたし}^は {四人|よにん} {家族|かぞく}です。 {父|ちち}と {母|はは}と {妹|いもうと}が います。 {父|ちち}^は {先生|せんせい}です。 {妹|いもうと}^は {高校生|こうこうせい}で、 ねこが {大好|だいす}きです。',
+  vi:'Gia đình tôi có bốn người: bố, mẹ, em gái và tôi. Bố tôi là giáo viên. Em gái tôi là học sinh cấp ba và rất thích mèo.'},
+ {id:'p03',lv:'n5',title:'Một ngày của tôi',
+  jp:'{私|わたし}^は {毎朝|まいあさ} {六時|ろくじ}に {起|お}きます。 コーヒーを {飲|の}んで、 パンを {食|た}べます。 {八時|はちじ}に {会社|かいしゃ}^へ {行|い}きます。 {夜|よる}^は {十一時|じゅういちじ}ごろ {寝|ね}ます。',
+  vi:'Mỗi sáng tôi dậy lúc 6 giờ. Tôi uống cà phê và ăn bánh mì. 8 giờ tôi đến công ty. Buổi tối tôi đi ngủ vào khoảng 11 giờ.'},
+ {id:'p04',lv:'n5',title:'Thời tiết',
+  jp:'{今日|きょう}^は いい {天気|てんき}です ね。 {空|そら}が {青|あお}くて、 {風|かぜ}が {涼|すず}しいです。 {明日|あした}^は {雨|あめ}が {降|ふ}る そうです から、 {傘|かさ}を {忘|わす}れないで ください。',
+  vi:'Hôm nay trời đẹp nhỉ. Bầu trời xanh, gió mát. Nghe nói ngày mai trời mưa nên đừng quên mang ô nhé.'},
+ {id:'p05',lv:'n5',title:'Ở nhà hàng',
+  jp:'「いらっしゃいませ。 {何名|なんめい}さまですか。」 「ふたりです。」 「こちら^へ どうぞ。」 「すみません、 ラーメンと ぎょうざを ください。」 「はい、 {少々|しょうしょう} お{待|ま}ち ください。」',
+  vi:'“Xin mời vào. Quý khách đi mấy người ạ?” “Hai người.” “Xin mời lối này.” “Cho tôi ramen và gyoza.” “Vâng, xin quý khách chờ một chút.”'},
+ {id:'p06',lv:'n5',title:'Đi mua sắm',
+  jp:'{日曜日|にちようび}に {友達|ともだち}と デパート^へ {行|い}きました。 {私|わたし}^は {白|しろ}い シャツを {買|か}いました。 {友達|ともだち}^は {新|あたら}しい くつを {見|み}ましたが、 {高|たか}かったので {買|か}いませんでした。',
+  vi:'Chủ nhật tôi đi trung tâm thương mại cùng bạn. Tôi mua một chiếc áo sơ mi trắng. Bạn tôi xem một đôi giày mới nhưng vì đắt nên không mua.'},
+ {id:'p07',lv:'n5',title:'Sở thích',
+  jp:'{私|わたし}の {趣味|しゅみ}^は {写真|しゃしん}を {撮|と}る ことです。 {週末|しゅうまつ}^は よく カメラを {持|も}って、 {公園|こうえん}や {川|かわ}^へ {行|い}きます。 {花|はな}や {鳥|とり}の {写真|しゃしん}が {一番|いちばん} {好|す}きです。',
+  vi:'Sở thích của tôi là chụp ảnh. Cuối tuần tôi hay mang máy ảnh ra công viên hoặc bờ sông. Tôi thích nhất là chụp hoa và chim.'},
+ {id:'p08',lv:'n5',title:'Phòng của tôi',
+  jp:'{私|わたし}の {部屋|へや}^は あまり {広|ひろ}く ありません。 でも、 {窓|まど}が {大|おお}きくて、 とても {明|あか}るいです。 {机|つくえ}の {上|うえ}に パソコンと {本|ほん}が あります。 ベッドの {横|よこ}に {小|ちい}さい テレビも あります。',
+  vi:'Phòng của tôi không rộng lắm. Nhưng cửa sổ lớn nên rất sáng sủa. Trên bàn có máy tính và sách. Cạnh giường còn có một chiếc tivi nhỏ.'},
+ {id:'p09',lv:'n5',title:'Hỏi đường',
+  jp:'「すみません、 {駅|えき}^は どこですか。」 「この {道|みち}を まっすぐ {行|い}って、 {二|ふた}つ{目|め}の {信号|しんごう}を {右|みぎ}に {曲|ま}がって ください。」 「ありがとう ございます。」',
+  vi:'“Xin lỗi, nhà ga ở đâu ạ?” “Anh cứ đi thẳng đường này, đến đèn giao thông thứ hai thì rẽ phải.” “Cảm ơn anh.”'},
+ {id:'p10',lv:'n5',title:'Bốn mùa',
+  jp:'{日本|にほん}に^は {四|よっ}つの {季節|きせつ}が あります。 {春|はる}^は さくらが きれいで、 {夏|なつ}^は とても {暑|あつ}いです。 {秋|あき}^は {食|た}べ{物|もの}が おいしくて、 {冬|ふゆ}^は {雪|ゆき}が {降|ふ}ります。 {私|わたし}^は {秋|あき}が {一番|いちばん} {好|す}きです。',
+  vi:'Nhật Bản có bốn mùa. Mùa xuân hoa anh đào rất đẹp, mùa hè thì rất nóng. Mùa thu đồ ăn ngon, còn mùa đông có tuyết rơi. Tôi thích mùa thu nhất.'},
+ {id:'p11',lv:'n5',title:'Thỏ và rùa',
+  jp:'むかし むかし、 うさぎと かめが かけっこを しました。 うさぎ^は とても はやいので、 とちゅうで ひるねを して しまいました。 かめ^は ゆっくり ゆっくり あるいて、 さきに ゴールに つきました。',
+  vi:'Ngày xửa ngày xưa, thỏ và rùa chạy thi với nhau. Thỏ chạy rất nhanh nên giữa đường đã lăn ra ngủ trưa. Rùa thì cứ chậm rãi bước từng bước và về đích trước.'},
+ {id:'p12',lv:'n5',title:'Cậu bé quả đào',
+  jp:'むかし むかし、 ある ところに おじいさんと おばあさんが いました。 ある ひ、 おばあさんが かわで せんたくを して いると、 おおきな ももが ながれて きました。 ももの なかから げんきな おとこのこが うまれました。',
+  vi:'Ngày xửa ngày xưa, ở một nơi nọ có một ông lão và một bà lão. Một hôm, khi bà lão đang giặt đồ ở bờ sông thì có một quả đào thật to trôi đến. Từ trong quả đào, một cậu bé khỏe mạnh ra đời.'},
+ {id:'p13',lv:'n4',title:'Ngủ quên',
+  jp:'けさ、 {目覚|めざ}まし{時計|どけい}が {鳴|な}らなかったので、 {寝坊|ねぼう}して しまいました。 {急|いそ}いで {駅|えき}まで {走|はし}りましたが、 {電車|でんしゃ}^は もう {出|で}た あとでした。 {会社|かいしゃ}に {電話|でんわ}して、 {部長|ぶちょう}に あやまりました。',
+  vi:'Sáng nay đồng hồ báo thức không reo nên tôi ngủ quên mất. Tôi vội chạy ra ga nhưng tàu đã chạy mất rồi. Tôi gọi điện về công ty và xin lỗi trưởng phòng.'},
+ {id:'p14',lv:'n4',title:'Du lịch Kyoto',
+  jp:'{去年|きょねん}の {秋|あき}、 {家族|かぞく}と {京都|きょうと}^へ {旅行|りょこう}に {行|い}きました。 {古|ふる}い お{寺|てら}や {神社|じんじゃ}を たくさん {見|み}て、 {紅葉|こうよう}の {写真|しゃしん}を {撮|と}りました。 {夜|よる}^は {旅館|りょかん}に {泊|と}まって、 おいしい {料理|りょうり}を {食|た}べました。 また {行|い}きたいです。',
+  vi:'Mùa thu năm ngoái, tôi cùng gia đình đi du lịch Kyoto. Chúng tôi tham quan nhiều chùa và đền cổ, chụp ảnh lá đỏ. Buổi tối chúng tôi nghỉ ở nhà trọ kiểu Nhật và ăn những món rất ngon. Tôi muốn lại được đến đó.'},
+ {id:'p15',lv:'n4',title:'Học tiếng Nhật',
+  jp:'{日本語|にほんご}の {勉強|べんきょう}を {始|はじ}めて、 もう {一年|いちねん}に なります。 ひらがなと カタカナ^は {読|よ}める ように なりましたが、 {漢字|かんじ}^は まだ {難|むずか}しいです。 {毎日|まいにち} {少|すこ}しずつ {練習|れんしゅう}すれば、 きっと {上手|じょうず}に なると {思|おも}います。',
+  vi:'Đã một năm kể từ khi tôi bắt đầu học tiếng Nhật. Tôi đã đọc được hiragana và katakana, nhưng kanji thì vẫn còn khó. Tôi nghĩ nếu mỗi ngày luyện tập một chút thì chắc chắn sẽ giỏi lên.'},
+ {id:'p16',lv:'n4',title:'Quà sinh nhật',
+  jp:'{来週|らいしゅう}の {土曜日|どようび}^は {友達|ともだち}の {誕生日|たんじょうび}です。 プレゼントに {何|なに}を あげたら いいか、 まだ {決|き}めて いません。 {音楽|おんがく}が {好|す}きな {人|ひと}なので、 ヘッドホンに しようかなと {思|おも}って います。',
+  vi:'Thứ bảy tuần sau là sinh nhật bạn tôi. Tôi vẫn chưa quyết định nên tặng gì. Vì bạn ấy thích âm nhạc nên tôi đang tính tặng tai nghe.'},
+ {id:'p17',lv:'n4',title:'Quán cà phê mới',
+  jp:'{駅|えき}の {近|ちか}くに {新|あたら}しい {喫茶店|きっさてん}が できました。 {店|みせ}の {中|なか}^は {静|しず}かで、 {音楽|おんがく}も {小|ちい}さく {流|なが}れて います。 ケーキが おいしいと {聞|き}いたので、 {今度|こんど} {行|い}って みる つもりです。',
+  vi:'Gần nhà ga mới mở một quán cà phê. Bên trong quán yên tĩnh, nhạc chỉ mở nhỏ. Nghe nói bánh ngọt ở đó ngon nên lần tới tôi định ghé thử.'},
+ {id:'p18',lv:'n4',title:'Ở công ty',
+  jp:'{私|わたし}の {会社|かいしゃ}^は ソフトウェアを {作|つく}って います。 {先月|せんげつ}、 {新|あたら}しい プロジェクトが {始|はじ}まって、 とても {忙|いそが}しく なりました。 でも、 チームの みんなと {協力|きょうりょく}して、 {毎日|まいにち} {頑張|がんば}って います。',
+  vi:'Công ty tôi làm phần mềm. Tháng trước một dự án mới bắt đầu nên tôi trở nên rất bận. Nhưng tôi vẫn cùng mọi người trong nhóm hợp tác và cố gắng mỗi ngày.'},
+ {id:'p19',lv:'kata',title:'Ở quán cà phê',
+  jp:'カフェで アイスコーヒーと チーズケーキを {注文|ちゅうもん}しました。 テーブルの {上|うえ}に ノートパソコンを {置|お}いて、 メールを チェックしました。 インターネットが {速|はや}くて、 とても {便利|べんり}です。',
+  vi:'Tôi gọi một ly cà phê đá và một miếng bánh phô mai ở quán. Tôi đặt laptop lên bàn và kiểm tra email. Mạng internet nhanh nên rất tiện.'},
+ {id:'p20',lv:'kata',title:'Thể thao',
+  jp:'{私|わたし}^は サッカーと バスケットボールが {好|す}きです。 {週末|しゅうまつ}^は テレビで ヨーロッパの サッカーの {試合|しあい}を {見|み}ます。 {昨日|きのう}^は {友達|ともだち}と ジョギングを して、 {公園|こうえん}で バドミントンも しました。',
+  vi:'Tôi thích bóng đá và bóng rổ. Cuối tuần tôi xem các trận bóng đá châu Âu trên tivi. Hôm qua tôi chạy bộ với bạn và còn chơi cầu lông ở công viên.'},
+ {id:'p21',lv:'kata',title:'Đi siêu thị',
+  jp:'スーパーで トマトと キャベツと ソーセージを {買|か}いました。 それから、 パンと バターと ヨーグルトも {買|か}いました。 {家|いえ}に {帰|かえ}ってから、 サンドイッチと スープを {作|つく}りました。',
+  vi:'Tôi mua cà chua, bắp cải và xúc xích ở siêu thị. Sau đó tôi mua thêm bánh mì, bơ và sữa chua. Về đến nhà, tôi làm bánh sandwich và nấu súp.'},
+ {id:'p22',lv:'kata',title:'Du lịch châu Âu',
+  jp:'{夏休|なつやす}みに フランスと イタリアと スペインを {旅行|りょこう}しました。 パリで^は エッフェル{塔|とう}に のぼって、 ローマで^は ピザと パスタを たくさん {食|た}べました。 バルセロナの ビーチも すてきでした。',
+  vi:'Kỳ nghỉ hè tôi đi du lịch Pháp, Ý và Tây Ban Nha. Ở Paris tôi leo lên tháp Eiffel, ở Rome tôi ăn rất nhiều pizza và mì Ý. Bãi biển ở Barcelona cũng rất tuyệt.'},
+ {id:'p23',lv:'kata',title:'Laptop mới',
+  jp:'{新|あたら}しい ノートパソコンを {買|か}いました。 メモリーが {大|おお}きくて、 ソフトウェアも {速|はや}く {動|うご}きます。 {毎日|まいにち} プログラミングの {勉強|べんきょう}に {使|つか}って います。 キーボードの {音|おと}も {静|しず}かで、 とても {気|き}に {入|い}って います。',
+  vi:'Tôi mới mua một chiếc laptop. Bộ nhớ lớn nên phần mềm chạy rất nhanh. Ngày nào tôi cũng dùng nó để học lập trình. Bàn phím gõ cũng êm, tôi rất ưng ý.'},
+ {id:'p24',lv:'kata',title:'Thực đơn bữa trưa',
+  jp:'きょうの ランチの メニュー^は ハンバーガーと フライドポテトと チキンサラダです。 のみもの^は オレンジジュースか ミルクティーを えらべます。 デザートに チョコレートケーキも あります。',
+  vi:'Thực đơn bữa trưa hôm nay gồm hamburger, khoai tây chiên và salad gà. Đồ uống có thể chọn nước cam hoặc trà sữa. Tráng miệng còn có bánh sô-cô-la.'},
+ {id:'p25',lv:'kata',title:'Bữa tiệc cuối tuần',
+  jp:'{週末|しゅうまつ}に {友達|ともだち}の {家|いえ}で パーティーが ありました。 ピザや フライドチキンを {食|た}べながら、 ギターで ジャズを {弾|ひ}いたり、 アニメの {映画|えいが}を {見|み}たり しました。 {最後|さいご}^は ソファーで ゆっくり {休|やす}みました。',
+  vi:'Cuối tuần có một bữa tiệc ở nhà bạn tôi. Chúng tôi vừa ăn pizza, gà rán, vừa chơi jazz bằng guitar và xem phim hoạt hình. Cuối cùng cả bọn thư giãn trên ghế sofa.'},
+ /* ---- bổ sung ---- */
+ {id:'p26',lv:'n5',title:'Ngày nghỉ',
+  jp:'{土曜日|どようび}^は {学校|がっこう}が {休|やす}みです。 {朝|あさ} {遅|おそ}く {起|お}きて、 {部屋|へや}を {掃除|そうじ}しました。 {午後|ごご}^は {友達|ともだち}と {映画|えいが}を {見|み}に {行|い}きました。 とても おもしろかったです。',
+  vi:'Thứ bảy trường được nghỉ. Tôi dậy muộn và dọn dẹp phòng. Buổi chiều tôi đi xem phim với bạn. Phim rất hay.'},
+ {id:'p27',lv:'n5',title:'Con mèo của tôi',
+  jp:'うちに^は {小|ちい}さい ねこが います。 {名前|なまえ}^は ミケです。 ミケ^は {魚|さかな}が {好|す}きで、 いつも {窓|まど}の {近|ちか}くで {寝|ね}て います。 {夜|よる}に なると、 {元気|げんき}に {走|はし}ります。',
+  vi:'Nhà tôi có một con mèo nhỏ. Tên nó là Mike. Mike thích cá và lúc nào cũng nằm ngủ gần cửa sổ. Cứ đến tối là nó chạy nhảy tung tăng.'},
+ {id:'p28',lv:'n5',title:'Bữa sáng kiểu Nhật',
+  jp:'{日本|にほん}の あさごはん^は ごはんと みそしると {焼|や}き{魚|ざかな}が {多|おお}いです。 でも、 さいきん^は パンと コーヒーの {人|ひと}も {増|ふ}えました。 {私|わたし}^は ごはんの ほうが {好|す}きです。',
+  vi:'Bữa sáng của người Nhật thường là cơm, súp miso và cá nướng. Nhưng gần đây số người ăn bánh mì với cà phê cũng tăng lên. Tôi thì thích cơm hơn.'},
+ {id:'p29',lv:'n5',title:'Gọi điện rủ bạn',
+  jp:'「もしもし、 たなかさん？ {明日|あした}、 いっしょに {昼|ひる}ごはんを {食|た}べませんか。」 「いいですね。 {何時|なんじ}に しますか。」 「{十二時|じゅうにじ}^は どうですか。」 「はい、 だいじょうぶです。 じゃ、 また {明日|あした}。」',
+  vi:'“A lô, anh Tanaka à? Ngày mai mình đi ăn trưa cùng nhau nhé?” “Hay đấy. Mấy giờ nhỉ?” “12 giờ được không?” “Được. Vậy hẹn mai nhé.”'},
+ {id:'p30',lv:'n5',title:'Mùa hè ở Việt Nam',
+  jp:'ベトナムの {夏|なつ}^は とても {暑|あつ}いです。 {毎日|まいにち} {三十五度|さんじゅうごど}ぐらいに なります。 {午後|ごご}^は よく {雨|あめ}が {降|ふ}りますが、 すぐ やみます。 {夏|なつ}^は つめたい ジュースや アイスクリームが おいしいです。',
+  vi:'Mùa hè ở Việt Nam rất nóng. Ngày nào cũng khoảng 35 độ. Buổi chiều hay có mưa nhưng tạnh ngay. Mùa hè thì nước ép lạnh và kem ăn rất ngon.'},
+ {id:'p31',lv:'n5',title:'Chàng Urashima',
+  jp:'むかし、 うらしまたろうと いう わかい りょうしが いました。 ある ひ、 はまで こどもたちに いじめられて いる かめを たすけました。 かめ^は おれいに、 たろうを うみの そこの りゅうぐうじょう^へ つれて いきました。',
+  vi:'Ngày xưa có một chàng ngư dân trẻ tên là Urashima Tarō. Một hôm, chàng cứu một con rùa đang bị lũ trẻ bắt nạt trên bãi biển. Để trả ơn, rùa đưa Tarō xuống Long cung dưới đáy biển.'},
+ {id:'p32',lv:'n4',title:'Chuyển nhà',
+  jp:'{先週|せんしゅう}、 {会社|かいしゃ}の {近|ちか}くに {引|ひ}っ{越|こ}しました。 {前|まえ}の アパートより {少|すこ}し {狭|せま}いですが、 {駅|えき}から {歩|ある}いて {五分|ごふん}なので とても {便利|べんり}です。 {近|ちか}くに スーパーも あるし、 {静|しず}かで {住|す}みやすいです。',
+  vi:'Tuần trước tôi chuyển nhà đến gần công ty. Nhà hơi hẹp hơn căn hộ cũ nhưng đi bộ từ ga chỉ 5 phút nên rất tiện. Gần đó còn có siêu thị, lại yên tĩnh, rất dễ sống.'},
+ {id:'p33',lv:'n4',title:'Bị cảm',
+  jp:'きのうの {夜|よる}から {熱|ねつ}が あって、 のどが {痛|いた}いです。 {今朝|けさ}、 {病院|びょういん}^へ {行|い}って、 {薬|くすり}を もらいました。 {医者|いしゃ}に {今日|きょう}^は ゆっくり {休|やす}んだ ほうが いいと {言|い}われたので、 {会社|かいしゃ}を {休|やす}む ことに しました。',
+  vi:'Từ tối qua tôi bị sốt và đau họng. Sáng nay tôi đi bệnh viện và được kê thuốc. Bác sĩ bảo hôm nay nên nghỉ ngơi cho khỏe nên tôi quyết định nghỉ làm.'},
+ {id:'p34',lv:'n4',title:'Lời cảm ơn',
+  jp:'{山田|やまだ}さん、 {先日|せんじつ}^は ありがとう ございました。 いただいた お{菓子|かし}^は {家族|かぞく}みんなで おいしく いただきました。 {今度|こんど}^は ぜひ {私|わたし}の {家|いえ}にも {遊|あそ}びに {来|き}て ください。 お{待|ま}ちして います。',
+  vi:'Chị Yamada, cảm ơn chị về hôm trước. Bánh kẹo chị tặng, cả nhà tôi đã ăn rất ngon. Lần tới nhất định chị hãy ghé nhà tôi chơi nhé. Tôi rất mong chị đến.'},
+ {id:'p35',lv:'n4',title:'Lễ hội mùa hè',
+  jp:'{夏|なつ}に なると、 {日本|にほん}の あちこちで お{祭|まつ}りが あります。 ゆかたを {着|き}て {花火|はなび}を {見|み}に {行|い}く {人|ひと}も たくさん います。 {屋台|やたい}で たこやきや かきごおりを {買|か}って {食|た}べるのも {楽|たの}しみの ひとつです。',
+  vi:'Cứ đến mùa hè, khắp nơi ở Nhật đều có lễ hội. Nhiều người mặc yukata đi xem pháo hoa. Mua takoyaki hay đá bào ở các quầy hàng rong để ăn cũng là một niềm vui.'},
+ {id:'p36',lv:'n4',title:'Phỏng vấn xin việc',
+  jp:'{来週|らいしゅう}の {月曜日|げつようび}に {日本|にほん}の {会社|かいしゃ}の {面接|めんせつ}が あります。 {日本語|にほんご}で {自己紹介|じこしょうかい}を しなければ ならないので、 {毎晩|まいばん} {練習|れんしゅう}して います。 きんちょうしますが、 {頑張|がんば}ろうと {思|おも}います。',
+  vi:'Thứ hai tuần sau tôi có buổi phỏng vấn ở một công ty Nhật. Vì phải tự giới thiệu bằng tiếng Nhật nên tối nào tôi cũng luyện tập. Tôi hồi hộp lắm nhưng sẽ cố gắng.'},
+ {id:'p37',lv:'n4',title:'Lạc đường ở Tokyo',
+  jp:'{初|はじ}めて {東京|とうきょう}に {来|き}た とき、 {駅|えき}が {大|おお}きすぎて {道|みち}に {迷|まよ}って しまいました。 {困|こま}って いたら、 {親切|しんせつ}な おばあさんが {声|こえ}を かけて くれました。 おかげで、 {約束|やくそく}の {時間|じかん}に {間|ま}に{合|あ}いました。',
+  vi:'Lần đầu đến Tokyo, nhà ga to quá nên tôi bị lạc. Đang bối rối thì một bà cụ tốt bụng đến hỏi han giúp. Nhờ vậy tôi đã đến kịp giờ hẹn.'},
+ {id:'p38',lv:'n4',title:'Tập nấu ăn',
+  jp:'さいきん、 {自分|じぶん}で {料理|りょうり}を する ように なりました。 {最初|さいしょ}^は {失敗|しっぱい}ばかりでしたが、 インターネットで レシピを {見|み}ながら {作|つく}ると、 だんだん {上手|じょうず}に なりました。 {今|いま}^は カレーが {一番|いちばん} とくいです。',
+  vi:'Gần đây tôi bắt đầu tự nấu ăn. Lúc đầu toàn thất bại, nhưng vừa xem công thức trên mạng vừa nấu thì dần dần tôi nấu khéo hơn. Giờ tôi giỏi nhất là món cà ri.'},
+ {id:'p39',lv:'n4',title:'Tàu điện ở Nhật',
+  jp:'{日本|にほん}の {電車|でんしゃ}^は {時間|じかん}に とても {正確|せいかく}です。 {電車|でんしゃ}の {中|なか}で {電話|でんわ}を かけたり、 {大|おお}きい {声|こえ}で {話|はな}したり する {人|ひと}^は あまり いません。 {朝|あさ}の ラッシュの {時間|じかん}^は とても こんで います。',
+  vi:'Tàu điện ở Nhật chạy rất đúng giờ. Hầu như không ai gọi điện hay nói chuyện to trên tàu. Giờ cao điểm buổi sáng thì tàu rất đông.'},
+ {id:'p40',lv:'kata',title:'Cửa hàng tiện lợi',
+  jp:'{家|いえ}の {近|ちか}くの コンビニ^は {二十四時間|にじゅうよじかん} あいて います。 おにぎりや サンドイッチや コーヒーなどが {買|か}えます。 コピーも できるし、 {電気代|でんきだい}も {払|はら}えるので、 とても {便利|べんり}です。',
+  vi:'Cửa hàng tiện lợi gần nhà tôi mở cửa 24 giờ. Ở đó có thể mua cơm nắm, sandwich, cà phê… Lại có thể photocopy và trả cả tiền điện nên rất tiện.'},
+ {id:'p41',lv:'kata',title:'Điện thoại thông minh',
+  jp:'{私|わたし}^は {毎日|まいにち} スマートフォンで ニュースを {読|よ}んだり、 ゲームを したり します。 {友達|ともだち}とも チャットで れんらくします。 でも、 {夜|よる} {遅|おそ}くまで {使|つか}うと {目|め}が {疲|つか}れるので、 {気|き}を つけて います。',
+  vi:'Hằng ngày tôi dùng điện thoại thông minh để đọc tin tức, chơi game. Tôi cũng liên lạc với bạn bè qua tin nhắn chat. Nhưng dùng đến khuya thì mỏi mắt nên tôi cũng chú ý.'},
+ {id:'p42',lv:'kata',title:'Phòng gym',
+  jp:'{先月|せんげつ}から {駅前|えきまえ}の ジムに {通|かよ}って います。 ランニングマシンで {三十分|さんじゅっぷん} {走|はし}ってから、 ストレッチと ヨガを します。 シャワーを {浴|あ}びた あとの スポーツドリンクが {最高|さいこう}です。',
+  vi:'Từ tháng trước tôi bắt đầu tập ở phòng gym trước ga. Tôi chạy máy 30 phút rồi giãn cơ và tập yoga. Uống nước thể thao sau khi tắm xong là tuyệt nhất.'},
+ {id:'p43',lv:'kata',title:'Ở khách sạn',
+  jp:'ホテルの フロントで チェックインを しました。 {部屋|へや}^は {十階|じゅっかい}で、 ベランダから {海|うみ}が {見|み}えます。 ベッドも ソファーも {大|おお}きくて、 とても リラックスできました。 {朝|あさ}^は レストランで バイキングの {朝食|ちょうしょく}を {食|た}べました。',
+  vi:'Tôi làm thủ tục nhận phòng ở quầy lễ tân khách sạn. Phòng ở tầng 10, từ ban công nhìn thấy biển. Giường và ghế sofa đều to, tôi được thư giãn thật thoải mái. Buổi sáng tôi ăn buffet sáng ở nhà hàng.'},
+ {id:'p44',lv:'kata',title:'Đi xem concert',
+  jp:'{昨日|きのう}、 {好|す}きな バンドの コンサートに {行|い}きました。 ステージの ライトが きれいで、 ギターと ドラムの {音|おと}も すごかったです。 {最後|さいご}の アンコールで^は みんなで いっしょに {歌|うた}いました。',
+  vi:'Hôm qua tôi đi xem concert của ban nhạc mình thích. Ánh đèn sân khấu rất đẹp, tiếng guitar và trống cũng tuyệt vời. Đến phần encore cuối cùng thì mọi người cùng nhau hát.'},
+ {id:'p45',lv:'n3',title:'Kinh nghiệm làm thêm',
+  jp:'{大学生|だいがくせい}の とき、 {居酒屋|いざかや}で アルバイトを して いました。 {仕事|しごと}^は {大変|たいへん}でしたが、 お{客|きゃく}さんとの {会話|かいわ}を {通|つう}じて、 {敬語|けいご}の {使|つか}い{方|かた}を {自然|しぜん}に {覚|おぼ}える ことが できました。 {今|いま}でも その {経験|けいけん}が {役|やく}に {立|た}って います。',
+  vi:'Hồi sinh viên tôi làm thêm ở một quán nhậu. Công việc vất vả nhưng nhờ trò chuyện với khách mà tôi đã học được cách dùng kính ngữ một cách tự nhiên. Đến giờ kinh nghiệm đó vẫn còn giúp ích cho tôi.'},
+ {id:'p46',lv:'n3',title:'Phân loại rác',
+  jp:'{日本|にほん}で^は ごみを {捨|す}てる とき、 {燃|も}える ごみと {燃|も}えない ごみに {分|わ}けなければ なりません。 {地域|ちいき}に よって {出|だ}す {曜日|ようび}が {決|き}まって いるので、 {引|ひ}っ{越|こ}して きた ばかりの {人|ひと}^は {注意|ちゅうい}が {必要|ひつよう}です。',
+  vi:'Ở Nhật, khi vứt rác phải phân loại rác cháy được và rác không cháy được. Ngày đổ rác được quy định tùy theo khu vực nên người mới chuyển đến cần chú ý.'},
+ {id:'p47',lv:'n3',title:'Làm việc tại nhà',
+  jp:'{最近|さいきん}^は {家|いえ}で {仕事|しごと}を する {人|ひと}が {増|ふ}えて います。 {通勤|つうきん}の {時間|じかん}が なくなる {一方|いっぽう}で、 {同僚|どうりょう}と {直接|ちょくせつ} {話|はな}す {機会|きかい}が {減|へ}って しまいました。 {仕事|しごと}と {生活|せいかつ}の バランスを {取|と}るの^は {意外|いがい}と {難|むずか}しい ものです。',
+  vi:'Gần đây số người làm việc tại nhà ngày càng tăng. Không mất thời gian đi lại nhưng ngược lại cơ hội nói chuyện trực tiếp với đồng nghiệp lại giảm đi. Cân bằng giữa công việc và cuộc sống hóa ra lại khó hơn tưởng.'},
+ {id:'p48',lv:'n3',title:'Động đất',
+  jp:'{日本|にほん}^は {地震|じしん}が {多|おお}い {国|くに}です。 そのため、 {学校|がっこう}や {会社|かいしゃ}で^は {定期的|ていきてき}に {避難|ひなん}{訓練|くんれん}が {行|おこな}われて います。 {家|いえ}にも {水|みず}や {食料|しょくりょう}を {用意|ようい}して おく ことが {大切|たいせつ}です。',
+  vi:'Nhật Bản là đất nước có nhiều động đất. Vì vậy ở trường học và công ty thường xuyên tổ chức diễn tập sơ tán. Ở nhà cũng nên chuẩn bị sẵn nước và lương thực.'},
+ {id:'p49',lv:'n3',title:'Thói quen đọc sách',
+  jp:'{子供|こども}の ころから {本|ほん}を {読|よ}むのが {好|す}きでした。 {最近|さいきん}^は {忙|いそが}しくて なかなか {時間|じかん}が {取|と}れませんが、 {寝|ね}る {前|まえ}に {少|すこ}しでも {読|よ}む ように して います。 {一冊|いっさつ} {読|よ}み{終|お}わった ときの {満足感|まんぞくかん}^は {格別|かくべつ}です。',
+  vi:'Từ nhỏ tôi đã thích đọc sách. Gần đây bận rộn nên khó có thời gian, nhưng trước khi ngủ tôi cố gắng đọc dù chỉ một chút. Cảm giác thỏa mãn khi đọc xong một cuốn sách thật đặc biệt.'},
+ {id:'p50',lv:'n3',title:'Bảo vệ môi trường',
+  jp:'{環境|かんきょう}を {守|まも}る ために、 {一人|ひとり}ひとりが できる ことから {始|はじ}める べきです。 たとえば、 {買|か}い{物|もの}の とき エコバッグを {持|も}って いったり、 {使|つか}わない {電気|でんき}を こまめに {消|け}したり する ことです。 {小|ちい}さな {努力|どりょく}でも、 {続|つづ}ければ {大|おお}きな {力|ちから}に なります。',
+  vi:'Để bảo vệ môi trường, mỗi người nên bắt đầu từ những việc mình có thể làm. Ví dụ như mang theo túi vải khi đi mua sắm, hay tắt điện khi không dùng. Dù chỉ là nỗ lực nhỏ, nếu duy trì thì sẽ trở thành sức mạnh lớn.'},
+];
+const LV_NAME={n5:'N5',n4:'N4',n3:'N3',kata:'katakana',custom:'tự nhập'};
+const LV_ORDER={n5:0,n4:1,n3:2,kata:3};
+
+/* ============ parser: kana → token romaji ============ */
+const MAP={};
+for(const rows of [SEION,DAKUON,HANDAKU,YOON,YOON_D]) for(const r of rows) for(const [k,...o] of r[2]){MAP[k]=o;MAP[toKata(k)]=o;}
+for(const r of GAIRAI) for(const [k,...o] of r[2]) MAP[k]=o;
+const SMALL={'ぁ':'a','ぃ':'i','ぅ':'u','ぇ':'e','ぉ':'o','ゃ':'ya','ゅ':'yu','ょ':'yo','ゎ':'wa'};
+for(const [k,v] of Object.entries(SMALL)){MAP[k]=['x'+v,'l'+v];MAP[toKata(k)]=['x'+v,'l'+v];}
+Object.assign(MAP,{'ー':['-'],'ゔ':['vu'],'クァ':['kwa','qa'],'グァ':['gwa'],'スィ':['si','swi'],'ズィ':['zi','zwi'],'ヴュ':['vyu'],'ウァ':['wha']});
+const PUNCT=/[。、，．！？!?,.「」『』（）()・…〜～：:；;"'“”\-0-9０-９]/;
+const isKataCh=c=>/[゠-ヿ]/.test(c);
+
+function sokuOpts(opts){
+  const r=[];
+  for(const o of opts){ if(o.startsWith('ch')) r.push('t'+o); r.push(o[0]+o); }
+  for(const o of opts) for(const x of ['xtu','ltu','xtsu','ltsu']) r.push(x+o);
+  return r;
+}
+function mkTok(disp,opts,extra){
+  const key=(isKataCh(disp[0])?'k:':'h:')+disp+(extra&&extra.particle?'^':'');
+  return Object.assign({disp,opts,hint:opts[0],key,label:disp,miss:opts[0]},extra||{});
+}
+// tách một chuỗi kana thành các token
+function tokenize(s){
+  const out=[];let i=0,particle=false;
+  const mora=j=>{
+    if(j>=s.length) return null;
+    const two=s.slice(j,j+2);
+    if(two.length===2&&MAP[two]) return {disp:two,opts:MAP[two],end:j+2};
+    if(MAP[s[j]]) return {disp:s[j],opts:MAP[s[j]],end:j+1};
+    return null;
+  };
+  while(i<s.length){
+    const c=s[i];
+    if(c==='^'){particle=true;i++;continue;}
+    if(c==='っ'||c==='ッ'){
+      const m=mora(i+1);
+      if(m&&m.disp!=='ー'&&m.opts.every(o=>/^[bcdfghjkmpqrstvwxyz]/.test(o))){
+        out.push(mkTok(c+m.disp,sokuOpts(m.opts)));i=m.end;
+      }else{out.push(mkTok(c,['xtu','ltu','xtsu','ltsu']));i++;}
+      continue;
+    }
+    const m=mora(i);
+    if(m){
+      if(particle&&m.disp==='は') out.push(mkTok('は',['wa','ha'],{particle:true}));
+      else if(particle&&m.disp==='へ') out.push(mkTok('へ',['e','he'],{particle:true}));
+      else out.push(mkTok(m.disp,m.opts));
+      particle=false;i=m.end;continue;
+    }
+    // dấu câu, kanji không có cách đọc, chữ Latin… → hiển thị nhưng không cần gõ
+    out.push({disp:c,punct:true,opts:[],hint:''});particle=false;i++;
+  }
+  return out;
+}
+const RUBY=/\{([^|{}]+)\|([^{}]+)\}/g;
+function parsePassage(jp){
+  const words=[];
+  for(const w of jp.split(/[\s　]+/).filter(Boolean)){
+    const reading=w.replace(RUBY,'$2');
+    const shown=w.replace(RUBY,'$1').replace(/\^/g,'');
+    const hasKanji=w.includes('{');
+    let toks=tokenize(reading);
+    // câu không có dấu cách (tự nhập) → chia nhỏ để xuống dòng được
+    if(toks.length>14){
+      let seg=[];
+      const flush=()=>{for(let k=0;k<seg.length;k+=8) words.push({tokens:seg.slice(k,k+8),kj:''});seg=[];};
+      for(const t of toks){seg.push(t);if(t.punct&&/[。、！？!?,.」』]/.test(t.disp)) flush();}
+      flush();
+    }
+    else words.push({tokens:toks,kj:hasKanji?shown:''});
+  }
+  return words;
+}
+
+/* ============ config ============ */
+const DEF={app:'kana',script:'hira',mode:'time',time:30,count:50,groups:{seion:true},rows:{},onError:'stop',hint:'error',adaptive:false,live:true,theme:'serika',font:'Noto Sans JP',size:'m',
+  tLevel:'all',tMode:'passage',tTime:60,tPick:'random',kanji:true,trans:true};
+let cfg=Object.assign({},DEF,store.get('kanatype.cfg',{}));
+cfg.groups=Object.assign({},cfg.groups||{});cfg.rows=Object.assign({},cfg.rows||{});
+let STATS=store.get('kanatype.stats',{});
+let PB=store.get('kanatype.pb',{});
+let customText=store.get('kanatype.custom','');
+let useCustom=false;
+const saveCfg=()=>store.set('kanatype.cfg',cfg);
+
+const THEMES=[['serika','mực',['#323437','#e2b714']],['night','đêm',['#111426','#7aa2f7']],['matcha','matcha',['#1f2a24','#a8c96f']],['sakura','sakura',['#fbeff1','#d14d7f']],['paper','giấy',['#eeebe2','#3d3d3d']]];
+const FONTS=[['Noto Sans JP','gothic'],['Zen Maru Gothic','maru'],['Klee One','viết tay'],['Shippori Mincho','mincho']];
+const SIZES={s:'1.9rem',m:'2.4rem',l:'3.1rem'};
+
+function applyLook(){
+  document.documentElement.dataset.theme=cfg.theme;
+  document.documentElement.style.setProperty('--kana-font',`'${cfg.font}'`);
+  document.documentElement.style.setProperty('--kana-size',SIZES[cfg.size]||SIZES.m);
+  document.body.classList.toggle('text-mode',cfg.app==='text');
+  [...document.querySelectorAll('#tabs button')].forEach(b=>b.classList.toggle('on',b.dataset.app===cfg.app));
+}
+
+/* ============ pool (chế độ chữ cái) ============ */
+function makeEntry(g,it,s){
+  const [kana,...opts]=it;
+  const cv=x=>(s==='kata'&&!g.raw)?toKata(x):x;
+  if(g.kind==='choon'){const d=toKata(kana)+'ー';return {key:'k:'+d,disp:d,label:d,opts:opts.map(o=>o+'-'),hint:opts[0]+'-',miss:opts[0]+'-'};}
+  if(g.kind==='soku'){const tsu=s==='kata'?'ッ':'っ';const b=cv(kana);const so=sokuOpts(opts);return {key:s[0]+':'+tsu+b,soku:true,s,label:tsu+b,so,miss:so[0]};}
+  const d=cv(kana);return {key:s[0]+':'+d,disp:d,label:d,opts,hint:opts[0],miss:opts[0]};
+}
+function scriptsFor(g){
+  if(g.kata) return cfg.script==='hira'?[]:['kata'];
+  return cfg.script==='both'?['hira','kata']:[cfg.script];
+}
+let customPool=null;
+function buildPool(){
+  if(customPool) return customPool;
+  const out=[];
+  for(const g of GROUPS){
+    if(!cfg.groups[g.id]) continue;
+    const sc=scriptsFor(g);
+    for(const r of g.rows){
+      if(cfg.rows[r.id]===false) continue;
+      for(const it of r.items) for(const s of sc) out.push(makeEntry(g,it,s));
+    }
+  }
+  return out;
+}
+function realize(e){
+  if(!e.soku) return {...e};
+  const p=SOKU_PRE[Math.floor(Math.random()*SOKU_PRE.length)];
+  const pd=e.s==='kata'?toKata(p[0]):p[0];
+  const po=p.slice(1),opts=[];
+  for(const a of po) for(const b of e.so) opts.push(a+b);
+  return {...e,disp:pd+e.label,opts,hint:po[0]+e.so[0]};
+}
+function pickEntry(pool,recent){
+  let total=0;
+  const ws=pool.map(e=>{
+    let w=1;
+    if(cfg.adaptive){const s=STATS[e.key];if(s) w=1+5*s.e/(s.e+s.o+1);}
+    if(pool.length>3&&recent.includes(e.key)) w*=0.04;
+    total+=w;return w;
+  });
+  let r=Math.random()*total;
+  for(let i=0;i<pool.length;i++){r-=ws[i];if(r<=0) return pool[i];}
+  return pool[pool.length-1];
+}
+
+/* ============ passages (chế độ đoạn văn) ============ */
+const textList=()=>TEXTS.filter(p=>cfg.tLevel==='all'||p.lv===cfg.tLevel).sort((a,b)=>LV_ORDER[a.lv]-LV_ORDER[b.lv]||a.id.localeCompare(b.id));
+let lastPid=null;
+function nextPassage(first){
+  if(useCustom&&customText.trim()) return {id:'custom',lv:'custom',title:'Đoạn tự nhập',jp:customText,vi:''};
+  const list=textList();if(!list.length) return null;
+  if(first&&cfg.tPick!=='random'){const p=TEXTS.find(x=>x.id===cfg.tPick);if(p) return p;}
+  let cand=list.filter(p=>p.id!==lastPid);if(!cand.length) cand=list;
+  return cand[Math.floor(Math.random()*cand.length)];
+}
+
+/* ============ test state ============ */
+const $=s=>document.querySelector(s);
+const wordsEl=$('#words'),wrapEl=$('#wrap'),liveEl=$('#live'),hid=$('#hid');
+let T=null,POOL=[],lineH=60,timer=null;
+const isText=()=>cfg.app==='text';
+const endsAtLast=()=>isText()?cfg.tMode==='passage':cfg.mode==='count';
+
+function newTest(){
+  clearInterval(timer);
+  applyLook();
+  T={tokens:[],idx:0,buf:'',started:false,ended:false,t0:0,elapsed:0,ck:0,wk:0,secErr:0,hist:[],lastSec:0,recent:[],mistakes:{},okKana:0,allKana:0,okRoma:0,doneN:0,total:0,passages:[],base:0};
+  wordsEl.innerHTML='';wordsEl.style.transform='';
+  document.body.classList.remove('typing');$('#app').classList.remove('focus');
+  $('#res').classList.remove('show');$('#test').style.display='';
+  $('#note').innerHTML=isTouch()?'chạm vào khung chữ để mở bàn phím · gõ romaji':'gõ romaji của chữ được gạch chân · tắt bộ gõ tiếng Việt/Nhật (chế độ E)';
+  if(isText()){
+    POOL=[];
+    const p=nextPassage(true);
+    if(!p){wordsEl.innerHTML='<div class="empty">Không có đoạn văn nào ở mức này.</div>';return;}
+    addPassage(p);
+    if(cfg.tMode==='time'&&T.tokens.length<120&&!useCustom){addPassage(nextPassage());}
+  }else{
+    POOL=buildPool();
+    if(!POOL.length){
+      wordsEl.innerHTML=`<div class="empty">Chưa có chữ nào để luyện.<br>Hãy bật ít nhất một nhóm âm${cfg.script==='hira'?' (trường âm và âm ngoại lai chỉ có ở katakana)':''}.</div>`;
+      wrapEl.style.height='';liveEl.innerHTML='';$('#trans').style.display='none';$('#note').textContent='';
+      return;
+    }
+    addTokens(cfg.mode==='count'?cfg.count:80);
+  }
+  T.total=T.tokens.filter(t=>!t.punct).length;
+  skipPunct();
+  measure();paintCur();updateLive();updateTrans();
+}
+function tokEl(t){
+  const el=document.createElement('div');el.className='tok'+(t.punct?' p':'');
+  el.innerHTML='<span class="k"></span><span class="r"></span>';
+  el.firstChild.textContent=t.disp;
+  t.el=el;t.kEl=el.firstChild;t.rEl=el.lastChild;t.status='todo';
+  if(cfg.hint==='always'&&!t.punct){t.rEl.textContent=t.hint;t.rEl.className='r hint';}
+  T.tokens.push(t);
+  return el;
+}
+function addTokens(n){
+  const frag=document.createDocumentFragment();
+  for(let i=0;i<n;i++){
+    const e=pickEntry(POOL,T.recent);
+    T.recent.push(e.key);if(T.recent.length>2)T.recent.shift();
+    frag.appendChild(tokEl(realize(e)));
+  }
+  wordsEl.appendChild(frag);
+}
+function addPassage(p){
+  lastPid=p.id;T.passages.push(p);
+  const frag=document.createDocumentFragment();
+  for(const w of parsePassage(p.jp)){
+    const we=document.createElement('div');we.className='word';
+    if(cfg.kanji){const kj=document.createElement('div');kj.className='kj';kj.textContent=w.kj;we.appendChild(kj);}
+    const wt=document.createElement('div');wt.className='wt';
+    w.tokens.forEach((t,i)=>{t.pid=p.id;t.wordStart=(i===0);wt.appendChild(tokEl(t));});
+    we.appendChild(wt);frag.appendChild(we);
+  }
+  wordsEl.appendChild(frag);
+  T.total=T.tokens.filter(t=>!t.punct).length;
+}
+function measure(){
+  const first=wordsEl.firstElementChild;if(!T||!T.tokens.length||!first) return;
+  const gap=parseFloat(getComputedStyle(wordsEl).rowGap)||0;
+  lineH=first.offsetHeight+gap;
+  wrapEl.style.height=(lineH*3-gap)+'px';
+  T.base=T.tokens[0].el.offsetTop;
+  scrollWords();
+}
+function scrollWords(){
+  const t=T.tokens[Math.min(T.idx,T.tokens.length-1)];if(!t) return;
+  const shift=Math.max(0,t.el.offsetTop-T.base-lineH);
+  wordsEl.style.transform=`translateY(${-shift}px)`;
+}
+function updateTrans(){
+  const el=$('#trans');
+  if(!isText()||!T||!T.passages.length){el.style.display='none';return;}
+  const cur=T.tokens[Math.min(T.idx,T.tokens.length-1)];
+  const p=T.passages.find(x=>x.id===(cur&&cur.pid))||T.passages[0];
+  el.style.display='';
+  el.innerHTML=`<span class="lv">${LV_NAME[p.lv]}</span><b>${p.title}</b>${cfg.trans&&p.vi?p.vi:(p.vi?'<i>(nghĩa đang ẩn)</i>':'')}`;
+}
+function paintCur(){
+  const t=T.tokens[T.idx];if(!t) return;
+  t.el.classList.add('cur');
+  const showHint=cfg.hint==='always'||(cfg.hint==='error'&&t.hadErr)||t.revealed;
+  const b=T.buf;
+  if(showHint){
+    t.rEl.className='r hint';
+    if(b&&t.hint.startsWith(b)) t.rEl.innerHTML=`<b>${b}</b>${t.hint.slice(b.length)}`;
+    else if(b){t.rEl.className='r buf';t.rEl.textContent=b;}
+    else t.rEl.textContent=t.hint;
+  }else{
+    t.rEl.className=b?'r buf':'r';t.rEl.textContent=b;
+  }
+}
+function paintDone(t){
+  t.el.classList.remove('cur','shake');t.el.classList.add(t.status);
+  if(t.status==='err'&&cfg.hint!=='off'){t.rEl.className='r bad';t.rEl.textContent=t.hint;}
+  else{t.rEl.className='r';t.rEl.textContent='';}
+}
+function skipPunct(){
+  while(T.tokens[T.idx]&&T.tokens[T.idx].punct){const p=T.tokens[T.idx];p.status='ok';p.el.classList.add('ok');T.idx++;}
+}
+// chuỗi s có thể là phần đầu của các chữ từ vị trí i trở đi không? (xử lý ん: n / nn)
+function canConsume(i,s){
+  if(!s) return true;
+  const t=T.tokens[i];if(!t) return false;
+  if(t.punct) return canConsume(i+1,s);
+  if(t.opts.some(o=>o.startsWith(s))) return true;
+  return t.opts.some(o=>s.startsWith(o)&&canConsume(i+1,s.slice(o.length)));
+}
+const altSplit=(t,b)=>{for(let k=b.length-1;k>0;k--) if(t.opts.includes(b.slice(0,k))&&canConsume(T.idx+1,b.slice(k))) return k;return 0;};
+function lastToken(){
+  if(!endsAtLast()) return false;
+  for(let i=T.idx+1;i<T.tokens.length;i++) if(!T.tokens[i].punct) return false;
+  return true;
+}
+const isFinal=(t,b)=>t.opts.includes(b)&&((!t.opts.some(o=>o.length>b.length&&o.startsWith(b))&&!altSplit(t,b))||lastToken());
+
+function start(){
+  T.started=true;T.t0=performance.now();
+  document.body.classList.add('typing');$('#app').classList.add('focus');
+  timer=setInterval(tick,100);
+}
+const limit=()=>isText()?(cfg.tMode==='time'?cfg.tTime:0):(cfg.mode==='time'?cfg.time:0);
+function tick(){
+  if(!T||T.ended) return;
+  T.elapsed=(performance.now()-T.t0)/1000;
+  const s=Math.floor(T.elapsed);
+  while(T.lastSec<s){T.lastSec++;T.hist.push({t:T.lastSec,ok:T.okKana,all:T.allKana,err:T.secErr});T.secErr=0;}
+  const L=limit();
+  if(L&&T.elapsed>=L){T.elapsed=L;end(false);return;}
+  updateLive();
+}
+function updateLive(){
+  if(!T) return;
+  const L=limit();
+  let main='';
+  if(L) main=Math.max(0,Math.ceil(L-(T.started?T.elapsed:0)));
+  else if(endsAtLast()) main=`${T.doneN}/${T.total}`;
+  else main=`${T.doneN} <span class="dim">${fmtTime(T.elapsed)}</span>`;
+  let sp='';
+  if(cfg.live&&T.started&&T.elapsed>1.5) sp=`<span class="dim">${Math.round(T.okKana/(T.elapsed/60))} kana/phút</span>`;
+  liveEl.innerHTML=(T.started||L||endsAtLast())?`<span>${main}</span>${sp}`:'<span class="dim">vô hạn · esc để kết thúc</span>';
+}
+const fmtTime=s=>{s=Math.floor(s);return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')};
+
+function feed(c){
+  if(!T||T.ended||!T.tokens[T.idx]) return;
+  if(/[^\x00-\x7f]/.test(c)){warnIME();return;}
+  c=c.toLowerCase();
+  if(!/^[a-z'\-]$/.test(c)) return;
+  if(!T.started) start();
+  $('#app').classList.add('focus');
+  const t=T.tokens[T.idx];
+  const nb=T.buf+c;
+  if(t.opts.some(o=>o.startsWith(nb))){
+    T.buf=nb;T.ck++;
+    if(isFinal(t,nb)) finish(t,true); else paintCur();
+    return;
+  }
+  // chữ hiện tại đã đủ (vd ん gõ "n") và ký tự mới thuộc chữ kế tiếp
+  if(T.buf&&t.opts.includes(T.buf)){
+    const B=T.buf;
+    if(!canConsume(T.idx+1,c)){
+      for(let k=B.length-1;k>0;k--){
+        const rest=B.slice(k)+c;
+        if(t.opts.includes(B.slice(0,k))&&canConsume(T.idx+1,rest)){
+          T.buf=B.slice(0,k);T.ck-=B.length-k;finish(t,true);
+          for(const ch of rest) feed(ch);
+          return;
+        }
+      }
+    }
+    finish(t,true);feed(c);return;
+  }
+  // gõ sai
+  T.wk++;T.secErr++;markErr(t);
+  if(cfg.onError==='skip'){finish(t,false);}
+  else{t.el.classList.remove('shake');void t.el.offsetWidth;t.el.classList.add('shake');paintCur();}
+}
+function markErr(t){
+  if(t.hadErr) return;
+  t.hadErr=true;
+  const m=T.mistakes[t.key]||(T.mistakes[t.key]={label:t.label,roma:t.miss,n:0,entry:t});
+  m.n++;
+}
+function finish(t,typedOk){
+  t.typed=T.buf;
+  t.status=(typedOk&&!t.hadErr)?'ok':'err';
+  const len=[...t.disp].length;
+  T.allKana+=len;T.doneN++;
+  if(t.status==='ok'){T.okKana+=len;T.okRoma+=t.typed.length;}
+  const s=STATS[t.key]||(STATS[t.key]={e:0,o:0});
+  if(t.status==='ok') s.o++; else s.e++;
+  paintDone(t);
+  T.buf='';T.idx++;
+  skipPunct();
+  if(T.idx>=T.tokens.length&&endsAtLast()){end(false);return;}
+  if(isText()){
+    if(cfg.tMode==='time'&&T.idx>T.tokens.length-40){const p=nextPassage();if(p) addPassage(p);}
+  }else if(cfg.mode!=='count'&&T.idx>T.tokens.length-40) addTokens(60);
+  paintCur();scrollWords();updateLive();updateTrans();
+}
+function space(){
+  if(!T||T.ended) return;
+  const t=T.tokens[T.idx];if(!t) return;
+  if(T.buf&&t.opts.includes(T.buf)){finish(t,true);return;}
+  if(!T.started) return;
+  if(isText()&&!T.buf&&t.wordStart) return; // dấu cách giữa các từ: bỏ qua
+  $('#app').classList.add('focus');
+  if(cfg.onError==='skip'){T.wk++;T.secErr++;markErr(t);finish(t,false);}
+  else if(!t.revealed){t.revealed=true;markErr(t);paintCur();}
+}
+function back(all){
+  if(!T||T.ended||!T.buf) return;
+  T.buf=all?'':T.buf.slice(0,-1);paintCur();
+}
+
+function end(early){
+  if(!T||T.ended) return;
+  clearInterval(timer);
+  if(!limit()||early) T.elapsed=(performance.now()-T.t0)/1000;
+  if(!T.started){T.ended=true;return;}
+  T.ended=true;
+  if(T.elapsed-T.lastSec>0.2) T.hist.push({t:T.elapsed,ok:T.okKana,all:T.allKana,err:T.secErr});
+  store.set('kanatype.stats',STATS);
+  showResults(early);
+}
+
+/* ============ results ============ */
+function desc(){
+  if(isText()){
+    const md=cfg.tMode==='time'?cfg.tTime+' giây':'hết đoạn';
+    return `đoạn văn · ${md} · ${useCustom?'tự nhập':(cfg.tLevel==='all'?'mọi mức':LV_NAME[cfg.tLevel])}`;
+  }
+  if(customPool) return `luyện chữ sai (${customPool.length})`;
+  const sc={hira:'hiragana',kata:'katakana',both:'hira + kata'}[cfg.script];
+  const md=cfg.mode==='time'?cfg.time+' giây':cfg.mode==='count'?cfg.count+' chữ':'vô hạn';
+  const gs=GROUPS.filter(g=>cfg.groups[g.id]&&scriptsFor(g).length).map(g=>g.name).join(', ');
+  return `${sc} · ${md} · ${gs}`;
+}
+function pbKey(){
+  if(isText()){
+    if(useCustom) return null;
+    if(cfg.tMode==='passage') return T.passages.length===1?JSON.stringify(['text',T.passages[0].id]):null;
+    return JSON.stringify(['text-time',cfg.tLevel,cfg.tTime]);
+  }
+  if(customPool||cfg.mode==='zen') return null;
+  return JSON.stringify([cfg.script,cfg.mode,cfg.mode==='time'?cfg.time:cfg.count,GROUPS.filter(g=>cfg.groups[g.id]).map(g=>g.id),Object.keys(cfg.rows).filter(k=>cfg.rows[k]===false).sort()]);
+}
+function passageHtml(p){
+  const jp=p.jp.replace(RUBY,(m,k,r)=>cfg.kanji?`<ruby>${k}<rt>${r}</rt></ruby>`:r).replace(/\^/g,'').replace(/\s+/g,'');
+  return `<div class="passage"><div class="sec-lbl">${LV_NAME[p.lv]} · ${p.title}</div><div class="jpt">${jp}</div>${p.vi?`<div class="vit">${p.vi}</div>`:''}</div>`;
+}
+function showResults(early){
+  const min=Math.max(T.elapsed,0.5)/60;
+  const kpm=Math.round(T.okKana/min),raw=Math.round(T.allKana/min),wpm=Math.round(T.okRoma/5/min);
+  const acc=T.ck+T.wk?Math.round(100*T.ck/(T.ck+T.wk)):0;
+  const done=T.tokens.slice(0,T.idx).filter(t=>!t.punct),okN=done.filter(t=>t.status==='ok').length,errN=done.length-okN;
+  let pbHtml='';const key=pbKey();
+  if(key&&!early&&done.length){
+    const old=PB[key];
+    if(!old||kpm>old.kpm){pbHtml=old?`<div class="pb">★ kỷ lục mới! (cũ: ${old.kpm})</div>`:`<div class="pb">★ kỷ lục đầu tiên cho ${isText()&&cfg.tMode==='passage'?'bài này':'cấu hình này'}</div>`;PB[key]={kpm,acc};store.set('kanatype.pb',PB);}
+    else pbHtml=`<div class="pb" style="color:var(--sub)">kỷ lục: ${old.kpm} kana/phút</div>`;
+  }
+  const miss=Object.values(T.mistakes).sort((a,b)=>b.n-a.n);
+  const missHtml=miss.length?`<div class="miss"><div class="sec-lbl">chữ gõ sai (${miss.length})</div><div class="chips">${miss.slice(0,24).map(m=>`<div class="mchip"><span class="k">${m.label}</span><span class="r">${m.roma}</span>${m.n>1?`<span class="n">×${m.n}</span>`:''}</div>`).join('')}</div></div>`:`<div class="miss"><div class="sec-lbl">không sai chữ nào — tuyệt vời 🎉</div></div>`;
+  const passHtml=isText()?T.passages.filter(p=>T.tokens.slice(0,T.idx).some(t=>t.pid===p.id)).map(passageHtml).join(''):'';
+  $('#res').innerHTML=`
+    <div class="res-top">
+      <div><div class="big"><div class="lbl">kana/phút</div><div class="val">${kpm}</div></div>
+      <div class="big"><div class="lbl">chính xác</div><div class="val">${acc}%</div></div>${pbHtml}</div>
+      <div>${chartSvg()}<div class="legend"><span><i style="background:var(--main)"></i>kana/phút</span><span><i style="background:var(--sub)"></i>thô</span><span><i style="background:var(--err);width:6px;height:6px;border-radius:50%"></i>lỗi</span></div></div>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="lbl">bài</div><div class="val" style="font-size:1rem;color:var(--text);max-width:360px">${desc()}</div></div>
+      <div class="stat"><div class="lbl">thô</div><div class="val">${raw}</div></div>
+      <div class="stat"><div class="lbl">wpm (romaji)</div><div class="val">${wpm}</div></div>
+      <div class="stat"><div class="lbl">chữ đúng/sai</div><div class="val">${okN}<small>/</small><span class="bad">${errN}</span></div></div>
+      <div class="stat"><div class="lbl">phím đúng/sai</div><div class="val">${T.ck}<small>/</small><span class="bad">${T.wk}</span></div></div>
+      <div class="stat"><div class="lbl">thời gian</div><div class="val">${T.elapsed<60?T.elapsed.toFixed(1)+'s':fmtTime(T.elapsed)}</div></div>
+    </div>
+    ${missHtml}
+    ${passHtml}
+    <div class="btns">
+      <button class="btn pri" id="again">↻ ${isText()?'đoạn khác':'bài mới'} <kbd>tab</kbd></button>
+      ${isText()&&cfg.tMode==='passage'&&T.passages[0]&&!useCustom?`<button class="btn" id="retry">gõ lại đoạn này</button>`:''}
+      ${miss.length?`<button class="btn" id="drill">luyện lại ${miss.length} chữ sai</button>`:''}
+      ${customPool&&!isText()?`<button class="btn" id="exitDrill">về bài thường</button>`:''}
+    </div>`;
+  $('#test').style.display='none';$('#res').classList.add('show');
+  document.body.classList.remove('typing');$('#app').classList.remove('focus');
+  $('#again').onclick=()=>newTest();
+  const rt=$('#retry');if(rt) rt.onclick=()=>{const keep=cfg.tPick;cfg.tPick=T.passages[0].id;newTest();cfg.tPick=keep;};
+  const d=$('#drill');if(d) d.onclick=()=>{
+    const seen=new Set();customPool=[];
+    for(const m of miss){const e=m.entry,k=e.key;if(seen.has(k))continue;seen.add(k);
+      const base={key:e.key,label:e.label,miss:e.miss};
+      if(e.soku){Object.assign(base,{soku:true,s:e.s,so:e.so});}
+      else Object.assign(base,{disp:e.label===e.disp?e.disp:e.disp,opts:e.opts,hint:e.hint});
+      customPool.push(base);}
+    cfg.app='kana';saveCfg();renderBars();newTest();
+  };
+  const x=$('#exitDrill');if(x) x.onclick=()=>{customPool=null;renderBars();newTest();};
+}
+function chartSvg(){
+  const h=T.hist.filter(p=>p.t>0);
+  if(h.length<2) return '<div style="height:40px"></div>';
+  const W=640,H=180,L=36,R=8,TP=14,B=24;
+  const pts=h.map(p=>({t:p.t,v:p.ok/(p.t/60),r:p.all/(p.t/60),e:p.err}));
+  const maxT=pts[pts.length-1].t;
+  let maxV=Math.max(...pts.map(p=>Math.max(p.v,p.r)),10);
+  const raw4=maxV*1.1/4,mag=Math.pow(10,Math.floor(Math.log10(raw4)));
+  const step=[1,2,2.5,5,10].map(m=>m*mag).find(s=>s>=raw4);maxV=Math.ceil(maxV*1.1/step)*step;
+  const x=t=>L+(t/maxT)*(W-L-R),y=v=>H-B-(v/maxV)*(H-TP-B);
+  let g='';
+  for(let v=0;v<=maxV+1e-9;v+=step) g+=`<line class="grid" x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}"/><text class="lab" x="${L-6}" y="${y(v)+4}" text-anchor="end">${Math.round(v)}</text>`;
+  const tStep=maxT>90?30:maxT>40?10:maxT>15?5:2;
+  for(let t=tStep;t<maxT;t+=tStep) g+=`<text class="lab" x="${x(t)}" y="${H-6}" text-anchor="middle">${t}s</text>`;
+  const line=k=>pts.map((p,i)=>(i?'L':'M')+x(p.t).toFixed(1)+' '+y(p[k]).toFixed(1)).join(' ');
+  const area=line('v')+` L${x(maxT)} ${y(0)} L${x(pts[0].t)} ${y(0)} Z`;
+  const errs=pts.filter(p=>p.e>0).map(p=>`<circle class="e" cx="${x(p.t)}" cy="${TP+2}" r="${Math.min(2.5+p.e,6)}"/>`).join('');
+  return `<svg class="chart" viewBox="0 0 ${W} ${H}">${g}<path class="area" d="${area}"/><path class="l-raw" d="${line('r')}"/><path class="l-main" d="${line('v')}"/>${errs}</svg>`;
+}
+
+/* ============ bars ============ */
+const opt=(on,label,act,extra='')=>`<button class="opt ${on?'on':''} ${extra}" data-act="${act}">${label}</button>`;
+function renderBars(){
+  const b1=$('#bar1'),b2=$('#bar2');
+  if(isText()){
+    let h=['all','n5','n4','n3','kata'].map(l=>opt(cfg.tLevel===l&&!useCustom,l==='all'?'tất cả':LV_NAME[l],'lv:'+l)).join('');
+    h+='<span class="sep"></span>';
+    h+=opt(cfg.tMode==='passage','📄 hết đoạn','tmode:passage')+opt(cfg.tMode==='time','⏱ thời gian','tmode:time');
+    if(cfg.tMode==='time'){h+='<span class="sep"></span>'+[30,60,120].map(v=>opt(cfg.tTime===v,v,'tval:'+v)).join('');}
+    b1.innerHTML=h;
+    const list=textList();
+    let sel=`<select class="sel" id="pick" ${useCustom?'disabled':''}><option value="random">🎲 ngẫu nhiên (${list.length} đoạn)</option>${list.map(p=>`<option value="${p.id}" ${cfg.tPick===p.id?'selected':''}>${LV_NAME[p.lv]} · ${p.title}</option>`).join('')}</select>`;
+    let h2=sel+'<span class="sep"></span>'+opt(cfg.kanji,'<span class="jp">漢</span> kanji','kanji')+opt(cfg.trans,'nghĩa','trans')+'<span class="sep"></span>'+opt(useCustom,'✎ tự nhập','custext');
+    b2.innerHTML=h2;
+    $('#pick').onchange=e=>{cfg.tPick=e.target.value;saveCfg();e.target.blur();newTest();};
+    $('#tagbox').innerHTML=useCustom?`<span class="tag">đang gõ đoạn tự nhập<button id="untag" title="thoát">✕</button></span>`:'';
+    const u=$('#untag');if(u) u.onclick=()=>{useCustom=false;renderBars();newTest();};
+    return;
+  }
+  let h=opt(cfg.script==='hira','<span class="jp">あ</span> hiragana','script:hira')+opt(cfg.script==='kata','<span class="jp">ア</span> katakana','script:kata')+opt(cfg.script==='both','cả hai','script:both');
+  h+='<span class="sep"></span>';
+  h+=opt(cfg.mode==='time','⏱ thời gian','mode:time')+opt(cfg.mode==='count','# số chữ','mode:count')+opt(cfg.mode==='zen','∞ vô hạn','mode:zen');
+  if(cfg.mode!=='zen'){
+    h+='<span class="sep"></span>';
+    const vals=cfg.mode==='time'?[15,30,60,120]:[25,50,100];
+    const cur=cfg.mode==='time'?cfg.time:cfg.count;
+    h+=vals.map(v=>opt(cur===v,v,'val:'+v)).join('');
+    h+=opt(!vals.includes(cur),vals.includes(cur)?'✎':'✎ '+cur,'custom');
+  }
+  b1.innerHTML=h;
+  let h2=GROUPS.map(g=>{const dis=g.kata&&cfg.script==='hira';return opt(cfg.groups[g.id]&&!dis,g.name,'grp:'+g.id,dis?'dis':'')}).join('');
+  const n=buildPool().length;
+  h2+=`<span class="sep"></span>`+opt(false,'⚙ chọn hàng','rows')+`<span class="count">${customPool?'':n+' chữ'}</span>`;
+  b2.innerHTML=h2;
+  [...b2.querySelectorAll('.opt.dis')].forEach(e=>e.title='Chỉ có ở katakana — chọn "katakana" hoặc "cả hai"');
+  $('#tagbox').innerHTML=customPool?`<span class="tag">đang luyện ${customPool.length} chữ sai<button id="untag" title="thoát">✕</button></span>`:'';
+  const u=$('#untag');if(u) u.onclick=()=>{customPool=null;renderBars();newTest();};
+}
+document.addEventListener('click',e=>{
+  const tb=e.target.closest('#tabs button');
+  if(tb){tb.blur();if(cfg.app!==tb.dataset.app){cfg.app=tb.dataset.app;saveCfg();renderBars();newTest();}return;}
+  const b=e.target.closest('.bars .opt');if(!b) return;
+  b.blur();
+  const [a,v]=b.dataset.act.split(':');
+  if(b.classList.contains('dis')) return;
+  if(a==='script') cfg.script=v;
+  else if(a==='mode') cfg.mode=v;
+  else if(a==='val'){if(cfg.mode==='time') cfg.time=+v; else cfg.count=+v;}
+  else if(a==='grp') cfg.groups[v]=!cfg.groups[v];
+  else if(a==='custom'){openModal('custom');return;}
+  else if(a==='rows'){openModal('rows');return;}
+  else if(a==='lv'){cfg.tLevel=v;useCustom=false;if(cfg.tPick!=='random'&&!textList().some(p=>p.id===cfg.tPick)) cfg.tPick='random';}
+  else if(a==='tmode') cfg.tMode=v;
+  else if(a==='tval') cfg.tTime=+v;
+  else if(a==='kanji') cfg.kanji=!cfg.kanji;
+  else if(a==='trans'){cfg.trans=!cfg.trans;saveCfg();renderBars();updateTrans();return;}
+  else if(a==='custext'){openModal('text');return;}
+  if(!isText()) customPool=null;
+  saveCfg();renderBars();newTest();
+});
+
+/* ============ modal ============ */
+let modalOpen=false,dirty=false,clearArm=false,modalKind='set';
+function openModal(focus){
+  modalOpen=true;modalKind=focus==='text'?'text':'set';
+  $('#modal').classList.add('show');renderModal();
+  if(focus==='custom') setTimeout(()=>{const i=$('#in-'+(cfg.mode==='count'?'count':'time'));if(i){i.scrollIntoView({block:'center'});i.focus();i.select();}},30);
+  if(focus==='text') setTimeout(()=>{const t=$('#ctext');if(t) t.focus();},30);
+}
+function closeModal(){modalOpen=false;$('#modal').classList.remove('show');clearArm=false;if(dirty){dirty=false;if(!isText()) customPool=null;saveCfg();renderBars();newTest();}}
+$('#modal').addEventListener('mousedown',e=>{if(e.target.id==='modal') closeModal();});
+$('#openSet').onclick=()=>openModal();
+
+function seg(name,cur,opts){return `<div class="seg">${opts.map(([v,l])=>`<button class="${cur===v?'on':''}" data-set="${name}" data-v="${v}">${l}</button>`).join('')}</div>`;}
+function renderModal(){
+  if(modalKind==='text'){
+    $('#panel').innerHTML=`<div class="ph"><h2>Tự nhập đoạn văn</h2><button class="mini" id="closeM">đóng ✕ <kbd>esc</kbd></button></div>
+    <p>Dán đoạn văn bằng <b>hiragana / katakana</b>. Dấu câu sẽ được tự bỏ qua. Kanji không gõ được — hãy viết bằng kana, hoặc kèm cách đọc theo dạng <code>{漢字|かんじ}</code>. Đánh dấu trợ từ は / へ (đọc wa / e) bằng <code>^は</code>, <code>^へ</code>. Nên để dấu cách giữa các từ để dễ đọc.</p>
+    <textarea class="ta" id="ctext" placeholder="{私|わたし}^は まいにち にほんごを べんきょう します。">${customText.replace(/</g,'&lt;')}</textarea>
+    <div class="btns" style="justify-content:flex-start;margin-top:14px"><button class="btn pri" id="useText">bắt đầu gõ</button><button class="btn" id="sampleText">dùng đoạn mẫu</button></div>`;
+    $('#closeM').onclick=closeModal;
+    $('#sampleText').onclick=()=>{$('#ctext').value=TEXTS[Math.floor(Math.random()*TEXTS.length)].jp;};
+    $('#useText').onclick=()=>{
+      const v=$('#ctext').value.trim();customText=v;store.set('kanatype.custom',v);
+      useCustom=!!v;modalOpen=false;$('#modal').classList.remove('show');renderBars();newTest();
+    };
+    return;
+  }
+  const disp=(g,s)=>(g.raw||g.kata)?toKata(s):(cfg.script==='kata'?toKata(s):s);
+  let h=`<div class="ph"><h2>Cài đặt</h2><button class="mini" id="closeM">đóng ✕ <kbd>esc</kbd></button></div>`;
+  if(!isText()){
+    h+=`<h3>bộ chữ & chọn hàng</h3>`;
+    for(const g of GROUPS){
+      const dis=g.kata&&cfg.script==='hira';const on=cfg.groups[g.id]&&!dis;
+      h+=`<div class="grp ${on?'':'off'}"><div class="grp-h"><button class="sw ${on?'on':''}" data-grp="${g.id}" ${dis?'disabled title="Chỉ có ở katakana"':''}></button><span class="t">${g.full}<span class="jp">${g.jp}</span></span>${dis?'<span class="knote">· chỉ katakana</span>':''}<span class="sp"></span><button class="mini" data-all="${g.id}">chọn hết</button><button class="mini" data-none="${g.id}">bỏ hết</button></div><div class="rows">`;
+      for(const r of g.rows){
+        const ron=cfg.rows[r.id]!==false;
+        let mem;
+        if(g.kind==='soku') mem=r.items.map(i=>disp(g,'っ'+i[0]));
+        else if(g.kind==='choon') mem=r.items.map(i=>toKata(i[0])+'ー');
+        else mem=r.items.map(i=>disp(g,i[0]));
+        const txt=mem.length>6?mem.slice(0,5).join(' ')+' …':mem.join(' ');
+        h+=`<button class="rchip ${ron?'on':''}" data-row="${r.id}" title="${mem.join(' ')}">${txt}</button>`;
+      }
+      h+=`</div></div>`;
+    }
+  }
+  h+=`<h3>cách luyện</h3>
+  <div class="setrow"><div class="d">Khi gõ sai<small>"Dừng lại": phải gõ đúng mới sang chữ kế. "Bỏ qua": chữ bị tính sai và chuyển tiếp ngay (giống quiz).</small></div>${seg('onError',cfg.onError,[['stop','dừng lại'],['skip','bỏ qua']])}</div>
+  <div class="setrow"><div class="d">Gợi ý romaji<small>"Khi sai": hiện cách đọc dưới chữ sau khi gõ sai. "Luôn hiện": dành cho người mới bắt đầu.</small></div>${seg('hint',cfg.hint,[['off','tắt'],['error','khi sai'],['always','luôn hiện']])}</div>
+  <div class="setrow"><div class="d">Ưu tiên chữ hay sai<small>Chế độ chữ cái: chữ bạn hay gõ sai (lưu qua các bài, kể cả đoạn văn) sẽ xuất hiện nhiều hơn.</small></div><div style="display:flex;gap:8px;align-items:center">${seg('adaptive',String(cfg.adaptive),[['false','tắt'],['true','bật']])}<button class="mini" id="clrStats">${clearArm?'nhấn lần nữa để xoá':'xoá thống kê ('+Object.keys(STATS).length+')'}</button></div></div>
+  <div class="setrow"><div class="d">Tốc độ trực tiếp<small>Hiện kana/phút trong lúc gõ.</small></div>${seg('live',String(cfg.live),[['false','ẩn'],['true','hiện']])}</div>`;
+  if(!isText()) h+=`<div class="setrow"><div class="d">Thời gian tuỳ chọn (giây)</div><input class="num" id="in-time" type="number" min="5" max="3600" value="${cfg.time}"></div>
+  <div class="setrow"><div class="d">Số chữ tuỳ chọn</div><input class="num" id="in-count" type="number" min="5" max="1000" value="${cfg.count}"></div>`;
+  else h+=`<div class="setrow"><div class="d">Thời gian tuỳ chọn cho đoạn văn (giây)</div><input class="num" id="in-ttime" type="number" min="10" max="3600" value="${cfg.tTime}"></div>`;
+  h+=`<h3>giao diện</h3>
+  <div class="setrow"><div class="d">Chủ đề</div><div class="themes">${THEMES.map(([id,l,c])=>`<button class="th ${cfg.theme===id?'on':''}" data-theme-id="${id}" style="background:${c[0]};color:${c[1]}"><i style="background:${c[1]}"></i>${l}</button>`).join('')}</div></div>
+  <div class="setrow"><div class="d">Font kana</div><div class="seg fonts">${FONTS.map(([f,l])=>`<button class="${cfg.font===f?'on':''}" data-set="font" data-v="${f}" style="font-family:'${f}'">あア <span style="font-family:'Roboto Mono';font-size:.7rem">${l}</span></button>`).join('')}</div></div>
+  <div class="setrow"><div class="d">Cỡ chữ</div>${seg('size',cfg.size,[['s','nhỏ'],['m','vừa'],['l','lớn']])}</div>
+  <h3>cách gõ được chấp nhận</h3>
+  <div class="ref">
+    <div><b>し</b> <code>shi</code> / <code>si</code> · <b>ち</b> <code>chi</code> / <code>ti</code></div>
+    <div><b>つ</b> <code>tsu</code> / <code>tu</code> · <b>ふ</b> <code>fu</code> / <code>hu</code></div>
+    <div><b>じ ぢ</b> <code>ji</code> (<code>zi</code>, <code>di</code>) · <b>づ</b> <code>zu</code> / <code>du</code></div>
+    <div><b>を</b> <code>wo</code> / <code>o</code> · <b>ん</b> <code>n</code>, <code>nn</code>, <code>n'</code></div>
+    <div><b>しゃ</b> <code>sha</code>/<code>sya</code> · <b>じゃ</b> <code>ja</code>/<code>jya</code>/<code>zya</code></div>
+    <div><b>ちゃ</b> <code>cha</code>/<code>cya</code>/<code>tya</code></div>
+    <div><b>っ</b> gấp đôi phụ âm: <b>かっぱ</b> <code>kappa</code>, <b>まっちゃ</b> <code>matcha</code>; hoặc <code>xtu</code>/<code>ltu</code></div>
+    <div><b>ー</b> phím <code>-</code>: <b>カー</b> <code>ka-</code></div>
+    <div><b>ティ</b> <code>ti</code>/<code>thi</code> · <b>ディ</b> <code>di</code>/<code>dhi</code> · <b>ファ</b> <code>fa</code></div>
+    <div>trợ từ <b>は</b> <code>wa</code>/<code>ha</code> · <b>へ</b> <code>e</code>/<code>he</code> (đoạn văn)</div>
+    <div>dấu cách giữa các từ: gõ hay không đều được</div>
+  </div>`;
+  $('#panel').innerHTML=h;
+  $('#closeM').onclick=closeModal;
+}
+$('#panel').addEventListener('click',e=>{
+  if(modalKind==='text') return;
+  const t=e.target.closest('button');if(!t) return;
+  if(t.dataset.grp){cfg.groups[t.dataset.grp]=!cfg.groups[t.dataset.grp];dirty=true;}
+  else if(t.dataset.row){const id=t.dataset.row;cfg.rows[id]=cfg.rows[id]===false;if(cfg.rows[id]) delete cfg.rows[id];
+    const gid=id.split('.')[0];if(cfg.rows[id]!==false) cfg.groups[gid]=true;dirty=true;}
+  else if(t.dataset.all){const g=GROUPS.find(x=>x.id===t.dataset.all);g.rows.forEach(r=>delete cfg.rows[r.id]);cfg.groups[g.id]=true;dirty=true;}
+  else if(t.dataset.none){const g=GROUPS.find(x=>x.id===t.dataset.none);g.rows.forEach(r=>cfg.rows[r.id]=false);dirty=true;}
+  else if(t.dataset.set){const k=t.dataset.set,v=t.dataset.v;cfg[k]=(v==='true'?true:v==='false'?false:v);
+    if(['font','size'].includes(k)){applyLook();setTimeout(measure,50);}
+    dirty=true;}
+  else if(t.dataset.themeId){cfg.theme=t.dataset.themeId;applyLook();saveCfg();}
+  else if(t.id==='clrStats'){if(clearArm){STATS={};store.set('kanatype.stats',STATS);clearArm=false;}else clearArm=true;}
+  else return;
+  renderModal();
+});
+$('#panel').addEventListener('change',e=>{
+  const i=e.target;if(!i.classList.contains('num')) return;
+  const v=Math.round(+i.value);if(!v||v<5) return;
+  if(i.id==='in-time'){cfg.time=Math.min(v,3600);if(cfg.mode!=='zen') cfg.mode='time';}
+  else if(i.id==='in-count'){cfg.count=Math.min(v,1000);if(cfg.mode!=='zen') cfg.mode='count';}
+  else if(i.id==='in-ttime'){cfg.tTime=Math.min(Math.max(v,10),3600);cfg.tMode='time';}
+  dirty=true;
+});
+
+/* ============ input ============ */
+let warnTimer=null;
+function warnIME(){
+  const w=$('#warn');
+  w.innerHTML='⚠ Có vẻ bộ gõ <b>tiếng Việt</b> (Unikey/EVKey/Telex) hoặc <b>bộ gõ tiếng Nhật</b> đang bật. Hãy chuyển sang chế độ gõ tiếng Anh (<b>E</b>) để gõ romaji — ví dụ Ctrl+Shift hoặc Alt+Z với Unikey.';
+  w.classList.add('show');clearTimeout(warnTimer);warnTimer=setTimeout(()=>w.classList.remove('show'),7000);
+}
+const isTouch=()=>matchMedia('(pointer:coarse)').matches;
+document.addEventListener('keydown',e=>{
+  if(modalOpen){if(e.key==='Escape'){e.preventDefault();closeModal();}return;}
+  if((e.target.tagName==='INPUT'&&e.target!==hid)||e.target.tagName==='SELECT'||e.target.tagName==='TEXTAREA') return;
+  if(e.key==='Tab'){e.preventDefault();newTest();return;}
+  if(!T) return;
+  if(T.ended){if(e.key==='Enter'){e.preventDefault();newTest();}return;}
+  if(e.key==='Escape'||(e.key==='Enter'&&e.shiftKey)){if(T.started){e.preventDefault();end(true);}return;}
+  if(e.ctrlKey||e.metaKey||e.altKey){if(e.ctrlKey&&e.key==='Backspace'){e.preventDefault();back(true);}return;}
+  if(e.isComposing||e.key==='Process'){warnIME();return;}
+  if(e.key==='Backspace'){e.preventDefault();back();return;}
+  if(e.key===' '){e.preventDefault();space();return;}
+  if(e.key.length===1){e.preventDefault();feed(e.key);}
+});
+// mobile: bàn phím ảo thường không gửi e.key chuẩn → đọc từ ô input ẩn
+let prevVal='';
+hid.addEventListener('input',()=>{
+  const v=hid.value;
+  if(v.length>prevVal.length&&v.startsWith(prevVal)){for(const ch of v.slice(prevVal.length)){if(ch===' ') space(); else feed(ch);}}
+  else if(v.length<prevVal.length){for(let i=0;i<prevVal.length-v.length;i++) back();}
+  prevVal=v;
+  if(v.length>30){hid.value='';prevVal='';}
+});
+wrapEl.addEventListener('click',()=>{hid.focus({preventScroll:true});});
+document.addEventListener('mousemove',e=>{if(Math.abs(e.movementX)+Math.abs(e.movementY)>3) $('#app').classList.remove('focus');});
+$('#logo').onclick=()=>{customPool=null;renderBars();newTest();};
+window.addEventListener('resize',()=>{clearTimeout(window._rz);window._rz=setTimeout(measure,120);});
+
+/* ============ boot ============ */
+applyLook();renderBars();newTest();
+if(document.fonts&&document.fonts.ready) document.fonts.ready.then(measure);
+</script>
+</body>
+</html>
