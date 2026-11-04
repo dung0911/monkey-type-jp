@@ -876,7 +876,8 @@ function markErr(t){
 }
 function finish(t,typedOk){
   t.typed=T.buf;
-  t.status=(typedOk&&!t.hadErr)?'ok':'err';
+  // gõ sai nhưng đã tự Backspace sửa lại (và không xem gợi ý bằng phím cách) → hiện như đúng; lỗi vẫn tính vào độ chính xác
+  t.status=(typedOk&&(!t.hadErr||(t.fixed&&!t.revealed)))?'ok':'err';
   const len=[...t.disp].length;
   T.allKana+=len;T.doneN++;
   if(t.status==='ok'){T.okKana+=len;T.okRoma+=t.typed.length;}
@@ -904,7 +905,7 @@ function space(){
 }
 function back(all){
   if(!T||T.ended) return;
-  if(T.bad){T.bad=all?'':T.bad.slice(0,-1);if(!T.bad) T.tokens[T.idx].el.classList.remove('shake');paintCur();return;}
+  if(T.bad){T.bad=all?'':T.bad.slice(0,-1);if(!T.bad){const t=T.tokens[T.idx];t.el.classList.remove('shake');t.fixed=true;}paintCur();return;}
   if(!T.buf) return;
   T.buf=all?'':T.buf.slice(0,-1);paintCur();
 }
