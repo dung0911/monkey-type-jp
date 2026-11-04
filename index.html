@@ -77,6 +77,7 @@ header{display:flex;align-items:center;justify-content:space-between;gap:16px;fl
 .tok .r.buf{color:var(--main)}
 .tok .r.hint{color:var(--sub)}
 .tok .r.hint b{color:var(--main);font-weight:400}
+.tok .r .wrong{color:var(--err)}
 .tok .r.bad{color:var(--err);opacity:.85}
 .tok.shake .k{animation:shake .2s;color:var(--err)}
 @keyframes blink{50%{opacity:0}}
@@ -656,7 +657,7 @@ const endsAtLast=()=>isText()?cfg.tMode==='passage':cfg.mode==='count';
 function newTest(){
   clearInterval(timer);
   applyLook();
-  T={tokens:[],idx:0,buf:'',started:false,ended:false,t0:0,elapsed:0,ck:0,wk:0,secErr:0,hist:[],lastSec:0,recent:[],mistakes:{},okKana:0,allKana:0,okRoma:0,doneN:0,total:0,passages:[],base:0};
+  T={tokens:[],idx:0,buf:'',bad:'',started:false,ended:false,t0:0,elapsed:0,ck:0,wk:0,secErr:0,hist:[],lastSec:0,recent:[],mistakes:{},okKana:0,allKana:0,okRoma:0,doneN:0,total:0,passages:[],base:0};
   wordsEl.innerHTML='';wordsEl.style.transform='';
   document.body.classList.remove('typing');$('#app').classList.remove('focus');
   $('#res').classList.remove('show');$('#test').style.display='';
@@ -761,6 +762,11 @@ function paintCur(){
   t.el.classList.add('cur');
   const showHint=cfg.hint==='always'||(cfg.hint==='error'&&t.hadErr)||t.revealed;
   const b=T.buf;
+  if(T.bad){ // chữ sai hiện màu đỏ ngay sau phần đã gõ đúng, Backspace để xóa
+    t.rEl.className='r buf';
+    t.rEl.innerHTML=`${b}<span class="wrong">${T.bad}</span>`;
+    return;
+  }
   if(showHint){
     t.rEl.className='r hint';
     if(b&&t.hint.startsWith(b)) t.rEl.innerHTML=`<b>${b}</b>${t.hint.slice(b.length)}`;
@@ -830,6 +836,12 @@ function feed(c){
   if(!T.started) start();
   $('#app').classList.add('focus');
   const t=T.tokens[T.idx];
+  // đang có ký tự sai chưa xóa: gõ thêm chỉ nối vào phần sai, phải Backspace xóa hết mới gõ tiếp được
+  if(T.bad){
+    T.wk++;T.secErr++;
+    if(T.bad.length<6) T.bad+=c;
+    paintCur();return;
+  }
   const nb=T.buf+c;
   if(t.opts.some(o=>o.startsWith(nb))){
     T.buf=nb;T.ck++;
@@ -854,7 +866,7 @@ function feed(c){
   // gõ sai
   T.wk++;T.secErr++;markErr(t);
   if(cfg.onError==='skip'){finish(t,false);}
-  else{t.el.classList.remove('shake');void t.el.offsetWidth;t.el.classList.add('shake');paintCur();}
+  else{T.bad=c;t.el.classList.remove('shake');void t.el.offsetWidth;t.el.classList.add('shake');paintCur();}
 }
 function markErr(t){
   if(t.hadErr) return;
@@ -882,6 +894,7 @@ function finish(t,typedOk){
 function space(){
   if(!T||T.ended) return;
   const t=T.tokens[T.idx];if(!t) return;
+  if(T.bad) return;
   if(T.buf&&t.opts.includes(T.buf)){finish(t,true);return;}
   if(!T.started) return;
   if(isText()&&!T.buf&&t.wordStart) return; // dấu cách giữa các từ: bỏ qua
@@ -890,7 +903,9 @@ function space(){
   else if(!t.revealed){t.revealed=true;markErr(t);paintCur();}
 }
 function back(all){
-  if(!T||T.ended||!T.buf) return;
+  if(!T||T.ended) return;
+  if(T.bad){T.bad=all?'':T.bad.slice(0,-1);if(!T.bad) T.tokens[T.idx].el.classList.remove('shake');paintCur();return;}
+  if(!T.buf) return;
   T.buf=all?'':T.buf.slice(0,-1);paintCur();
 }
 
