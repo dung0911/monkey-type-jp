@@ -84,6 +84,10 @@ header{display:flex;align-items:center;justify-content:space-between;gap:16px;fl
 #hid{position:absolute;top:0;left:0;width:1px;height:1px;opacity:0;border:0;padding:0;pointer-events:none}
 .trans{margin-top:22px;background:var(--sub-alt);border-radius:10px;padding:12px 16px;font-size:.8rem;line-height:1.7;color:var(--sub)}
 .trans b{color:var(--text);font-weight:500;margin-right:8px}
+.trans{max-height:9.5em;overflow-y:auto;position:relative;scrollbar-width:thin}
+.trans .vs{opacity:.45;transition:color .2s,opacity .2s}
+.trans .vs.done{opacity:1;color:var(--text)}
+.trans .vs.now{opacity:1;color:var(--main);background:color-mix(in srgb,var(--main) 14%,transparent);border-radius:4px;box-shadow:0 0 0 3px color-mix(in srgb,var(--main) 14%,transparent)}
 .trans .lv{display:inline-block;font-size:.66rem;color:var(--bg);background:var(--sub);border-radius:4px;padding:0 6px;margin-right:8px;vertical-align:1px}
 .note{color:var(--sub);font-size:.76rem;text-align:center;margin-top:22px;line-height:1.7}
 .warn{display:none;margin:0 auto 18px;max-width:640px;background:var(--sub-alt);border-left:3px solid var(--err);color:var(--text);padding:10px 14px;border-radius:6px;font-size:.8rem;line-height:1.6}
@@ -315,7 +319,7 @@ const TEXTS=[
   vi:'Rất vui được gặp bạn. Tôi là Nguyễn. Tôi đến từ Việt Nam. Hiện tôi đang làm kỹ sư ở một công ty tại Hà Nội. Rất mong được giúp đỡ.'},
  {id:'p02',lv:'n5',title:'Gia đình',
   jp:'{私|わたし}^は {四人|よにん} {家族|かぞく}です。 {父|ちち}と {母|はは}と {妹|いもうと}が います。 {父|ちち}^は {先生|せんせい}です。 {妹|いもうと}^は {高校生|こうこうせい}で、 ねこが {大好|だいす}きです。',
-  vi:'Gia đình tôi có bốn người: bố, mẹ, em gái và tôi. Bố tôi là giáo viên. Em gái tôi là học sinh cấp ba và rất thích mèo.'},
+  vi:'Gia đình tôi có bốn người. Gồm bố, mẹ, em gái và tôi. Bố tôi là giáo viên. Em gái tôi là học sinh cấp ba và rất thích mèo.'},
  {id:'p03',lv:'n5',title:'Một ngày của tôi',
   jp:'{私|わたし}^は {毎朝|まいあさ} {六時|ろくじ}に {起|お}きます。 コーヒーを {飲|の}んで、 パンを {食|た}べます。 {八時|はちじ}に {会社|かいしゃ}^へ {行|い}きます。 {夜|よる}^は {十一時|じゅういちじ}ごろ {寝|ね}ます。',
   vi:'Mỗi sáng tôi dậy lúc 6 giờ. Tôi uống cà phê và ăn bánh mì. 8 giờ tôi đến công ty. Buổi tối tôi đi ngủ vào khoảng 11 giờ.'},
@@ -461,9 +465,33 @@ const TEXTS=[
  {id:'p50',lv:'n3',title:'Bảo vệ môi trường',
   jp:'{環境|かんきょう}を {守|まも}る ために、 {一人|ひとり}ひとりが できる ことから {始|はじ}める べきです。 たとえば、 {買|か}い{物|もの}の とき エコバッグを {持|も}って いったり、 {使|つか}わない {電気|でんき}を こまめに {消|け}したり する ことです。 {小|ちい}さな {努力|どりょく}でも、 {続|つづ}ければ {大|おお}きな {力|ちから}に なります。',
   vi:'Để bảo vệ môi trường, mỗi người nên bắt đầu từ những việc mình có thể làm. Ví dụ như mang theo túi vải khi đi mua sắm, hay tắt điện khi không dùng. Dù chỉ là nỗ lực nhỏ, nếu duy trì thì sẽ trở thành sức mạnh lớn.'},
+
+ /* ---- đoạn dài (9–10 câu) · mỗi câu tiếng Nhật ứng với đúng 1 câu tiếng Việt để phần nghĩa sáng theo ---- */
+ {id:'l01',lv:'long',title:'Một ngày ở Tokyo',
+  jp:'{先週|せんしゅう}の {日曜日|にちようび}、 {友達|ともだち}と {一緒|いっしょ}に {東京|とうきょう}^へ {遊|あそ}びに {行|い}きました。 {朝|あさ}^は {早|はや}く {起|お}きて、 {電車|でんしゃ}で {浅草|あさくさ}に {向|む}かいました。 {浅草|あさくさ}には {大|おお}きな お{寺|てら}が あって、 {外国|がいこく}から {来|き}た {観光客|かんこうきゃく}も たくさん いました。 {私|わたし}たち^は お{寺|てら}で お{参|まい}りを して、 おみくじを ひきました。 {私|わたし}^は {大吉|だいきち}で、 とても うれしく なりました。 {昼|ひる}ごはん^は {近|ちか}くの {店|みせ}で てんぷらを {食|た}べました。 さくさく して いて、 {今|いま}までで {一番|いちばん} おいしい てんぷらでした。 {午後|ごご}^は スカイツリーに {登|のぼ}って、 {町|まち}を {見|み}ました。 {天気|てんき}が よかったので、 {遠|とお}くの {富士山|ふじさん}まで {見|み}えました。 {帰|かえ}りの {電車|でんしゃ}^は {混|こ}んで いましたが、 {楽|たの}しい {一日|いちにち}でした。',
+  vi:'Chủ nhật tuần trước, tôi cùng bạn đi chơi ở Tokyo. Sáng tôi dậy sớm rồi đi tàu điện đến Asakusa. Ở Asakusa có một ngôi chùa lớn, và cũng có rất nhiều khách du lịch nước ngoài. Chúng tôi cầu nguyện ở chùa và rút quẻ. Tôi rút được quẻ đại cát nên rất vui. Bữa trưa chúng tôi ăn tempura ở một quán gần đó. Món ăn giòn rụm, là món tempura ngon nhất từ trước đến nay. Buổi chiều chúng tôi lên tháp Skytree ngắm thành phố. Vì trời đẹp nên nhìn thấy cả núi Phú Sĩ ở tận xa. Chuyến tàu về rất đông, nhưng đó là một ngày thật vui.'},
+ {id:'l02',lv:'long',title:'Học tiếng Nhật mỗi ngày',
+  jp:'{私|わたし}^は {去年|きょねん}から {日本語|にほんご}を {勉強|べんきょう}して います。 {最初|さいしょ}^は ひらがなも {読|よ}めませんでしたが、 {今|いま}^は {簡単|かんたん}な {文|ぶん}なら {書|か}ける ように なりました。 {毎朝|まいあさ} {三十分|さんじゅっぷん}、 {単語|たんご}を {覚|おぼ}える ように して います。 {覚|おぼ}えた {単語|たんご}^は、 {寝|ね}る {前|まえ}に もう {一度|いちど} {見直|みなお}します。 {週|しゅう}に {二回|にかい}、 オンラインで {日本人|にほんじん}の {先生|せんせい}と {話|はな}す {練習|れんしゅう}も して います。 {先生|せんせい}^は {私|わたし}の {間違|まちが}いを、 やさしく {直|なお}して くれます。 でも、 {敬語|けいご}^は まだ {難|むずか}しくて、 よく {間違|まちが}えて しまいます。 {日本|にほん}の アニメを {見|み}ると、 {勉強|べんきょう}に なる だけでなく、 とても {楽|たの}しいです。 {来年|らいねん}^は {日本語|にほんご}{能力|のうりょく}{試験|しけん}に {合格|ごうかく}したいと {思|おも}って います。 その ために、 これからも {毎日|まいにち} {少|すこ}しずつ {頑張|がんば}ります。',
+  vi:'Tôi học tiếng Nhật từ năm ngoái. Lúc đầu tôi còn không đọc được hiragana, nhưng giờ đã viết được những câu đơn giản. Mỗi sáng tôi cố gắng học thuộc từ vựng trong 30 phút. Những từ đã học, tôi xem lại thêm một lần trước khi ngủ. Mỗi tuần hai lần, tôi cũng luyện nói chuyện trực tuyến với giáo viên người Nhật. Thầy cô sửa lỗi sai cho tôi một cách nhẹ nhàng. Nhưng kính ngữ vẫn còn khó nên tôi hay nói sai. Xem anime Nhật không chỉ giúp học mà còn rất vui. Năm sau tôi muốn đỗ kỳ thi năng lực tiếng Nhật. Vì thế, từ giờ tôi cũng sẽ cố gắng mỗi ngày một chút.'},
+ {id:'l03',lv:'long',title:'Du lịch Hokkaido',
+  jp:'{夏休|なつやす}みに、 {家族|かぞく}みんなで {北海道|ほっかいどう}^へ {旅行|りょこう}に {行|い}きました。 {飛行機|ひこうき}に {乗|の}る のは {初|はじ}めてだったので、 {少|すこ}し {緊張|きんちょう}しました。 {空港|くうこう}に {着|つ}くと、 {東京|とうきょう}より ずっと {涼|すず}しくて、 {気持|きも}ちが よかったです。 {最初|さいしょ}の {日|ひ}^は、 {札幌|さっぽろ}で {有名|ゆうめい}な ラーメンを {食|た}べました。 スープが {濃|こ}くて、 {体|からだ}が {温|あたた}まりました。 {次|つぎ}の {日|ひ}^は、 レンタカーを {借|か}りて、 {広|ひろ}い {牧場|ぼくじょう}に {行|い}きました。 そこでは、 {牛|うし}や {馬|うま}を {近|ちか}くで {見|み}る ことが できました。 とれたての {牛乳|ぎゅうにゅう}で {作|つく}った アイスクリーム^は、 {忘|わす}れられない {味|あじ}でした。 {旅行|りょこう}の {最後|さいご}の {夜|よる}には、 みんなで {海|うみ}の {近|ちか}くの {温泉|おんせん}に {入|はい}りました。 {星|ほし}が とても きれいで、 {一生|いっしょう}の {思|おも}い{出|で}に なりました。',
+  vi:'Kỳ nghỉ hè, cả gia đình tôi đi du lịch Hokkaido. Vì là lần đầu đi máy bay nên tôi hơi hồi hộp. Xuống sân bay, trời mát hơn Tokyo nhiều, cảm giác rất dễ chịu. Ngày đầu tiên, chúng tôi ăn món ramen nổi tiếng ở Sapporo. Nước dùng đậm đà, làm ấm cả người. Hôm sau, chúng tôi thuê xe và đến một trang trại rộng lớn. Ở đó chúng tôi được ngắm bò và ngựa ở gần. Kem làm từ sữa bò mới vắt là một hương vị không thể quên. Vào đêm cuối chuyến đi, cả nhà cùng ngâm onsen gần biển. Sao rất đẹp, và trở thành kỷ niệm cả đời.'},
+ {id:'l04',lv:'long',title:'Chú mèo trong cơn mưa',
+  jp:'ある {雨|あめ}の {日|ひ}、 {私|わたし}^は {会社|かいしゃ}から {家|いえ}^へ {帰|かえ}る {途中|とちゅう}で、 {小|ちい}さな {猫|ねこ}を {見|み}つけました。 {猫|ねこ}^は {箱|はこ}の {中|なか}で、 さむそうに ふるえて いました。 {私|わたし}^は {少|すこ}し {迷|まよ}いましたが、 そのまま {置|お}いて {帰|かえ}る ことが できませんでした。 {猫|ねこ}を タオルで {包|つつ}んで、 {急|いそ}いで {家|いえ}^へ {連|つ}れて {帰|かえ}りました。 {次|つぎ}の {日|ひ}、 {動物|どうぶつ}{病院|びょういん}^へ {行|い}くと、 {先生|せんせい}^は 「{元気|げんき}ですよ」と {言|い}って くれました。 それから、 {私|わたし}と その {猫|ねこ}の {生活|せいかつ}が {始|はじ}まりました。 {名前|なまえ}^は 「ミケ」に しました。 {最初|さいしょ}^は {私|わたし}を {怖|こわ}がって いましたが、 {一|いっ}か{月|げつ}たつと、 {毎晩|まいばん} ひざの {上|うえ}で {寝|ね}る ように なりました。 {今|いま}では、 ミケが いない {生活|せいかつ}^は {考|かんが}えられません。 あの {雨|あめ}の {日|ひ}に {出会|であ}えて、 {本当|ほんとう}に よかったと {思|おも}います。',
+  vi:'Một ngày mưa, trên đường từ công ty về nhà, tôi tìm thấy một chú mèo nhỏ. Chú mèo run rẩy trong chiếc hộp, trông có vẻ rất lạnh. Tôi hơi do dự, nhưng không thể bỏ mặc nó mà về. Tôi quấn mèo trong khăn rồi vội mang về nhà. Hôm sau đến bệnh viện thú y, bác sĩ nói “Nó khỏe lắm”. Từ đó, cuộc sống của tôi và chú mèo bắt đầu. Tôi đặt tên nó là “Mike”. Lúc đầu nó sợ tôi, nhưng sau một tháng thì tối nào cũng ngủ trên đùi tôi. Giờ đây, tôi không thể nghĩ đến cuộc sống thiếu Mike. Tôi nghĩ thật may vì đã gặp nó vào ngày mưa hôm ấy.'},
+ {id:'l05',lv:'long',title:'Công việc ở công ty',
+  jp:'{私|わたし}が {働|はたら}いて いる {会社|かいしゃ}では、 {毎週|まいしゅう} {月曜日|げつようび}の {朝|あさ}に {会議|かいぎ}が あります。 {会議|かいぎ}では、 {先週|せんしゅう}の {結果|けっか}を {報告|ほうこく}して、 {今週|こんしゅう}の {予定|よてい}を {確認|かくにん}します。 {新|あたら}しい {社員|しゃいん}^は、 {最初|さいしょ}の うち^は {緊張|きんちょう}して、 うまく {話|はな}せない ことが {多|おお}いです。 {私|わたし}も {入社|にゅうしゃ}した ばかりの ころ^は、 そうでした。 しかし、 {先輩|せんぱい}たちが {丁寧|ていねい}に {教|おし}えて くれた おかげで、 {少|すこ}しずつ {自信|じしん}が つきました。 {最近|さいきん}^は、 {後輩|こうはい}に {仕事|しごと}を {教|おし}える {機会|きかい}も {増|ふ}えて います。 {教|おし}える とき^は、 {相手|あいて}の {気持|きも}ちを {考|かんが}えて、 わかりやすく {話|はな}す ように {心|こころ}がけて います。 {仕事|しごと}^は {大変|たいへん}ですが、 {仲間|なかま}と {協力|きょうりょく}して {目標|もくひょう}を {達成|たっせい}した ときの {喜|よろこ}び^は {大|おお}きいです。 これからも、 お{客様|きゃくさま}に {信頼|しんらい}される {社員|しゃいん}に なれる よう、 {努力|どりょく}を {続|つづ}けたいと {思|おも}います。',
+  vi:'Ở công ty tôi đang làm, sáng thứ Hai hằng tuần có một cuộc họp. Trong cuộc họp, chúng tôi báo cáo kết quả tuần trước và xác nhận kế hoạch tuần này. Nhân viên mới lúc đầu thường căng thẳng, hay không nói trôi chảy được. Hồi mới vào công ty, tôi cũng đã như vậy. Nhưng nhờ các anh chị đi trước chỉ dạy tận tình, tôi dần có được sự tự tin. Dạo này, tôi cũng có nhiều cơ hội hướng dẫn công việc cho đàn em hơn. Khi dạy, tôi luôn chú ý nghĩ đến cảm xúc của người nghe và nói thật dễ hiểu. Công việc vất vả, nhưng niềm vui khi cùng đồng đội đạt được mục tiêu thì rất lớn. Từ nay tôi cũng muốn tiếp tục nỗ lực để trở thành nhân viên được khách hàng tin tưởng.'},
+ {id:'l06',lv:'long',title:'Quê hương tôi',
+  jp:'{私|わたし}の {故郷|こきょう}^は、 ベトナムの {北|きた}に ある {小|ちい}さな {町|まち}です。 {町|まち}の {真|ま}ん{中|なか}には {大|おお}きな {湖|みずうみ}が あって、 {朝|あさ}に なると、 たくさんの {人|ひと}が {散歩|さんぽ}して います。 {春|はる}には、 {庭|にわ}に {黄色|きいろ}い {花|はな}が {咲|さ}いて、 {町全体|まちぜんたい}が {明|あか}るく なります。 テトの とき^は、 {遠|とお}くで {働|はたら}いて いる {家族|かぞく}も みんな {帰|かえ}って きます。 {母|はは}^は {朝早|あさはや}くから {台所|だいどころ}に {立|た}って、 バインチュンを {作|つく}ります。 {私|わたし}も {小|ちい}さい ころ^は、 {母|はは}の そばで {手伝|てつだ}いを しました。 {夜|よる}に なると、 {家族|かぞく}みんなで {火|ひ}の まわりに {集|あつ}まって、 {昔|むかし}の {話|はなし}を {聞|き}きます。 {今|いま}^は {日本|にほん}に {住|す}んで いるので、 なかなか {帰|かえ}る ことが できません。 でも、 {故郷|こきょう}の {味|あじ}や {景色|けしき}^は、 いつも {私|わたし}の {心|こころ}の {中|なか}に あります。 いつか、 {日本|にほん}の {友達|ともだち}を {連|つ}れて、 あの {町|まち}を {案内|あんない}したいです。',
+  vi:'Quê tôi là một thị trấn nhỏ ở miền Bắc Việt Nam. Giữa thị trấn có một cái hồ lớn, và mỗi buổi sáng có rất nhiều người đi dạo. Mùa xuân, hoa vàng nở trong vườn, cả thị trấn như sáng bừng lên. Mỗi dịp Tết, cả những người thân làm việc ở xa cũng đều trở về. Mẹ đứng trong bếp từ sáng sớm để gói bánh chưng. Hồi nhỏ, tôi cũng ở bên mẹ phụ giúp. Đêm đến, cả nhà quây quần bên bếp lửa và nghe kể chuyện ngày xưa. Bây giờ tôi sống ở Nhật nên khó mà về được. Nhưng hương vị và cảnh sắc quê hương vẫn luôn ở trong lòng tôi. Một ngày nào đó, tôi muốn dẫn bạn bè người Nhật về giới thiệu thị trấn ấy.'},
 ];
-const LV_NAME={n5:'N5',n4:'N4',n3:'N3',kata:'katakana',custom:'tự nhập'};
-const LV_ORDER={n5:0,n4:1,n3:2,kata:3};
+const LV_NAME={n5:'N5',n4:'N4',n3:'N3',kata:'katakana',long:'đoạn dài',custom:'tự nhập'};
+const LV_ORDER={n5:0,n4:1,n3:2,kata:3,long:4};
+
+/* chia câu: JP theo 。！？ (kèm 」』 đi sau) · VI theo . ! ? … (kèm ” đi sau) */
+const SENT_END=/[。！？!?]/;
+const viSentences=s=>(s||'').match(/[^.!?…]*[.!?…]+["”]*\s*|[^.!?…]+$/g)||[];
 
 /* ============ parser: kana → token romaji ============ */
 const MAP={};
@@ -673,14 +701,21 @@ function addTokens(n){
 function addPassage(p){
   lastPid=p.id;T.passages.push(p);
   const frag=document.createDocumentFragment();
+  let sid=0,ended=false; // sid = chỉ số câu của chữ (để phần nghĩa sáng theo câu đang gõ)
   for(const w of parsePassage(p.jp)){
     const we=document.createElement('div');we.className='word';
     if(cfg.kanji){const kj=document.createElement('div');kj.className='kj';kj.textContent=w.kj;we.appendChild(kj);}
     const wt=document.createElement('div');wt.className='wt';
-    w.tokens.forEach((t,i)=>{t.pid=p.id;t.wordStart=(i===0);wt.appendChild(tokEl(t));});
+    w.tokens.forEach((t,i)=>{
+      if(ended&&!(t.punct&&/[」』]/.test(t.disp))){sid++;ended=false;}
+      t.pid=p.id;t.sid=sid;t.wordStart=(i===0);
+      if(t.punct&&SENT_END.test(t.disp)) ended=true;
+      wt.appendChild(tokEl(t));
+    });
     we.appendChild(wt);frag.appendChild(we);
   }
   wordsEl.appendChild(frag);
+  p.nSent=sid+1;
   T.total=T.tokens.filter(t=>!t.punct).length;
 }
 function measure(){
@@ -699,10 +734,27 @@ function scrollWords(){
 function updateTrans(){
   const el=$('#trans');
   if(!isText()||!T||!T.passages.length){el.style.display='none';return;}
+  const finished=T.idx>=T.tokens.length;
   const cur=T.tokens[Math.min(T.idx,T.tokens.length-1)];
   const p=T.passages.find(x=>x.id===(cur&&cur.pid))||T.passages[0];
   el.style.display='';
-  el.innerHTML=`<span class="lv">${LV_NAME[p.lv]}</span><b>${p.title}</b>${cfg.trans&&p.vi?p.vi:(p.vi?'<i>(nghĩa đang ẩn)</i>':'')}`;
+  let body='';
+  if(cfg.trans&&p.vi){
+    // mỗi câu tiếng Việt ứng với 1 câu tiếng Nhật: đã gõ = sáng, đang gõ = nổi bật, chưa gõ = mờ
+    const vs=viSentences(p.vi),n=Math.max(1,p.nSent||vs.length);
+    const curS=finished?n:(cur&&cur.pid===p.id?cur.sid:0);
+    body=vs.map((s,i)=>{
+      const lo=Math.floor(i*n/vs.length),hi=Math.max(lo,Math.ceil((i+1)*n/vs.length)-1); // khi số câu lệch nhau: chia theo tỉ lệ
+      const cls=curS>hi?'done':(curS>=lo?'now':'');
+      return `<span class="vs ${cls}">${s}</span>`;
+    }).join('');
+  }else if(p.vi) body='<i>(nghĩa đang ẩn)</i>';
+  el.innerHTML=`<span class="lv">${LV_NAME[p.lv]}</span><b>${p.title}</b>${body}`;
+  const now=el.querySelector('.vs.now');
+  if(now){ // đoạn dài: cuộn khung nghĩa để câu đang gõ luôn nằm trong tầm nhìn
+    const top=now.offsetTop-el.clientHeight/2+now.offsetHeight/2;
+    el.scrollTop=Math.max(0,top);
+  }
 }
 function paintCur(){
   const t=T.tokens[T.idx];if(!t) return;
@@ -821,7 +873,7 @@ function finish(t,typedOk){
   paintDone(t);
   T.buf='';T.idx++;
   skipPunct();
-  if(T.idx>=T.tokens.length&&endsAtLast()){end(false);return;}
+  if(T.idx>=T.tokens.length&&endsAtLast()){updateTrans();end(false);return;}
   if(isText()){
     if(cfg.tMode==='time'&&T.idx>T.tokens.length-40){const p=nextPassage();if(p) addPassage(p);}
   }else if(cfg.mode!=='count'&&T.idx>T.tokens.length-40) addTokens(60);
@@ -954,7 +1006,7 @@ const opt=(on,label,act,extra='')=>`<button class="opt ${on?'on':''} ${extra}" d
 function renderBars(){
   const b1=$('#bar1'),b2=$('#bar2');
   if(isText()){
-    let h=['all','n5','n4','n3','kata'].map(l=>opt(cfg.tLevel===l&&!useCustom,l==='all'?'tất cả':LV_NAME[l],'lv:'+l)).join('');
+    let h=['all','n5','n4','n3','kata','long'].map(l=>opt(cfg.tLevel===l&&!useCustom,l==='all'?'tất cả':LV_NAME[l],'lv:'+l)).join('');
     h+='<span class="sep"></span>';
     h+=opt(cfg.tMode==='passage','📄 hết đoạn','tmode:passage')+opt(cfg.tMode==='time','⏱ thời gian','tmode:time');
     if(cfg.tMode==='time'){h+='<span class="sep"></span>'+[30,60,120].map(v=>opt(cfg.tTime===v,v,'tval:'+v)).join('');}
