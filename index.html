@@ -132,6 +132,43 @@ header{display:flex;align-items:center;justify-content:space-between;gap:16px;fl
 .btn.pri{color:var(--main)}
 .btn.pri:hover{background:var(--main);color:var(--bg)}
 
+
+/* ===== Minna no Nihongo ===== */
+.mprompt{margin:2px 0 20px;text-align:center;min-height:5.2rem}
+.mprompt .chips2{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-bottom:8px}
+.mprompt .lv{display:inline-block;font-size:.66rem;color:var(--bg);background:var(--sub);border-radius:4px;padding:1px 7px}
+.mprompt .lv.g{background:var(--main)}
+.mprompt .mean{font-size:1.45rem;line-height:1.45;color:var(--text)}
+.mprompt .hv{font-size:1.05rem;color:var(--main);letter-spacing:.06em;margin-bottom:2px}
+.mprompt .sub{font-size:.78rem;color:var(--sub);line-height:1.6;max-width:760px;margin:6px auto 0}
+.mprompt .pat{font-size:.82rem;color:var(--main);margin-bottom:4px}
+.minna-mode .tok .k{font-size:var(--kana-size)}
+.minna-mode.m-gram .tok .k{font-size:calc(var(--kana-size)*.8)}
+.tok.blind:not(.ok):not(.err) .k{color:transparent;background:linear-gradient(var(--sub),var(--sub)) 50% 86%/72% 2px no-repeat;opacity:.55}
+.tok.blind.cur:not(.ok):not(.err) .k{background:none;opacity:1}
+.sheet .tools{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:10px 0}
+.sheet table{width:100%;border-collapse:collapse;font-size:.85rem}
+.sheet th{color:var(--sub);font-weight:400;text-align:left;font-size:.72rem;padding:4px 8px}
+.sheet td{padding:6px 8px;border-top:1px solid var(--sub-alt);vertical-align:top}
+.sheet tr.lh td{border-top:0;padding-top:18px;color:var(--main);font-size:.78rem}
+.sheet .jpc{font-family:var(--kana-font),'Noto Sans JP',sans-serif;font-size:1.05rem}
+.sheet .hvc{color:var(--main);font-size:.72rem;letter-spacing:.04em}
+.sheet .hid{filter:blur(7px);cursor:pointer;user-select:none}
+.sheet .gt{color:var(--main);font-size:.82rem;margin:16px 0 2px}
+.sheet .gn{color:var(--sub);font-size:.72rem;line-height:1.6;margin-bottom:6px}
+.sheet .ex{padding:5px 0;border-top:1px solid var(--sub-alt)}
+.sheet .ex .jpc{font-size:1rem;line-height:1.9}
+.sheet .ex .vi{color:var(--sub);font-size:.76rem}
+.lchips{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:8px;margin-top:12px}
+.lchip{background:var(--sub-alt);border:1px solid transparent;border-radius:8px;padding:8px 6px;cursor:pointer;text-align:center;color:var(--sub);font-size:.8rem}
+.lchip small{display:block;font-size:.66rem;margin-top:2px}
+.lchip.on{color:var(--text);border-color:var(--main)}
+.review .rv{display:flex;gap:12px;align-items:baseline;flex-wrap:wrap;padding:6px 0;border-top:1px solid var(--bg)}
+.review .rv .k{font-family:var(--kana-font),'Noto Sans JP',sans-serif;font-size:1.25rem;min-width:5em}
+.review .rv.bad .k{color:var(--err)}
+.review .rv .r{color:var(--main);font-size:.8rem}
+.review .rv .m{color:var(--sub);font-size:.78rem;flex:1;min-width:12em}
+
 /* modal */
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:flex-start;justify-content:center;padding:5vh 16px;z-index:10}
 .modal.show{display:flex}
@@ -193,11 +230,12 @@ kbd{background:var(--sub);color:var(--bg);border-radius:4px;padding:1px 6px;font
   <header>
     <div class="logo" id="logo" title="Bài mới">
       <div class="mark">かな</div>
-      <div><div class="name">kana<span>type</span></div><small>luyện gõ hiragana · katakana</small></div>
+      <div><div class="name">kana<span>type</span></div><small>luyện gõ hiragana · katakana · Minna no Nihongo</small></div>
     </div>
     <div class="tabs" id="tabs">
       <button data-app="kana"><span class="jp">あ</span>chữ cái</button>
       <button data-app="text"><span class="jp">文</span>đoạn văn</button>
+      <button data-app="minna"><span class="jp">課</span>Minna 1–25</button>
     </div>
     <button class="iconbtn" id="openSet" title="Cài đặt">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
@@ -215,6 +253,7 @@ kbd{background:var(--sub);color:var(--bg);border-radius:4px;padding:1px 6px;font
     <div class="warn" id="warn"></div>
     <div id="test">
       <div class="live" id="live"></div>
+      <div class="mprompt" id="mprompt" style="display:none"></div>
       <div class="wrap" id="wrap"><div id="words"></div></div>
       <input id="hid" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" aria-label="ô gõ">
       <div class="trans" id="trans" style="display:none"></div>
@@ -233,6 +272,7 @@ kbd{background:var(--sub);color:var(--bg);border-radius:4px;padding:1px 6px;font
 
 <div class="modal" id="modal"><div class="panel" id="panel"></div></div>
 
+<script src="data/minna.js"></script>
 <script>
 /* ============ storage ============ */
 const store={
@@ -568,13 +608,17 @@ function parsePassage(jp){
 
 /* ============ config ============ */
 const DEF={app:'kana',script:'hira',mode:'time',time:30,count:50,groups:{seion:true},rows:{},onError:'stop',hint:'error',adaptive:false,live:true,theme:'serika',font:'Noto Sans JP',size:'m',
-  tLevel:'all',tMode:'passage',tTime:60,tPick:'random',kanji:true,trans:true};
+  tLevel:'all',tMode:'passage',tTime:60,tPick:'random',kanji:true,trans:true,
+  mType:'vocab',mPick:'mix',mOne:1,mLessons:[1],mMode:'count',mCount:20,mTime:60,mOrder:'random',mRecall:false};
 let cfg=Object.assign({},DEF,store.get('kanatype.cfg',{}));
 cfg.groups=Object.assign({},cfg.groups||{});cfg.rows=Object.assign({},cfg.rows||{});
+if(!Array.isArray(cfg.mLessons)||!cfg.mLessons.length) cfg.mLessons=[1];
+if(!(cfg.mOne>=1&&cfg.mOne<=25)) cfg.mOne=1;
 let STATS=store.get('kanatype.stats',{});
 let PB=store.get('kanatype.pb',{});
 let customText=store.get('kanatype.custom','');
 let useCustom=false;
+let MSTAT=store.get('kanatype.mstat',{}),MPOS=store.get('kanatype.mpos',{}),MDECK=[],MDRILL=null;
 const saveCfg=()=>store.set('kanatype.cfg',cfg);
 
 const THEMES=[['serika','mực',['#323437','#e2b714']],['night','đêm',['#111426','#7aa2f7']],['matcha','matcha',['#1f2a24','#a8c96f']],['sakura','sakura',['#fbeff1','#d14d7f']],['paper','giấy',['#eeebe2','#3d3d3d']]];
@@ -585,7 +629,9 @@ function applyLook(){
   document.documentElement.dataset.theme=cfg.theme;
   document.documentElement.style.setProperty('--kana-font',`'${cfg.font}'`);
   document.documentElement.style.setProperty('--kana-size',SIZES[cfg.size]||SIZES.m);
-  document.body.classList.toggle('text-mode',cfg.app==='text');
+  document.body.classList.toggle('text-mode',cfg.app==='text'||cfg.app==='minna');
+  document.body.classList.toggle('minna-mode',cfg.app==='minna');
+  document.body.classList.toggle('m-gram',cfg.app==='minna'&&cfg.mType==='gram');
   [...document.querySelectorAll('#tabs button')].forEach(b=>b.classList.toggle('on',b.dataset.app===cfg.app));
 }
 
@@ -651,18 +697,27 @@ function nextPassage(first){
 const $=s=>document.querySelector(s);
 const wordsEl=$('#words'),wrapEl=$('#wrap'),liveEl=$('#live'),hid=$('#hid');
 let T=null,POOL=[],lineH=60,timer=null;
-const isText=()=>cfg.app==='text';
-const endsAtLast=()=>isText()?cfg.tMode==='passage':cfg.mode==='count';
+const isMinna=()=>cfg.app==='minna';
+const isText=()=>cfg.app==='text'||cfg.app==='minna';
+const endsAtLast=()=>isMinna()?cfg.mMode==='count':isText()?cfg.tMode==='passage':cfg.mode==='count';
 
 function newTest(){
-  clearInterval(timer);
+  clearInterval(timer);M_WRONG=[];
   applyLook();
   T={tokens:[],idx:0,buf:'',bad:'',started:false,ended:false,t0:0,elapsed:0,ck:0,wk:0,secErr:0,hist:[],lastSec:0,recent:[],mistakes:{},okKana:0,allKana:0,okRoma:0,doneN:0,total:0,passages:[],base:0};
   wordsEl.innerHTML='';wordsEl.style.transform='';
   document.body.classList.remove('typing');$('#app').classList.remove('focus');
   $('#res').classList.remove('show');$('#test').style.display='';
-  $('#note').innerHTML=isTouch()?'chạm vào khung chữ để mở bàn phím · gõ romaji':'gõ romaji của chữ được gạch chân · tắt bộ gõ tiếng Việt/Nhật (chế độ E)';
-  if(isText()){
+  $('#note').innerHTML=isMinna()?(cfg.mRecall?'chế độ ghi nhớ: nhìn gợi ý phía trên, gõ romaji của từ · <kbd>space</kbd> xem đáp án':'gõ romaji của chữ được gạch chân · tắt bộ gõ tiếng Việt/Nhật (chế độ E)'):isTouch()?'chạm vào khung chữ để mở bàn phím · gõ romaji':'gõ romaji của chữ được gạch chân · tắt bộ gõ tiếng Việt/Nhật (chế độ E)';
+  $('#mprompt').style.display=isMinna()?'':'none';
+  if(isMinna()){
+    POOL=[];
+    MDECK=minnaItems();
+    if(!MDECK.length){wordsEl.innerHTML=`<div class="empty">${typeof MINNA==='undefined'?'Chưa tải được dữ liệu Minna (data/minna.js).':'Chưa có mục nào để luyện.<br>Hãy chọn ít nhất một bài (nút 📚).'}</div>`;wrapEl.style.height='';liveEl.innerHTML='';$('#mprompt').innerHTML='';$('#trans').style.display='none';$('#note').textContent='';return;}
+    T.mSig=minnaSig();T.mPos=MPOS[T.mSig]||0;T.mStart=T.mPos;T.mBag=[];T.pDone=0;
+    const n=cfg.mMode==='count'?cfg.mCount:30;
+    for(let i=0;i<n;i++) addPassage(minnaPassage(nextMinna()));
+  }else if(isText()){
     POOL=[];
     const p=nextPassage(true);
     if(!p){wordsEl.innerHTML='<div class="empty">Không có đoạn văn nào ở mức này.</div>';return;}
@@ -700,22 +755,24 @@ function addTokens(n){
   wordsEl.appendChild(frag);
 }
 function addPassage(p){
-  lastPid=p.id;T.passages.push(p);
+  lastPid=p.id;T.passages.push(p);const pi=T.passages.length-1,blind=isMinna()&&cfg.mRecall;
   const frag=document.createDocumentFragment();
   let sid=0,ended=false; // sid = chỉ số câu của chữ (để phần nghĩa sáng theo câu đang gõ)
   for(const w of parsePassage(p.jp)){
     const we=document.createElement('div');we.className='word';
-    if(cfg.kanji){const kj=document.createElement('div');kj.className='kj';kj.textContent=w.kj;we.appendChild(kj);}
+    if(showKj(p.item)){const kj=document.createElement('div');kj.className='kj';kj.textContent=w.kj;we.appendChild(kj);}
     const wt=document.createElement('div');wt.className='wt';
     w.tokens.forEach((t,i)=>{
       if(ended&&!(t.punct&&/[」』]/.test(t.disp))){sid++;ended=false;}
-      t.pid=p.id;t.sid=sid;t.wordStart=(i===0);
+      t.pid=p.id;t.pi=pi;t.sid=sid;t.wordStart=(i===0);if(isMinna()) t.mid=p.id;
       if(t.punct&&SENT_END.test(t.disp)) ended=true;
-      wt.appendChild(tokEl(t));
+      const te=tokEl(t);if(blind&&!t.punct) te.classList.add('blind');
+      wt.appendChild(te);
     });
     we.appendChild(wt);frag.appendChild(we);
   }
   wordsEl.appendChild(frag);
+  {let last=null;for(const t of T.tokens) if(t.pi===pi&&!t.punct) last=t;if(last) last.lastOfP=true;}
   p.nSent=sid+1;
   T.total=T.tokens.filter(t=>!t.punct).length;
 }
@@ -733,6 +790,7 @@ function scrollWords(){
   wordsEl.style.transform=`translateY(${-shift}px)`;
 }
 function updateTrans(){
+  if(isMinna()){renderPrompt();return;}
   const el=$('#trans');
   if(!isText()||!T||!T.passages.length){el.style.display='none';return;}
   const finished=T.idx>=T.tokens.length;
@@ -805,7 +863,7 @@ function start(){
   document.body.classList.add('typing');$('#app').classList.add('focus');
   timer=setInterval(tick,100);
 }
-const limit=()=>isText()?(cfg.tMode==='time'?cfg.tTime:0):(cfg.mode==='time'?cfg.time:0);
+const limit=()=>isMinna()?(cfg.mMode==='time'?cfg.mTime:0):isText()?(cfg.tMode==='time'?cfg.tTime:0):(cfg.mode==='time'?cfg.time:0);
 function tick(){
   if(!T||T.ended) return;
   T.elapsed=(performance.now()-T.t0)/1000;
@@ -820,7 +878,7 @@ function updateLive(){
   const L=limit();
   let main='';
   if(L) main=Math.max(0,Math.ceil(L-(T.started?T.elapsed:0)));
-  else if(endsAtLast()) main=`${T.doneN}/${T.total}`;
+  else if(endsAtLast()) main=isMinna()?`${T.pDone||0}/${T.passages.length}`:`${T.doneN}/${T.total}`;
   else main=`${T.doneN} <span class="dim">${fmtTime(T.elapsed)}</span>`;
   let sp='';
   if(cfg.live&&T.started&&T.elapsed>1.5) sp=`<span class="dim">${Math.round(T.okKana/(T.elapsed/60))} kana/phút</span>`;
@@ -883,11 +941,15 @@ function finish(t,typedOk){
   if(t.status==='ok'){T.okKana+=len;T.okRoma+=t.typed.length;}
   const s=STATS[t.key]||(STATS[t.key]={e:0,o:0});
   if(t.status==='ok') s.o++; else s.e++;
+  if(t.mid){const m=MSTAT[t.mid]||(MSTAT[t.mid]={e:0,o:0});if(t.status==='ok'&&!t.hadErr) m.o++; else m.e++;}
+  if(t.lastOfP) T.pDone++;
   paintDone(t);
   T.buf='';T.idx++;
   skipPunct();
   if(T.idx>=T.tokens.length&&endsAtLast()){updateTrans();end(false);return;}
-  if(isText()){
+  if(isMinna()){
+    if(cfg.mMode==='time'&&T.idx>T.tokens.length-30) for(let i=0;i<12;i++) addPassage(minnaPassage(nextMinna()));
+  }else if(isText()){
     if(cfg.tMode==='time'&&T.idx>T.tokens.length-40){const p=nextPassage();if(p) addPassage(p);}
   }else if(cfg.mode!=='count'&&T.idx>T.tokens.length-40) addTokens(60);
   paintCur();scrollWords();updateLive();updateTrans();
@@ -898,10 +960,10 @@ function space(){
   if(T.bad) return;
   if(T.buf&&t.opts.includes(T.buf)){finish(t,true);return;}
   if(!T.started) return;
-  if(isText()&&!T.buf&&t.wordStart) return; // dấu cách giữa các từ: bỏ qua
+  if(isText()&&(!isMinna()||cfg.mType==='gram')&&!T.buf&&t.wordStart) return; // dấu cách giữa các từ: bỏ qua
   $('#app').classList.add('focus');
   if(cfg.onError==='skip'){T.wk++;T.secErr++;markErr(t);finish(t,false);}
-  else if(!t.revealed){t.revealed=true;markErr(t);paintCur();}
+  else if(!t.revealed){t.revealed=true;t.el.classList.remove('blind');markErr(t);paintCur();}
 }
 function back(all){
   if(!T||T.ended) return;
@@ -918,11 +980,16 @@ function end(early){
   T.ended=true;
   if(T.elapsed-T.lastSec>0.2) T.hist.push({t:T.elapsed,ok:T.okKana,all:T.allKana,err:T.secErr});
   store.set('kanatype.stats',STATS);
+  if(isMinna()){store.set('kanatype.mstat',MSTAT);if(cfg.mOrder==='seq'&&T.mSig){MPOS[T.mSig]=T.mStart+(T.pDone||0);store.set('kanatype.mpos',MPOS);}}
   showResults(early);
 }
 
 /* ============ results ============ */
 function desc(){
+  if(isMinna()){
+    const md=cfg.mMode==='time'?cfg.mTime+' giây':cfg.mCount+' mục';
+    return `Minna · ${M_TYPES[cfg.mType]} · ${lessonLabel()} · ${md}${cfg.mRecall?' · ghi nhớ':''}${MDRILL?' · luyện lại từ sai':''}`;
+  }
   if(isText()){
     const md=cfg.tMode==='time'?cfg.tTime+' giây':'hết đoạn';
     return `đoạn văn · ${md} · ${useCustom?'tự nhập':(cfg.tLevel==='all'?'mọi mức':LV_NAME[cfg.tLevel])}`;
@@ -934,6 +1001,10 @@ function desc(){
   return `${sc} · ${md} · ${gs}`;
 }
 function pbKey(){
+  if(isMinna()){
+    if(MDRILL) return null;
+    return JSON.stringify(['minna',cfg.mType,activeLessons(),cfg.mMode,cfg.mMode==='time'?cfg.mTime:cfg.mCount,cfg.mRecall]);
+  }
   if(isText()){
     if(useCustom) return null;
     if(cfg.tMode==='passage') return T.passages.length===1?JSON.stringify(['text',T.passages[0].id]):null;
@@ -954,12 +1025,12 @@ function showResults(early){
   let pbHtml='';const key=pbKey();
   if(key&&!early&&done.length){
     const old=PB[key];
-    if(!old||kpm>old.kpm){pbHtml=old?`<div class="pb">★ kỷ lục mới! (cũ: ${old.kpm})</div>`:`<div class="pb">★ kỷ lục đầu tiên cho ${isText()&&cfg.tMode==='passage'?'bài này':'cấu hình này'}</div>`;PB[key]={kpm,acc};store.set('kanatype.pb',PB);}
+    if(!old||kpm>old.kpm){pbHtml=old?`<div class="pb">★ kỷ lục mới! (cũ: ${old.kpm})</div>`:`<div class="pb">★ kỷ lục đầu tiên cho ${isText()&&!isMinna()&&cfg.tMode==='passage'?'bài này':'cấu hình này'}</div>`;PB[key]={kpm,acc};store.set('kanatype.pb',PB);}
     else pbHtml=`<div class="pb" style="color:var(--sub)">kỷ lục: ${old.kpm} kana/phút</div>`;
   }
   const miss=Object.values(T.mistakes).sort((a,b)=>b.n-a.n);
   const missHtml=miss.length?`<div class="miss"><div class="sec-lbl">chữ gõ sai (${miss.length})</div><div class="chips">${miss.slice(0,24).map(m=>`<div class="mchip"><span class="k">${m.label}</span><span class="r">${m.roma}</span>${m.n>1?`<span class="n">×${m.n}</span>`:''}</div>`).join('')}</div></div>`:`<div class="miss"><div class="sec-lbl">không sai chữ nào — tuyệt vời 🎉</div></div>`;
-  const passHtml=isText()?T.passages.filter(p=>T.tokens.slice(0,T.idx).some(t=>t.pid===p.id)).map(passageHtml).join(''):'';
+  const passHtml=isMinna()?minnaReview():isText()?T.passages.filter(p=>T.tokens.slice(0,T.idx).some(t=>t.pid===p.id)).map(passageHtml).join(''):'';
   $('#res').innerHTML=`
     <div class="res-top">
       <div><div class="big"><div class="lbl">kana/phút</div><div class="val">${kpm}</div></div>
@@ -977,9 +1048,11 @@ function showResults(early){
     ${missHtml}
     ${passHtml}
     <div class="btns">
-      <button class="btn pri" id="again">↻ ${isText()?'đoạn khác':'bài mới'} <kbd>tab</kbd></button>
-      ${isText()&&cfg.tMode==='passage'&&T.passages[0]&&!useCustom?`<button class="btn" id="retry">gõ lại đoạn này</button>`:''}
-      ${miss.length?`<button class="btn" id="drill">luyện lại ${miss.length} chữ sai</button>`:''}
+      <button class="btn pri" id="again">↻ ${isMinna()?'lượt mới':isText()?'đoạn khác':'bài mới'} <kbd>tab</kbd></button>
+      ${isText()&&!isMinna()&&cfg.tMode==='passage'&&T.passages[0]&&!useCustom?`<button class="btn" id="retry">gõ lại đoạn này</button>`:''}
+      ${miss.length&&!isMinna()?`<button class="btn" id="drill">luyện lại ${miss.length} chữ sai</button>`:''}
+      ${M_WRONG.length?`<button class="btn" id="mdrill">luyện lại ${M_WRONG.length} mục sai</button>`:''}
+      ${MDRILL&&isMinna()?`<button class="btn" id="mexit">về bộ đầy đủ</button>`:''}
       ${customPool&&!isText()?`<button class="btn" id="exitDrill">về bài thường</button>`:''}
     </div>`;
   $('#test').style.display='none';$('#res').classList.add('show');
@@ -995,6 +1068,8 @@ function showResults(early){
       customPool.push(base);}
     cfg.app='kana';saveCfg();renderBars();newTest();
   };
+  const md=$('#mdrill');if(md) md.onclick=()=>{MDRILL=new Set(M_WRONG);renderBars();newTest();};
+  const mx=$('#mexit');if(mx) mx.onclick=()=>{MDRILL=null;renderBars();newTest();};
   const x=$('#exitDrill');if(x) x.onclick=()=>{customPool=null;renderBars();newTest();};
 }
 function chartSvg(){
@@ -1021,6 +1096,7 @@ function chartSvg(){
 const opt=(on,label,act,extra='')=>`<button class="opt ${on?'on':''} ${extra}" data-act="${act}">${label}</button>`;
 function renderBars(){
   const b1=$('#bar1'),b2=$('#bar2');
+  if(isMinna()){renderMinnaBars(b1,b2);return;}
   if(isText()){
     let h=['all','n5','n4','n3','kata','long'].map(l=>opt(cfg.tLevel===l&&!useCustom,l==='all'?'tất cả':LV_NAME[l],'lv:'+l)).join('');
     h+='<span class="sep"></span>';
@@ -1074,6 +1150,16 @@ document.addEventListener('click',e=>{
   else if(a==='kanji') cfg.kanji=!cfg.kanji;
   else if(a==='trans'){cfg.trans=!cfg.trans;saveCfg();renderBars();updateTrans();return;}
   else if(a==='custext'){openModal('text');return;}
+  else if(a==='mt'){cfg.mType=v;MDRILL=null;}
+  else if(a==='mpick'){cfg.mPick=v;MDRILL=null;}
+  else if(a==='mnav'){cfg.mOne=((cfg.mOne-1+(+v)+25)%25)+1;MDRILL=null;}
+  else if(a==='mmode') cfg.mMode=v;
+  else if(a==='mval'){if(cfg.mMode==='time') cfg.mTime=+v; else cfg.mCount=+v;}
+  else if(a==='mrecall') cfg.mRecall=!cfg.mRecall;
+  else if(a==='mo') cfg.mOrder=v;
+  else if(a==='msel'){openModal('msel');return;}
+  else if(a==='msheet'){openModal('msheet');return;}
+  else if(a==='mexit'){MDRILL=null;}
   if(!isText()) customPool=null;
   saveCfg();renderBars();newTest();
 });
@@ -1081,7 +1167,7 @@ document.addEventListener('click',e=>{
 /* ============ modal ============ */
 let modalOpen=false,dirty=false,clearArm=false,modalKind='set';
 function openModal(focus){
-  modalOpen=true;modalKind=focus==='text'?'text':'set';
+  modalOpen=true;modalKind=['text','msel','msheet'].includes(focus)?focus:'set';
   $('#modal').classList.add('show');renderModal();
   if(focus==='custom') setTimeout(()=>{const i=$('#in-'+(cfg.mode==='count'?'count':'time'));if(i){i.scrollIntoView({block:'center'});i.focus();i.select();}},30);
   if(focus==='text') setTimeout(()=>{const t=$('#ctext');if(t) t.focus();},30);
@@ -1092,6 +1178,7 @@ $('#openSet').onclick=()=>openModal();
 
 function seg(name,cur,opts){return `<div class="seg">${opts.map(([v,l])=>`<button class="${cur===v?'on':''}" data-set="${name}" data-v="${v}">${l}</button>`).join('')}</div>`;}
 function renderModal(){
+  if(modalKind==='msel'||modalKind==='msheet'){renderMinnaModal();return;}
   if(modalKind==='text'){
     $('#panel').innerHTML=`<div class="ph"><h2>Tự nhập đoạn văn</h2><button class="mini" id="closeM">đóng ✕ <kbd>esc</kbd></button></div>
     <p>Dán đoạn văn bằng <b>hiragana / katakana</b>. Dấu câu sẽ được tự bỏ qua. Kanji không gõ được — hãy viết bằng kana, hoặc kèm cách đọc theo dạng <code>{漢字|かんじ}</code>. Đánh dấu trợ từ は / へ (đọc wa / e) bằng <code>^は</code>, <code>^へ</code>. Nên để dấu cách giữa các từ để dễ đọc.</p>
@@ -1129,7 +1216,9 @@ function renderModal(){
   <div class="setrow"><div class="d">Gợi ý romaji<small>"Khi sai": hiện cách đọc dưới chữ sau khi gõ sai. "Luôn hiện": dành cho người mới bắt đầu.</small></div>${seg('hint',cfg.hint,[['off','tắt'],['error','khi sai'],['always','luôn hiện']])}</div>
   <div class="setrow"><div class="d">Ưu tiên chữ hay sai<small>Chế độ chữ cái: chữ bạn hay gõ sai (lưu qua các bài, kể cả đoạn văn) sẽ xuất hiện nhiều hơn.</small></div><div style="display:flex;gap:8px;align-items:center">${seg('adaptive',String(cfg.adaptive),[['false','tắt'],['true','bật']])}<button class="mini" id="clrStats">${clearArm?'nhấn lần nữa để xoá':'xoá thống kê ('+Object.keys(STATS).length+')'}</button></div></div>
   <div class="setrow"><div class="d">Tốc độ trực tiếp<small>Hiện kana/phút trong lúc gõ.</small></div>${seg('live',String(cfg.live),[['false','ẩn'],['true','hiện']])}</div>`;
-  if(!isText()) h+=`<div class="setrow"><div class="d">Thời gian tuỳ chọn (giây)</div><input class="num" id="in-time" type="number" min="5" max="3600" value="${cfg.time}"></div>
+  if(isMinna()) h+=`<div class="setrow"><div class="d">Thời gian tuỳ chọn cho Minna (giây)</div><input class="num" id="in-mtime" type="number" min="10" max="3600" value="${cfg.mTime}"></div>
+  <div class="setrow"><div class="d">Số mục tuỳ chọn cho Minna</div><input class="num" id="in-mcount" type="number" min="5" max="500" value="${cfg.mCount}"></div>`;
+  else if(!isText()) h+=`<div class="setrow"><div class="d">Thời gian tuỳ chọn (giây)</div><input class="num" id="in-time" type="number" min="5" max="3600" value="${cfg.time}"></div>
   <div class="setrow"><div class="d">Số chữ tuỳ chọn</div><input class="num" id="in-count" type="number" min="5" max="1000" value="${cfg.count}"></div>`;
   else h+=`<div class="setrow"><div class="d">Thời gian tuỳ chọn cho đoạn văn (giây)</div><input class="num" id="in-ttime" type="number" min="10" max="3600" value="${cfg.tTime}"></div>`;
   h+=`<h3>giao diện</h3>
@@ -1154,6 +1243,7 @@ function renderModal(){
   $('#closeM').onclick=closeModal;
 }
 $('#panel').addEventListener('click',e=>{
+  if(modalKind==='msel'||modalKind==='msheet'){minnaPanelClick(e);return;}
   if(modalKind==='text') return;
   const t=e.target.closest('button');if(!t) return;
   if(t.dataset.grp){cfg.groups[t.dataset.grp]=!cfg.groups[t.dataset.grp];dirty=true;}
@@ -1174,9 +1264,195 @@ $('#panel').addEventListener('change',e=>{
   const v=Math.round(+i.value);if(!v||v<5) return;
   if(i.id==='in-time'){cfg.time=Math.min(v,3600);if(cfg.mode!=='zen') cfg.mode='time';}
   else if(i.id==='in-count'){cfg.count=Math.min(v,1000);if(cfg.mode!=='zen') cfg.mode='count';}
+  else if(i.id==='in-mtime'){cfg.mTime=Math.min(Math.max(v,10),3600);cfg.mMode='time';}
+  else if(i.id==='in-mcount'){cfg.mCount=Math.min(v,500);cfg.mMode='count';}
   else if(i.id==='in-ttime'){cfg.tTime=Math.min(Math.max(v,10),3600);cfg.tMode='time';}
   dirty=true;
 });
+
+/* ============ Minna no Nihongo (bài 1–25) ============
+   Dữ liệu ở data/minna.js · 3 loại: từ vựng / kanji / ngữ pháp (câu ví dụ)
+   "Ghi nhớ" = ẩn kana, chỉ thấy gợi ý (nghĩa / kanji) và phải gõ romaji từ trí nhớ. */
+const M_TYPES={vocab:'từ vựng',kanji:'kanji',gram:'ngữ pháp',mix:'mix từ vựng + ngữ pháp'};
+const activeLessons=()=>cfg.mPick==='one'?[cfg.mOne]:cfg.mLessons;
+let M_WRONG=[],sheetHide='none';
+const esc=s=>String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const rubyHtml=jp=>esc(jp).replace(/\{([^|{}]+)\|([^{}]+)\}/g,'<ruby>$1<rt>$2</rt></ruby>').replace(/\^/g,'');
+const hvOf=k=>[...(k||'')].map(c=>(typeof MINNA!=='undefined'&&MINNA.hv[c])||'').filter(Boolean).join(' · ');
+const showKj=it=>isMinna()&&it?(it.kind==='kanji'||(cfg.kanji&&!cfg.mRecall)):cfg.kanji;
+
+function lessonLabel(){
+  const a=[...activeLessons()].sort((x,y)=>x-y);
+  if(!a.length) return 'chưa chọn bài';
+  if(a.length===25) return 'cả 25 bài';
+  if(a.length===1) return 'Bài '+a[0];
+  if(a.every((v,i)=>i===0||v===a[i-1]+1)) return `Bài ${a[0]}–${a[a.length-1]}`;
+  return 'Bài '+(a.length>5?a.slice(0,5).join(',')+'…':a.join(','));
+}
+const minnaSig=()=>MDRILL?'':cfg.mType+':'+[...activeLessons()].sort((x,y)=>x-y).join(',');
+function minnaItems(){
+  if(typeof MINNA==='undefined') return [];
+  const sel=new Set(activeLessons()),out=[];
+  const types=cfg.mType==='mix'?['vocab','gram']:[cfg.mType];
+  for(const L of MINNA.lessons){
+    if(!MDRILL&&!sel.has(L.n)) continue;
+    for(const ty of types){
+      if(ty==='gram'){
+        L.g.forEach((g,gi)=>g.e.forEach((e,ei)=>out.push({id:`g${L.n}.${gi}.${ei}`,kind:'gram',n:L.n,jp:e[0],vi:e[1],title:g.t,note:g.n})));
+      }else L.v.forEach((v,i)=>{
+        if(ty==='kanji'&&!v[1]) return;
+        const rd=v[0].replace('^','');
+        out.push({id:`v${L.n}.${i}`,kind:ty,n:L.n,r:rd,k:v[1],vi:v[2],jp:v[1]?`{${v[1]}|${rd}}`:v[0]});
+      });
+    }
+  }
+  return MDRILL?out.filter(it=>MDRILL.has(it.id)):out;
+}
+const minnaPassage=it=>({id:it.id,lv:'minna',title:it.title||'',jp:it.jp,vi:it.vi,item:it});
+function nextMinna(){
+  const items=MDECK,n=items.length;
+  if(cfg.mOrder==='seq') return items[(T.mPos++)%n];
+  if(cfg.mOrder==='weak'){
+    const recent=T.mRecent||(T.mRecent=[]);let tot=0;
+    const ws=items.map(it=>{const m=MSTAT[it.id];let w=m?1+6*m.e/(m.e+m.o+1):1.8;if(n>3&&recent.includes(it.id)) w*=0.03;tot+=w;return w;});
+    let r=Math.random()*tot,pick=items[n-1];
+    for(let i=0;i<n;i++){r-=ws[i];if(r<=0){pick=items[i];break;}}
+    recent.push(pick.id);if(recent.length>Math.min(4,n-1)) recent.shift();
+    return pick;
+  }
+  if(!T.mBag.length){
+    const b=items.map((_,i)=>i);
+    for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}
+    if(n>1&&T.mLast!=null&&b[b.length-1]===T.mLast){const j=Math.floor(Math.random()*(b.length-1));[b[b.length-1],b[j]]=[b[j],b[b.length-1]];}
+    T.mBag=b;
+  }
+  T.mLast=T.mBag.pop();
+  return items[T.mLast];
+}
+
+function renderPrompt(){
+  const el=$('#mprompt');$('#trans').style.display='none';
+  if(!T||!T.passages.length){el.innerHTML='';return;}
+  const cur=T.tokens[Math.min(T.idx,T.tokens.length-1)];
+  const it=T.passages[cur&&cur.pi!=null?cur.pi:0].item;
+  let h=`<div class="chips2"><span class="lv ${it.kind==='gram'?'g':''}">Bài ${it.n}</span><span class="lv">${M_TYPES[it.kind]}</span></div>`;
+  if(it.kind==='gram'){
+    h+=`<div class="pat">${esc(it.title)}</div>`;
+    h+=(cfg.trans||cfg.mRecall)?`<div class="mean">${esc(it.vi)}</div>`:'<div class="mean" style="color:var(--sub)">· · ·</div>';
+    if(it.note) h+=`<div class="sub">${esc(it.note)}</div>`;
+  }else if(it.kind==='kanji'){
+    const hv=hvOf(it.k);
+    if(hv) h+=`<div class="hv">${esc(hv)}</div>`;
+    h+=cfg.trans?`<div class="mean">${esc(it.vi)}</div>`:'<div class="mean" style="color:var(--sub)">· · ·</div>';
+  }else{
+    h+=(cfg.trans||cfg.mRecall)?`<div class="mean">${esc(it.vi)}</div>`:'<div class="mean" style="color:var(--sub)">· · ·</div>';
+    if(it.k&&!cfg.mRecall){const hv=hvOf(it.k);if(hv) h+=`<div class="sub">${esc(hv)}</div>`;}
+  }
+  el.innerHTML=h;
+}
+
+function minnaReview(){
+  const per={};
+  T.tokens.slice(0,T.idx).forEach(t=>{
+    if(t.punct||t.pi==null) return;
+    const o=per[t.pi]||(per[t.pi]={err:false});if(t.status==='err'||t.hadErr) o.err=true;
+  });
+  const seen=new Set(),rows=[],wrong=[];
+  for(const k of Object.keys(per)){
+    const it=T.passages[+k].item,bad=per[k].err;
+    if(bad&&!wrong.includes(it.id)) wrong.push(it.id);
+    if(seen.has(it.id)) continue;seen.add(it.id);rows.push({it,bad});
+  }
+  M_WRONG=wrong;
+  rows.sort((a,b)=>(b.bad-a.bad));
+  const body=rows.map(({it,bad})=>{
+    if(it.kind==='gram') return `<div class="rv ${wrong.includes(it.id)?'bad':''}"><span class="k" style="min-width:0;font-size:1.05rem;line-height:1.9">${rubyHtml(it.jp.replace(/ /g,''))}</span><span class="m">${esc(it.vi)}</span></div>`;
+    const hv=hvOf(it.k);
+    return `<div class="rv ${wrong.includes(it.id)?'bad':''}"><span class="k">${esc(it.k||it.r)}</span><span class="r">${esc(it.r)}</span><span class="m">${hv?esc(hv)+' — ':''}${esc(it.vi)}</span></div>`;
+  }).join('');
+  return `<div class="miss review"><div class="sec-lbl">đã ôn ${rows.length} mục · sai ${wrong.length}</div>${body}</div>`;
+}
+
+function renderMinnaBars(b1,b2){
+  let h=Object.entries(M_TYPES).map(([k,l])=>opt(cfg.mType===k,k==='kanji'?'<span class="jp">漢</span> '+l:k==='mix'?'🔀 mix':l,'mt:'+k)).join('');
+  h+='<span class="sep"></span>'+opt(cfg.mPick==='one','1 bài','mpick:one')+opt(cfg.mPick==='mix','mix nhiều bài','mpick:mix');
+  if(cfg.mPick==='one'){
+    h+=opt(false,'◀','mnav:-1')+`<select class="sel" id="mone" style="max-width:110px">${MINNA.lessons.map(L=>`<option value="${L.n}" ${cfg.mOne===L.n?'selected':''}>Bài ${L.n}</option>`).join('')}</select>`+opt(false,'▶','mnav:1');
+  }else h+=opt(false,'📚 '+lessonLabel(),'msel');
+  h+='<span class="sep"></span>'+opt(cfg.mMode==='count','# số mục','mmode:count')+opt(cfg.mMode==='time','⏱ thời gian','mmode:time');
+  const vals=cfg.mMode==='time'?[30,60,120]:[10,20,40,80],cur=cfg.mMode==='time'?cfg.mTime:cfg.mCount;
+  h+='<span class="sep"></span>'+vals.map(v=>opt(cur===v,v,'mval:'+v)).join('');
+  if(!vals.includes(cur)) h+=opt(true,cur,'mval:'+cur);
+  b1.innerHTML=h;
+  const mo=$('#mone');if(mo) mo.onchange=e=>{cfg.mOne=+e.target.value;MDRILL=null;saveCfg();e.target.blur();renderBars();newTest();};
+  const n=minnaItems().length;
+  let h2=opt(cfg.mRecall,'🙈 ghi nhớ (ẩn kana)','mrecall');
+  if(cfg.mType!=='kanji') h2+=opt(cfg.kanji,'<span class="jp">漢</span> kanji','kanji');
+  h2+=opt(cfg.trans,'nghĩa','trans')+'<span class="sep"></span>';
+  h2+=[['random','ngẫu nhiên'],['seq','tuần tự'],['weak','ưu tiên mục sai']].map(([v,l])=>opt(cfg.mOrder===v,l,'mo:'+v)).join('');
+  h2+='<span class="sep"></span>'+opt(false,'📖 xem bảng','msheet')+`<span class="count">${n} mục</span>`;
+  b2.innerHTML=h2;
+  $('#tagbox').innerHTML=MDRILL?`<span class="tag">đang luyện lại ${MDRILL.size} mục sai<button id="untag" title="thoát">✕</button></span>`:'';
+  const u=$('#untag');if(u) u.onclick=()=>{MDRILL=null;renderBars();newTest();};
+}
+
+function lessonCount(n){
+  const L=MINNA.lessons[n-1];
+  const gr=L.g.reduce((a,g)=>a+g.e.length,0);
+  return cfg.mType==='mix'?L.v.length+gr:cfg.mType==='gram'?gr:cfg.mType==='kanji'?L.v.filter(v=>v[1]).length:L.v.length;
+}
+function renderMinnaModal(){
+  let h='';
+  if(modalKind==='msel'){
+    const sel=new Set(cfg.mLessons);
+    h=`<div class="ph"><h2>Mix nhiều bài · ${M_TYPES[cfg.mType]}</h2><button class="mini" id="closeM">đóng ✕ <kbd>esc</kbd></button></div>
+    <p>Bấm vào từng bài để bật/tắt. Số bên dưới là số mục của loại đang luyện (${M_TYPES[cfg.mType]}).</p>
+    <div class="tools" style="display:flex;gap:6px;flex-wrap:wrap"><button class="mini" data-mall="all">tất cả</button><button class="mini" data-mall="none">bỏ hết</button>${['1-5','6-10','11-15','16-20','21-25'].map(r=>`<button class="mini" data-mr="${r}">bài ${r.replace('-','–')}</button>`).join('')}</div>
+    <div class="lchips">${MINNA.lessons.map(L=>`<button class="lchip ${sel.has(L.n)?'on':''}" data-ml="${L.n}">Bài ${L.n}<small>${lessonCount(L.n)} mục</small></button>`).join('')}</div>`;
+  }else{
+    const hid=k=>sheetHide===k?' hid':'';
+    const sel=new Set(activeLessons());
+    h=`<div class="sheet"><div class="ph"><h2>Bảng ${M_TYPES[cfg.mType]} · ${lessonLabel()}</h2><button class="mini" id="closeM">đóng ✕ <kbd>esc</kbd></button></div>
+    <div class="tools"><span class="knote">tự kiểm tra:</span><div class="seg">${[['none','hiện hết'],['kana','ẩn kana'],['mean','ẩn nghĩa'],['kanji','ẩn kanji']].map(([v,l])=>`<button class="${sheetHide===v?'on':''}" data-sh="${v}">${l}</button>`).join('')}</div><span class="knote">bấm vào ô bị mờ để xem</span></div>`;
+    if(cfg.mType==='gram'||cfg.mType==='mix'){
+      for(const L of MINNA.lessons){
+        if(!sel.has(L.n)||!L.g.length) continue;
+        h+=`<div class="gt" style="font-size:.9rem;margin-top:22px">Bài ${L.n}</div>`;
+        for(const g of L.g){
+          h+=`<div class="gt">${esc(g.t)}</div>${g.n?`<div class="gn">${esc(g.n)}</div>`:''}`;
+          for(const e of g.e) h+=`<div class="ex"><div class="jpc${hid('kana')}">${rubyHtml(e[0].replace(/ /g,''))}</div><div class="vi${hid('mean')}">${esc(e[1])}</div></div>`;
+        }
+      }
+    }
+    if(cfg.mType!=='gram'){
+      h+=`<table><tr><th>kanji</th><th>kana</th><th>Hán Việt</th><th>nghĩa</th></tr>`;
+      for(const L of MINNA.lessons){
+        if(!sel.has(L.n)) continue;
+        h+=`<tr class="lh"><td colspan="4">Bài ${L.n}</td></tr>`;
+        for(const v of L.v){
+          if(cfg.mType==='kanji'&&!v[1]) continue;
+          h+=`<tr><td class="jpc${hid('kanji')}">${esc(v[1])}</td><td class="jpc${hid('kana')}">${esc(v[0].replace('^',''))}</td><td class="hvc${hid('mean')}">${esc(hvOf(v[1]))}</td><td class="${hid('mean').trim()}">${esc(v[2])}</td></tr>`;
+        }
+      }
+      h+='</table>';
+    }
+    h+='</div>';
+  }
+  $('#panel').innerHTML=h;
+  $('#closeM').onclick=closeModal;
+}
+function minnaPanelClick(e){
+  const hidEl=e.target.closest('.hid');
+  const t=e.target.closest('button');
+  if(hidEl&&!t){hidEl.classList.remove('hid');return;}
+  if(!t) return;
+  if(t.dataset.ml){const n=+t.dataset.ml,s=new Set(cfg.mLessons);s.has(n)?s.delete(n):s.add(n);cfg.mLessons=[...s].sort((a,b)=>a-b);dirty=true;MDRILL=null;}
+  else if(t.dataset.mall){cfg.mLessons=t.dataset.mall==='all'?MINNA.lessons.map(L=>L.n):[];dirty=true;MDRILL=null;}
+  else if(t.dataset.mr){const [a,b]=t.dataset.mr.split('-').map(Number);cfg.mLessons=[];for(let i=a;i<=b;i++) cfg.mLessons.push(i);dirty=true;MDRILL=null;}
+  else if(t.dataset.sh){sheetHide=t.dataset.sh;}
+  else return;
+  renderMinnaModal();
+}
 
 /* ============ input ============ */
 let warnTimer=null;
