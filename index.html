@@ -285,6 +285,104 @@ header{display:flex;align-items:center;justify-content:space-between;gap:16px;fl
   .bq-ch.glyph{grid-template-columns:1fr 1fr}
 }
 
+/* ===== 六書 Lục thư ===== */
+#rk{width:100%;animation:fade .2s}
+.rk-mode .stage{justify-content:flex-start;padding-top:22px}
+.ft-rk{display:none}
+.rk-mode .ft-rk{display:inline}
+.rk-mode .ft-type{display:none}
+.rk{max-width:860px;margin:0 auto}
+.rk-intro{background:var(--sub-alt);border-radius:10px;padding:12px 16px;font-size:.8rem;line-height:1.7;color:var(--sub);margin-bottom:16px}
+.rk-intro b{color:var(--text);font-weight:500}
+.rk-card{background:var(--sub-alt);border-radius:14px;padding:18px 20px;margin-bottom:14px}
+.rk-card p{margin:8px 0 0;font-size:.82rem;line-height:1.75;color:var(--text)}
+.rk-card .rk-how{color:var(--sub)}
+.rk-card .rk-how b{color:var(--text);font-weight:500}
+.rk-card .rk-tip{color:var(--sub);font-size:.78rem}
+.rk-h{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.rk-h .jp{font-size:2rem;color:var(--main);line-height:1.1}
+.rk-h .ro{color:var(--sub);font-size:.8rem}
+.rk-h b{font-size:1.05rem;color:var(--text);font-weight:500}
+.rk-h small{color:var(--sub);font-size:.72rem;margin-left:auto}
+.rk-tiles{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.rk-tile{background:var(--bg);border:1px solid transparent;border-radius:8px;padding:5px 8px 4px;cursor:pointer;color:var(--text);text-align:center;min-width:54px;transition:border-color .12s}
+.rk-tile:hover{border-color:var(--sub)}
+.rk-tile.on{border-color:var(--main)}
+.rk-tile .bjp{display:block;font-size:1.5rem;line-height:1.25}
+.rk-tile small{display:block;font-size:.6rem;color:var(--sub)}
+.rk-card>.mini{margin-top:8px}
+.rk-detail:not(:empty){margin-top:14px;background:var(--bg);border-radius:10px;padding:14px 16px}
+.rk-formula{display:flex;align-items:center;flex-wrap:wrap;gap:6px;justify-content:flex-start}
+.rk-formula.big{justify-content:center;margin:6px 0 12px}
+.rk-formula.big .rk-p .bjp{font-size:3rem}
+.rk-p{display:inline-flex;flex-direction:column;align-items:center;border:2px solid var(--sub);border-radius:10px;padding:3px 10px 4px;min-width:56px}
+.rk-p .bjp{font-size:1.9rem;line-height:1.25;color:var(--text)}
+.rk-p small{font-size:.6rem;color:var(--sub);line-height:1.2;text-align:center;max-width:9em}
+.rk-p.sem{border-color:var(--main)}
+.rk-p.sem .bjp{color:var(--main)}
+.rk-p.ph{background:var(--main);border-color:var(--main)}
+.rk-p.ph .bjp,.rk-p.ph small{color:var(--bg)}
+.rk-p.res{border-color:var(--text)}
+.rk-p.sm{padding:0 7px;min-width:0;border-width:1.5px;border-radius:7px}
+.rk-p.sm .bjp{font-size:1.15rem;line-height:1.5}
+.rk-op{color:var(--sub);font-size:1.1rem}
+.rk-meta{margin-top:10px;font-size:.82rem;color:var(--sub)}
+.rk-meta b{color:var(--main);font-weight:500}
+.rk-why{margin-top:8px;font-size:.8rem;line-height:1.75;color:var(--text)}
+.rk-why b{font-weight:500;color:var(--main)}
+
+/* họ âm */
+.rk-fam{background:var(--sub-alt);border-radius:14px;padding:14px 16px;margin-bottom:12px}
+.rk-fh{display:flex;gap:14px;align-items:center}
+.rk-fi{font-size:.82rem;line-height:1.6;color:var(--text)}
+.rk-fi b{color:var(--main);font-weight:500}
+.rk-mem{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:8px;margin-top:12px}
+.rk-m{background:var(--bg);border-radius:10px;padding:8px 6px;text-align:center}
+.rk-m.dr{opacity:.8}
+.rk-mf{display:flex;align-items:center;justify-content:center;gap:2px}
+.rk-mf .rk-op{font-size:.8rem}
+.rk-mc{font-size:2.2rem;line-height:1.2;color:var(--text);margin-top:2px}
+.rk-mh{color:var(--main);font-size:.74rem}
+.rk-mm{color:var(--text);font-size:.72rem;line-height:1.35;min-height:2.1em}
+.rk-mo{color:var(--main);font-size:.8rem;margin-top:2px}
+.rk-ms{color:var(--sub);font-size:.62rem;margin-top:2px}
+
+/* bộ gợi nghĩa */
+.rk-rads{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:12px}
+.rk-rad{background:var(--sub-alt);border-radius:14px;padding:14px 16px}
+.rk-rh{display:flex;gap:14px;align-items:center}
+.rk-rg{font-size:2.8rem;line-height:1.1;color:var(--main);min-width:1.3em;text-align:center}
+.rk-rh b{color:var(--text);font-weight:500}
+.rk-alt{color:var(--sub);font-size:.85rem}
+.rk-rm{color:var(--main);font-size:.82rem;margin-top:2px}
+.rk-note{margin-top:8px;font-size:.72rem;line-height:1.6;color:var(--sub)}
+.rk-ex{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.rk-e{background:var(--bg);border-radius:8px;padding:4px 8px;display:flex;align-items:baseline;gap:6px;font-size:.72rem;color:var(--sub)}
+.rk-e .bjp{font-size:1.2rem;color:var(--text)}
+.rk-e b{color:var(--main);font-weight:400}
+
+/* luyện tập */
+.rk-sibs{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:10px}
+.rk-sib{background:var(--bg);border-radius:10px;padding:6px 14px;text-align:center}
+.rk-sib .bjp{font-size:2rem;line-height:1.25;color:var(--text)}
+.rk-sib small{display:block;color:var(--main);font-size:.8rem}
+.rk-hint{color:var(--sub);font-size:.72rem}
+.rk-chg{font-size:2rem;line-height:1;min-width:1.2em;text-align:center;color:var(--text)}
+.bq-ch .ch.ok .rk-chg,.bq-ch .ch.bad .rk-chg{color:inherit}
+.rk-ans{text-align:left;color:var(--text)}
+.rk-ans small{display:block;color:var(--sub);font-size:.76rem;line-height:1.7;margin-top:4px}
+.rk-ans b{color:var(--main);font-weight:500}
+.bq-card .rk-formula{justify-content:center;margin-top:12px}
+.rk-wr{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.rk-w{display:flex;gap:14px;align-items:flex-start;background:var(--sub-alt);border-radius:10px;padding:10px 14px;font-size:.8rem;color:var(--text)}
+.rk-w .k{font-size:2rem;line-height:1.2;color:var(--err);min-width:1.2em;text-align:center}
+.rk-w b{color:var(--main);font-weight:500}
+.rk-w small{color:var(--sub);font-size:.72rem;line-height:1.6}
+@media (max-width:680px){
+  .rk-rads{grid-template-columns:1fr}
+  .rk-formula.big .rk-p .bjp{font-size:2.3rem}
+}
+
 /* modal */
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:flex-start;justify-content:center;padding:5vh 16px;z-index:10}
 .modal.show{display:flex}
@@ -346,13 +444,14 @@ kbd{background:var(--sub);color:var(--bg);border-radius:4px;padding:1px 6px;font
   <header>
     <div class="logo" id="logo" title="Bài mới">
       <div class="mark">かな</div>
-      <div><div class="name">kana<span>type</span></div><small>luyện gõ hiragana · katakana · Minna no Nihongo · bộ thủ</small></div>
+      <div><div class="name">kana<span>type</span></div><small>luyện gõ hiragana · katakana · Minna no Nihongo · bộ thủ · lục thư</small></div>
     </div>
     <div class="tabs" id="tabs">
       <button data-app="kana"><span class="jp">あ</span>chữ cái</button>
       <button data-app="text"><span class="jp">文</span>đoạn văn</button>
       <button data-app="minna"><span class="jp">課</span>Minna 1–25</button>
       <button data-app="bothu"><span class="jp">部</span>Bộ thủ 214</button>
+      <button data-app="rikusho"><span class="jp">書</span>Lục thư</button>
     </div>
     <button class="iconbtn" id="openSet" title="Cài đặt">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
@@ -378,6 +477,7 @@ kbd{background:var(--sub);color:var(--bg);border-radius:4px;padding:1px 6px;font
     </div>
     <div class="res" id="res"></div>
     <div id="bt" style="display:none"></div>
+    <div id="rk" style="display:none"></div>
   </main>
 
   <footer>
@@ -389,6 +489,9 @@ kbd{background:var(--sub);color:var(--bg);border-radius:4px;padding:1px 6px;font
     <span class="ft-bt"><kbd>enter</kbd> xác nhận / tiếp</span>
     <span class="ft-bt"><kbd>1</kbd>–<kbd>4</kbd> chọn đáp án</span>
     <span class="ft-bt"><kbd>h</kbd> gợi ý nét · <kbd>backspace</kbd> viết lại</span>
+    <span class="ft-rk"><kbd>1</kbd>–<kbd>6</kbd> chọn đáp án</span>
+    <span class="ft-rk"><kbd>enter</kbd> xác nhận / tiếp</span>
+    <span class="ft-rk"><kbd>tab</kbd> lượt mới</span>
   </footer>
 </div>
 
@@ -397,6 +500,8 @@ kbd{background:var(--sub);color:var(--bg);border-radius:4px;padding:1px 6px;font
 <script src="data/minna.js"></script>
 <script src="data/botthu.js"></script>
 <script src="js/bothu.js"></script>
+<script src="data/rikusho.js"></script>
+<script src="js/rikusho.js"></script>
 <script>
 /* ============ storage ============ */
 const store={
@@ -734,12 +839,14 @@ function parsePassage(jp){
 const DEF={app:'kana',script:'hira',mode:'time',time:30,count:50,groups:{seion:true},rows:{},onError:'stop',hint:'error',adaptive:false,live:true,theme:'serika',font:'Noto Sans JP',size:'m',
   tLevel:'all',tMode:'passage',tTime:60,tPick:'random',kanji:true,trans:true,
   mType:'vocab',mPick:'mix',mOne:1,mLessons:[1],mMode:'count',mCount:20,mTime:60,mOrder:'random',mRecall:false,
-  bMode:'table',bSel:[],bOnly:'all',bHide:'none',bQ:'type',bCount:20,bHint:false,bWrite:'trace',bCur:0};
+  bMode:'table',bSel:[],bOnly:'all',bHide:'none',bQ:'type',bCount:20,bHint:false,bWrite:'trace',bCur:0,
+  rMode:'learn',rQ:'mix',rTypes:[],rCount:10,rHide:'none'};
 let cfg=Object.assign({},DEF,store.get('kanatype.cfg',{}));
 cfg.groups=Object.assign({},cfg.groups||{});cfg.rows=Object.assign({},cfg.rows||{});
 if(!Array.isArray(cfg.mLessons)||!cfg.mLessons.length) cfg.mLessons=[1];
 if(!(cfg.mOne>=1&&cfg.mOne<=25)) cfg.mOne=1;
 if(!Array.isArray(cfg.bSel)) cfg.bSel=[];
+if(!Array.isArray(cfg.rTypes)) cfg.rTypes=[];
 if(!(cfg.bCur>=0&&cfg.bCur<214)) cfg.bCur=0;
 let STATS=store.get('kanatype.stats',{});
 let PB=store.get('kanatype.pb',{});
@@ -759,6 +866,7 @@ function applyLook(){
   document.body.classList.toggle('text-mode',cfg.app==='text'||cfg.app==='minna');
   document.body.classList.toggle('minna-mode',cfg.app==='minna');
   document.body.classList.toggle('bt-mode',cfg.app==='bothu');
+  document.body.classList.toggle('rk-mode',cfg.app==='rikusho');
   document.body.classList.toggle('m-gram',cfg.app==='minna'&&cfg.mType==='gram');
   [...document.querySelectorAll('#tabs button')].forEach(b=>b.classList.toggle('on',b.dataset.app===cfg.app));
 }
@@ -827,14 +935,16 @@ const wordsEl=$('#words'),wrapEl=$('#wrap'),liveEl=$('#live'),hid=$('#hid');
 let T=null,POOL=[],lineH=60,timer=null;
 const isMinna=()=>cfg.app==='minna';
 const isBt=()=>cfg.app==='bothu';
+const isRk=()=>cfg.app==='rikusho';
 const isText=()=>cfg.app==='text'||cfg.app==='minna';
 const endsAtLast=()=>isMinna()?cfg.mMode==='count':isText()?cfg.tMode==='passage':cfg.mode==='count';
 
 function newTest(){
   clearInterval(timer);M_WRONG=[];
   applyLook();
-  $('#bt').style.display='none';
+  $('#bt').style.display='none';$('#rk').style.display='none';
   if(isBt()){btShow();return;}
+  if(isRk()){rkShow();return;}
   T={tokens:[],idx:0,buf:'',bad:'',started:false,ended:false,t0:0,elapsed:0,ck:0,wk:0,secErr:0,hist:[],lastSec:0,recent:[],mistakes:{},okKana:0,allKana:0,okRoma:0,doneN:0,total:0,passages:[],base:0};
   wordsEl.innerHTML='';wordsEl.style.transform='';
   document.body.classList.remove('typing');$('#app').classList.remove('focus');
@@ -1228,6 +1338,7 @@ const opt=(on,label,act,extra='')=>`<button class="opt ${on?'on':''} ${extra}" d
 function renderBars(){
   const b1=$('#bar1'),b2=$('#bar2');
   if(isBt()){renderBtBars(b1,b2);return;}
+  if(isRk()){renderRkBars(b1,b2);return;}
   if(isMinna()){renderMinnaBars(b1,b2);return;}
   if(isText()){
     let h=['all','n5','n4','n3','kata','long'].map(l=>opt(cfg.tLevel===l&&!useCustom,l==='all'?'tất cả':LV_NAME[l],'lv:'+l)).join('');
@@ -1271,6 +1382,7 @@ document.addEventListener('click',e=>{
   const [a,v]=b.dataset.act.split(':');
   if(b.classList.contains('dis')) return;
   if(a.startsWith('bt')){btBarAct(a,v);return;}
+  if(a.startsWith('rk')){rkBarAct(a,v);return;}
   if(a==='script') cfg.script=v;
   else if(a==='mode') cfg.mode=v;
   else if(a==='val'){if(cfg.mode==='time') cfg.time=+v; else cfg.count=+v;}
@@ -1598,6 +1710,7 @@ const isTouch=()=>matchMedia('(pointer:coarse)').matches;
 document.addEventListener('keydown',e=>{
   if(modalOpen){if(e.key==='Escape'){e.preventDefault();closeModal();}return;}
   if(isBt()){btKeydown(e);return;}
+  if(isRk()){rkKeydown(e);return;}
   if((e.target.tagName==='INPUT'&&e.target!==hid)||e.target.tagName==='SELECT'||e.target.tagName==='TEXTAREA') return;
   if(e.key==='Tab'){e.preventDefault();newTest();return;}
   if(!T) return;

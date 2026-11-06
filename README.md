@@ -20,6 +20,17 @@ Chạy: mở `index.html`, hoặc `python -m http.server` rồi vào http://loca
 - **✍ luyện viết**: xem từng nét chạy theo đúng thứ tự (có tên nét: ngang, sổ, phẩy, mác…) · tập viết theo nét mờ · viết theo trí nhớ không gợi ý. Vẽ bằng chuột hoặc cảm ứng, app chấm từng nét (đúng hình, đúng chiều, đúng thứ tự) và gợi ý khi sai nhiều lần
 - Lọc theo số nét (chọn nhiều nhóm cùng lúc), "❗ hay sai", "☆ chưa thuộc"; tiến độ lưu trong trình duyệt
 
+## Tab "Lục thư" (六書)
+
+Hiểu kanji được tạo ra như thế nào: 象形 tượng hình · 指事 chỉ sự · 会意 hội ý · 形声 hình thanh · 転注 chuyển chú · 仮借 giả tá.
+
+- **📘 học 6 loại**: định nghĩa, cách nhận biết, ví dụ bấm được (công thức ghép bộ, nghĩa gốc)
+- **🧩 họ âm 形声**: các chữ chung một phần chỉ âm nên cùng âm On (青 → 清 晴 請 情 精 …), có che âm / che nghĩa để tự kiểm tra
+- **🧱 bộ gợi nghĩa**: mỗi bộ thủ báo hiệu nhóm nghĩa nào (氵 nước, 扌 tay, 言 lời nói…), kèm các chữ ví dụ
+- **🧠 luyện tập**: phân loại chữ · gõ romaji đoán âm On từ các chữ cùng họ âm · chọn bộ gợi nghĩa · ghép nghĩa các phần của chữ hội ý; câu sai được hỏi lại
+
+`data/rikusho.js` do tôi biên soạn tay (không lấy từ trang web nào), sửa trực tiếp được. Một số chữ có nhiều cách phân tích (đặc biệt 転注), nên coi đây là cách giải thích phổ biến để dễ nhớ chứ không phải kết luận duy nhất.
+
 ## Dữ liệu
 
 `data/minna.js` được trích từ https://riki.edu.vn/minna-no-nihongo/bai-1 … bai-25 (từ vựng, ngữ pháp, câu ví dụ).
