@@ -169,6 +169,122 @@ header{display:flex;align-items:center;justify-content:space-between;gap:16px;fl
 .review .rv .r{color:var(--main);font-size:.8rem}
 .review .rv .m{color:var(--sub);font-size:.78rem;flex:1;min-width:12em}
 
+/* ===== Bộ thủ 214 ===== */
+#bt{width:100%;animation:fade .2s}
+.bt-mode .stage{justify-content:flex-start;padding-top:22px}
+.ft-bt{display:none}
+.bt-mode .ft-bt{display:inline}
+.bt-mode .ft-type{display:none}
+.bjp{font-family:var(--kana-font),'Noto Sans JP',sans-serif}
+.bt-cr{color:var(--sub);font-size:.66rem;margin-top:18px;text-align:center;opacity:.8}
+.bhid{filter:blur(7px);cursor:pointer;user-select:none}
+.mini[data-bq]{margin-top:6px}
+
+/* bảng */
+.btt section{margin-bottom:22px}
+.btt h4{margin:0 0 10px;font-size:.8rem;color:var(--main);font-weight:400;letter-spacing:.04em}
+.btt h4 small{color:var(--sub);margin-left:8px}
+.bgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:8px}
+.bcard{position:relative;background:var(--sub-alt);border:1px solid transparent;border-radius:10px;padding:10px 6px 9px;text-align:center;cursor:pointer;transition:border-color .12s}
+.bcard:hover{border-color:var(--sub)}
+.bcard.k{border-color:color-mix(in srgb,var(--main) 55%,transparent)}
+.bcard .bg{font-size:2.3rem;line-height:1.2;color:var(--text)}
+.bcard .bv{font-size:.8rem;color:var(--sub);height:1.2em;line-height:1.2em}
+.bcard .bn{color:var(--main);font-size:.8rem;margin-top:2px}
+.bcard .bm{color:var(--sub);font-size:.68rem;line-height:1.4;margin-top:3px;min-height:2.8em}
+.bcard .bk{position:absolute;top:2px;right:3px;background:none;border:0;color:var(--sub);cursor:pointer;font-size:.9rem;padding:2px 4px;line-height:1}
+.bcard.k .bk{color:var(--main)}
+
+/* luyện nhớ */
+.bq{max-width:640px;margin:0 auto}
+.bq-head{display:flex;gap:16px;align-items:center;flex-wrap:wrap;font-size:.8rem;color:var(--sub);margin-bottom:14px}
+.bq-head b{color:var(--text);font-weight:400}
+.bq-head .g{color:var(--main)}
+.bq-head .e{color:var(--err)}
+.bq-head .rt{color:var(--bg);background:var(--sub);border-radius:4px;padding:0 6px;font-size:.68rem}
+.bq-bar{flex:1;min-width:120px;height:4px;border-radius:2px;background:var(--sub-alt);overflow:hidden}
+.bq-bar i{display:block;height:100%;background:var(--main);transition:width .25s}
+.bq-card{background:var(--sub-alt);border-radius:14px;padding:26px 24px;text-align:center}
+.bq-g{font-size:6rem;line-height:1.15;color:var(--text)}
+.bq-p{font-size:1.3rem;color:var(--text);line-height:1.5}
+.bq-p b{color:var(--main);font-weight:500}
+.bq-s{color:var(--sub);font-size:.82rem;margin:8px 0 16px}
+.bq-s b{color:var(--text);font-weight:400}
+#bq-in{width:min(300px,100%);background:var(--bg);border:2px solid transparent;border-radius:8px;padding:11px 14px;color:var(--text);font:inherit;font-size:1.15rem;text-align:center;outline:none}
+#bq-in:focus{border-color:var(--main)}
+#bq-in[readonly]{opacity:.8}
+.bq-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+.bq-btns .btn{background:var(--bg)}
+.bq-btns .btn:hover{background:var(--text)}
+.bq-btns .btn.pri:hover{background:var(--main)}
+.bq-ch{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px}
+.bq-ch .ch{background:var(--bg);border:2px solid transparent;border-radius:10px;padding:13px 12px;cursor:pointer;color:var(--text);font-size:.92rem;line-height:1.4;text-align:left;display:flex;align-items:center;gap:10px;transition:border-color .12s}
+.bq-ch .ch:hover{border-color:var(--sub)}
+.bq-ch .ch kbd{flex:none}
+.bq-ch.glyph .ch{justify-content:center;font-size:2.6rem;padding:10px 12px}
+.bq-ch.glyph .ch kbd{position:absolute;margin:-38px 0 0 -52px;font-size:.62rem}
+.bq-ch.glyph .ch{position:relative}
+.bq-ch .ch.ok{border-color:var(--main);color:var(--main)}
+.bq-ch .ch.bad{border-color:var(--err);color:var(--err)}
+.bq-fb{margin-top:16px;font-size:.95rem}
+.bq-fb.ok{color:var(--main)}
+.bq-fb.bad{color:var(--err)}
+.bq-ans{display:flex;gap:14px;align-items:center;justify-content:center;margin-top:10px;font-size:.88rem;text-align:left;color:var(--text)}
+.bq-ans .g{font-size:2.6rem;line-height:1}
+.bq-ans b{color:var(--main);font-weight:500}
+.bq-ans small{color:var(--sub);font-size:.72rem}
+.bq-foot{text-align:center;margin-top:10px}
+.bq-res .chips{justify-content:flex-start}
+.mchip .bm2{color:var(--sub);font-size:.72rem}
+
+/* luyện viết */
+.bw{display:grid;grid-template-columns:minmax(250px,390px) 1fr;gap:28px;align-items:start;max-width:860px;margin:0 auto}
+.bw svg{width:100%;aspect-ratio:1;display:block;background:var(--sub-alt);border-radius:14px;touch-action:none;cursor:crosshair;user-select:none;-webkit-user-select:none}
+.bw-bd{fill:none;stroke:var(--sub);stroke-opacity:.55;stroke-width:.6}
+.bw-gr{fill:none;stroke:var(--sub);stroke-opacity:.3;stroke-width:.5;stroke-dasharray:2 2}
+#bw-ghost path{fill:none;stroke:var(--sub);stroke-opacity:.34;stroke-width:5;stroke-linecap:round;stroke-linejoin:round}
+.m-blind #bw-ghost{opacity:0}
+.m-watch #bw-ghost path{stroke-opacity:.16}
+.bw-ok,.bw-ink{fill:none;stroke:var(--text);stroke-width:5;stroke-linecap:round;stroke-linejoin:round}
+.bw-user{fill:none;stroke:var(--main);stroke-width:4.6;stroke-linecap:round;stroke-linejoin:round}
+.bw-user.bad{stroke:var(--err)}
+.bw-hl{fill:none;stroke:var(--main);stroke-width:5.6;stroke-linecap:round;stroke-linejoin:round;opacity:.9}
+.bw-start{fill:none;stroke:var(--main);stroke-width:1.4}
+.bw-num circle{fill:var(--main)}
+.bw-num text{fill:var(--bg);font-size:4.8px;text-anchor:middle;font-family:'Roboto Mono',monospace;font-weight:700}
+.bw-num.f{opacity:.55}
+.bw-msg{min-height:2.7em;margin-top:12px;font-size:.82rem;color:var(--sub);line-height:1.6;text-align:center}
+.bw-msg b{color:var(--text);font-weight:500}
+.bw-msg.ok{color:var(--main)}
+.bw-msg.bad{color:var(--err)}
+.bw-msg.bad b{color:var(--err)}
+.bw-tools{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:8px}
+.bw-tools .btn{padding:8px 13px;font-size:.8rem}
+.bw-right{min-width:0}
+.bw-glyph{font-size:5.2rem;line-height:1.1;color:var(--text)}
+.bw-hv{font-size:1.5rem;color:var(--main);margin-top:2px}
+.bw-mean{font-size:1rem;color:var(--text);margin-top:4px;line-height:1.5}
+.bw-meta{font-size:.76rem;color:var(--sub);margin-top:6px}
+.bw-forms{font-size:.76rem;color:var(--sub);margin-top:12px;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.bw-forms .fm{background:var(--sub-alt);border:1px solid transparent;border-radius:7px;color:var(--text);font-size:1.15rem;padding:2px 10px;cursor:pointer}
+.bw-forms .fm.on{border-color:var(--main);color:var(--main)}
+.bw-strokes{display:flex;flex-wrap:wrap;gap:6px;margin:16px 0}
+.bs{background:var(--sub-alt);color:var(--sub);border-radius:6px;padding:3px 9px;font-size:.74rem;border:1px solid transparent}
+.bs.done{color:var(--text)}
+.bs.now{color:var(--main);border-color:var(--main)}
+.bw-known{margin-bottom:6px}
+.bw-rules{background:var(--sub-alt);border-radius:10px;padding:10px 14px;margin-top:14px;font-size:.76rem;color:var(--sub);line-height:1.7}
+.bw-rules summary{cursor:pointer;color:var(--text)}
+.bw-rules p{margin:8px 0 0;font-size:.74rem}
+.bw-rules b{color:var(--text);font-weight:500}
+.bw-rules .bjp{color:var(--main);font-size:.9rem}
+@media (max-width:680px){
+  .bw{grid-template-columns:1fr;gap:18px}
+  .bq-g{font-size:4.6rem}
+  .bq-ch{grid-template-columns:1fr}
+  .bq-ch.glyph{grid-template-columns:1fr 1fr}
+}
+
 /* modal */
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:flex-start;justify-content:center;padding:5vh 16px;z-index:10}
 .modal.show{display:flex}
@@ -230,12 +346,13 @@ kbd{background:var(--sub);color:var(--bg);border-radius:4px;padding:1px 6px;font
   <header>
     <div class="logo" id="logo" title="Bài mới">
       <div class="mark">かな</div>
-      <div><div class="name">kana<span>type</span></div><small>luyện gõ hiragana · katakana · Minna no Nihongo</small></div>
+      <div><div class="name">kana<span>type</span></div><small>luyện gõ hiragana · katakana · Minna no Nihongo · bộ thủ</small></div>
     </div>
     <div class="tabs" id="tabs">
       <button data-app="kana"><span class="jp">あ</span>chữ cái</button>
       <button data-app="text"><span class="jp">文</span>đoạn văn</button>
       <button data-app="minna"><span class="jp">課</span>Minna 1–25</button>
+      <button data-app="bothu"><span class="jp">部</span>Bộ thủ 214</button>
     </div>
     <button class="iconbtn" id="openSet" title="Cài đặt">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
@@ -260,19 +377,26 @@ kbd{background:var(--sub);color:var(--bg);border-radius:4px;padding:1px 6px;font
       <div class="note" id="note"></div>
     </div>
     <div class="res" id="res"></div>
+    <div id="bt" style="display:none"></div>
   </main>
 
   <footer>
-    <span><kbd>tab</kbd> bài mới</span>
-    <span><kbd>esc</kbd> kết thúc sớm</span>
-    <span><kbd>space</kbd> bỏ qua / xem gợi ý</span>
-    <span><kbd>backspace</kbd> xoá ký tự</span>
+    <span class="ft-type"><kbd>tab</kbd> bài mới</span>
+    <span class="ft-type"><kbd>esc</kbd> kết thúc sớm</span>
+    <span class="ft-type"><kbd>space</kbd> bỏ qua / xem gợi ý</span>
+    <span class="ft-type"><kbd>backspace</kbd> xoá ký tự</span>
+    <span class="ft-bt"><kbd>←</kbd><kbd>→</kbd> bộ trước / sau</span>
+    <span class="ft-bt"><kbd>enter</kbd> xác nhận / tiếp</span>
+    <span class="ft-bt"><kbd>1</kbd>–<kbd>4</kbd> chọn đáp án</span>
+    <span class="ft-bt"><kbd>h</kbd> gợi ý nét · <kbd>backspace</kbd> viết lại</span>
   </footer>
 </div>
 
 <div class="modal" id="modal"><div class="panel" id="panel"></div></div>
 
 <script src="data/minna.js"></script>
+<script src="data/botthu.js"></script>
+<script src="js/bothu.js"></script>
 <script>
 /* ============ storage ============ */
 const store={
@@ -609,11 +733,14 @@ function parsePassage(jp){
 /* ============ config ============ */
 const DEF={app:'kana',script:'hira',mode:'time',time:30,count:50,groups:{seion:true},rows:{},onError:'stop',hint:'error',adaptive:false,live:true,theme:'serika',font:'Noto Sans JP',size:'m',
   tLevel:'all',tMode:'passage',tTime:60,tPick:'random',kanji:true,trans:true,
-  mType:'vocab',mPick:'mix',mOne:1,mLessons:[1],mMode:'count',mCount:20,mTime:60,mOrder:'random',mRecall:false};
+  mType:'vocab',mPick:'mix',mOne:1,mLessons:[1],mMode:'count',mCount:20,mTime:60,mOrder:'random',mRecall:false,
+  bMode:'table',bSel:[],bOnly:'all',bHide:'none',bQ:'type',bCount:20,bHint:false,bWrite:'trace',bCur:0};
 let cfg=Object.assign({},DEF,store.get('kanatype.cfg',{}));
 cfg.groups=Object.assign({},cfg.groups||{});cfg.rows=Object.assign({},cfg.rows||{});
 if(!Array.isArray(cfg.mLessons)||!cfg.mLessons.length) cfg.mLessons=[1];
 if(!(cfg.mOne>=1&&cfg.mOne<=25)) cfg.mOne=1;
+if(!Array.isArray(cfg.bSel)) cfg.bSel=[];
+if(!(cfg.bCur>=0&&cfg.bCur<214)) cfg.bCur=0;
 let STATS=store.get('kanatype.stats',{});
 let PB=store.get('kanatype.pb',{});
 let customText=store.get('kanatype.custom','');
@@ -631,6 +758,7 @@ function applyLook(){
   document.documentElement.style.setProperty('--kana-size',SIZES[cfg.size]||SIZES.m);
   document.body.classList.toggle('text-mode',cfg.app==='text'||cfg.app==='minna');
   document.body.classList.toggle('minna-mode',cfg.app==='minna');
+  document.body.classList.toggle('bt-mode',cfg.app==='bothu');
   document.body.classList.toggle('m-gram',cfg.app==='minna'&&cfg.mType==='gram');
   [...document.querySelectorAll('#tabs button')].forEach(b=>b.classList.toggle('on',b.dataset.app===cfg.app));
 }
@@ -698,12 +826,15 @@ const $=s=>document.querySelector(s);
 const wordsEl=$('#words'),wrapEl=$('#wrap'),liveEl=$('#live'),hid=$('#hid');
 let T=null,POOL=[],lineH=60,timer=null;
 const isMinna=()=>cfg.app==='minna';
+const isBt=()=>cfg.app==='bothu';
 const isText=()=>cfg.app==='text'||cfg.app==='minna';
 const endsAtLast=()=>isMinna()?cfg.mMode==='count':isText()?cfg.tMode==='passage':cfg.mode==='count';
 
 function newTest(){
   clearInterval(timer);M_WRONG=[];
   applyLook();
+  $('#bt').style.display='none';
+  if(isBt()){btShow();return;}
   T={tokens:[],idx:0,buf:'',bad:'',started:false,ended:false,t0:0,elapsed:0,ck:0,wk:0,secErr:0,hist:[],lastSec:0,recent:[],mistakes:{},okKana:0,allKana:0,okRoma:0,doneN:0,total:0,passages:[],base:0};
   wordsEl.innerHTML='';wordsEl.style.transform='';
   document.body.classList.remove('typing');$('#app').classList.remove('focus');
@@ -1096,6 +1227,7 @@ function chartSvg(){
 const opt=(on,label,act,extra='')=>`<button class="opt ${on?'on':''} ${extra}" data-act="${act}">${label}</button>`;
 function renderBars(){
   const b1=$('#bar1'),b2=$('#bar2');
+  if(isBt()){renderBtBars(b1,b2);return;}
   if(isMinna()){renderMinnaBars(b1,b2);return;}
   if(isText()){
     let h=['all','n5','n4','n3','kata','long'].map(l=>opt(cfg.tLevel===l&&!useCustom,l==='all'?'tất cả':LV_NAME[l],'lv:'+l)).join('');
@@ -1138,6 +1270,7 @@ document.addEventListener('click',e=>{
   b.blur();
   const [a,v]=b.dataset.act.split(':');
   if(b.classList.contains('dis')) return;
+  if(a.startsWith('bt')){btBarAct(a,v);return;}
   if(a==='script') cfg.script=v;
   else if(a==='mode') cfg.mode=v;
   else if(a==='val'){if(cfg.mode==='time') cfg.time=+v; else cfg.count=+v;}
@@ -1464,6 +1597,7 @@ function warnIME(){
 const isTouch=()=>matchMedia('(pointer:coarse)').matches;
 document.addEventListener('keydown',e=>{
   if(modalOpen){if(e.key==='Escape'){e.preventDefault();closeModal();}return;}
+  if(isBt()){btKeydown(e);return;}
   if((e.target.tagName==='INPUT'&&e.target!==hid)||e.target.tagName==='SELECT'||e.target.tagName==='TEXTAREA') return;
   if(e.key==='Tab'){e.preventDefault();newTest();return;}
   if(!T) return;
