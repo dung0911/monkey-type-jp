@@ -31,9 +31,9 @@ Hiểu kanji được tạo ra như thế nào: 象形 tượng hình · 指事 
 
 `data/rikusho.js` do tôi biên soạn tay (không lấy từ trang web nào), sửa trực tiếp được. Một số chữ có nhiều cách phân tích (đặc biệt 転注), nên coi đây là cách giải thích phổ biến để dễ nhớ chứ không phải kết luận duy nhất.
 
-## Tab "Ngày tháng" (日)
+## Tab "Ngày & số" (日)
 
-Luyện đọc **ngày (mùng 1–31), tháng, thứ** bằng cách gõ romaji.
+Luyện đọc **ngày (mùng 1–31), tháng, thứ và số đếm** bằng cách gõ romaji. Số đếm gồm: số 0–10 · 百千万 (300 さんびゃく, 600 ろっぴゃく, 8000 はっせん, 10000 いちまん…) · ～つ · ～人 · ～時 · ～分 · ～歳.
 
 - **📖 bảng**: 31 ngày · 12 tháng · 7 thứ · 何日/何月/何曜日, ô viền vàng là chỗ hay nhầm (4日 よっか, 14日, 17日, 19日, 20日 はつか, 24日, 27日, 29日; 4月 し · 7月 しち · 9月 く). Che cách đọc / che nghĩa, bấm vào ô bị che để xem
 - **⌨ luyện gõ**: mix · mùng 1–10 · ngày hay nhầm · cả 31 ngày · tháng · thứ · tháng + ngày (vd 7月4日 → shichigatsu yokka). Hiện kanji + nghĩa / chỉ kanji / chỉ nghĩa; ngẫu nhiên hoặc ưu tiên mục hay sai (lưu trong trình duyệt). Gõ đúng là tự qua câu, `enter` để kiểm tra, câu sai được hỏi lại sau vài câu

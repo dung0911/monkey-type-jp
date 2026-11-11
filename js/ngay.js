@@ -1,4 +1,4 @@
-/* ============ 日 Ngày tháng — bảng + luyện gõ romaji ngày / tháng / thứ ============
+/* ============ 日 Ngày & số — bảng + luyện gõ romaji ngày / tháng / thứ / số đếm ============
    Dữ liệu: data/ngay.js (NGAY). Nạp TRƯỚC script chính nên chỉ khai báo hàm;
    cfg/store/$/opt/renderBars… chỉ dùng lúc gọi. Dùng lại btEsc, btShuf của js/bothu.js. */
 
@@ -57,8 +57,10 @@ const DT_DAYS=NGAY.days.map(d=>({id:'d'+d.n,t:'day',n:d.n,k:d.n+'日',vi:d.n<=10
 const DT_MONTHS=NGAY.months.map(d=>({id:'m'+d.n,t:'month',n:d.n,k:d.n+'月',vi:'tháng '+d.n,r:d.r,tip:d.tip||'',trap:!!d.trap}));
 const DT_WEEKS=NGAY.weeks.map((d,i)=>({id:'w'+i,t:'week',k:d.k,vi:d.vi,r:d.r,tip:d.tip||''}));
 const DT_ASKS=NGAY.asks.map((d,i)=>({id:'q'+i,t:'ask',k:d.k,vi:d.vi,r:d.r,tip:''}));
+const DT_GROUPS=NGAY.groups.map(g=>({id:g.id,btn:g.btn,title:g.title,note:g.note,items:g.items.map((x,i)=>({id:'g'+g.id+i,t:g.id,k:x[0],vi:x[1],r:x[2],tip:x[3]||'',trap:!!x[4]}))}));
 const DT_TYPES={day:'ngày',month:'tháng',week:'thứ',date:'tháng + ngày',ask:'câu hỏi'};
-const DT_KINDS=[['mix','🔀 mix'],['mung','mùng 1–10'],['tricky','ngày hay nhầm'],['day','cả 31 ngày'],['month','tháng'],['week','thứ'],['date','tháng + ngày'],['ask','何～']];
+DT_GROUPS.forEach(g=>{DT_TYPES[g.id]=g.title;});
+const DT_KINDS=[['mix','🔀 mix'],['mung','mùng 1–10'],['tricky','ngày hay nhầm'],['day','cả 31 ngày'],['month','tháng'],['week','thứ'],['date','tháng + ngày'],['ask','何～']].concat(DT_GROUPS.map(g=>[g.id,g.btn]));
 function dtDate(){
   const m=DT_MONTHS[Math.random()*12|0],d=DT_DAYS[Math.random()*31|0];
   const r=[];m.r.forEach(a=>d.r.forEach(b=>r.push(a+b)));
@@ -73,7 +75,8 @@ function dtPool(kind){
     case 'week': return DT_WEEKS.slice();
     case 'ask': return DT_ASKS.slice();
     case 'date': return null;
-    default: return DT_DAYS.concat(DT_MONTHS,DT_WEEKS,DT_ASKS);
+    case 'mix': return DT_DAYS.concat(DT_MONTHS,DT_WEEKS,DT_ASKS,...DT_GROUPS.map(g=>g.items));
+    default: {const g=DT_GROUPS.find(x=>x.id===kind);return g?g.items.slice():DT_DAYS.slice();}
   }
 }
 let DSTAT=null;
@@ -109,7 +112,7 @@ function renderDtBars(b1,b2){
   h+='<span class="sep"></span>';
   if(cfg.dMode==='table'){
     h+=[['none','hiện hết'],['read','che cách đọc'],['vi','che nghĩa']].map(([k,l])=>opt(cfg.dHide===k,l,'dth:'+k)).join('');
-    b2.innerHTML='<span class="count">31 ngày · 12 tháng · 7 thứ — bấm vào ô bị che để xem</span>';
+    b2.innerHTML='<span class="count">ngày · tháng · thứ · số đếm — bấm vào ô bị che để xem</span>';
   }else{
     h+=DT_KINDS.map(([k,l])=>opt(cfg.dKind===k,l,'dtk:'+k)).join('');
     b2.innerHTML=[['both','kanji + nghĩa'],['kanji','chỉ kanji'],['vi','chỉ nghĩa']].map(([k,l])=>opt(cfg.dShow===k,l,'dts:'+k)).join('')
@@ -153,6 +156,7 @@ function dtRenderTable(){
     +DT_MONTHS.map(it=>dtCell(it,hide)).join('')+'</div></section>';
   h+='<section class="dt-sec"><h4>Thứ 曜日</h4><div class="dt-grid">'+DT_WEEKS.map(it=>dtCell(it,hide)).join('')+'</div></section>';
   h+='<section class="dt-sec"><h4>Câu hỏi 何～</h4><div class="dt-grid">'+DT_ASKS.map(it=>dtCell(it,hide)).join('')+'</div></section>';
+  for(const g of DT_GROUPS) h+=`<section class="dt-sec"><h4>${btEsc(g.title)} <small>${btEsc(g.note)}</small></h4><div class="dt-grid">${g.items.map(it=>dtCell(it,hide)).join('')}</div></section>`;
   h+='<section class="dt-sec"><h4>Ghép tháng + ngày <small>đọc tháng trước, ngày sau</small></h4><div class="dt-ex">'
     +[[7,4],[4,1],[9,20],[12,24],[3,14]].map(([m,d])=>{const M=DT_MONTHS[m-1],D=DT_DAYS[d-1];return `<div class="dt-e"><span class="bjp k">${m}月${d}日</span><span class="${hide==='read'?'bhid':''}"><span class="bjp">${M.r[0]+D.r[0]}</span> · ${dtDisp(M.r[0]+D.r[0])}</span><span class="v${hide==='vi'?' bhid':''}">ngày ${d} tháng ${m}</span></div>`;}).join('')
     +'</div></section></div>';
