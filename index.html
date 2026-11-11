@@ -285,6 +285,34 @@ header{display:flex;align-items:center;justify-content:space-between;gap:16px;fl
   .bq-ch.glyph{grid-template-columns:1fr 1fr}
 }
 
+/* ===== 日 Ngày tháng ===== */
+#dt{width:100%;animation:fade .2s}
+.dt-mode .stage{justify-content:flex-start;padding-top:22px}
+.ft-dt{display:none}
+.dt-mode .ft-dt{display:inline}
+.dt-mode .ft-type{display:none}
+.dt{max-width:860px;margin:0 auto}
+.dt-sec{margin-bottom:22px}
+.dt-sec h4{margin:0 0 10px;font-size:.8rem;color:var(--main);font-weight:400;letter-spacing:.04em}
+.dt-sec h4 small{color:var(--sub);margin-left:8px}
+.dt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:8px}
+.dt-cell{background:var(--sub-alt);border:1px solid transparent;border-radius:10px;padding:10px 6px 9px;text-align:center}
+.dt-cell.trap{border-color:color-mix(in srgb,var(--main) 55%,transparent)}
+.dt-k{font-size:1.5rem;line-height:1.3;color:var(--text)}
+.dt-r{color:var(--main);font-size:.95rem;margin-top:2px}
+.dt-ro{color:var(--sub);font-size:.72rem}
+.dt-alt{color:var(--sub);font-size:.66rem;margin-top:2px}
+.dt-v{color:var(--sub);font-size:.74rem;margin-top:4px}
+.dt-ex{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px}
+.dt-e{background:var(--sub-alt);border-radius:10px;padding:10px 14px;display:flex;flex-direction:column;gap:3px;font-size:.85rem}
+.dt-e .k{font-size:1.4rem}
+.dt-e .v{color:var(--sub);font-size:.74rem}
+.dt-big{font-size:5rem}
+.dt-vbig{font-size:2.2rem;color:var(--text);line-height:1.3}
+#dq-in{width:min(300px,100%);background:var(--bg);border:2px solid transparent;border-radius:8px;padding:11px 14px;color:var(--text);font:inherit;font-size:1.15rem;text-align:center;outline:none}
+#dq-in:focus{border-color:var(--main)}
+#dq-in[readonly]{opacity:.8}
+
 /* ===== 六書 Lục thư ===== */
 #rk{width:100%;animation:fade .2s}
 .rk-mode .stage{justify-content:flex-start;padding-top:22px}
@@ -444,7 +472,7 @@ kbd{background:var(--sub);color:var(--bg);border-radius:4px;padding:1px 6px;font
   <header>
     <div class="logo" id="logo" title="Bài mới">
       <div class="mark">かな</div>
-      <div><div class="name">kana<span>type</span></div><small>luyện gõ hiragana · katakana · Minna no Nihongo · bộ thủ · lục thư</small></div>
+      <div><div class="name">kana<span>type</span></div><small>luyện gõ hiragana · katakana · Minna no Nihongo · bộ thủ · lục thư · ngày tháng</small></div>
     </div>
     <div class="tabs" id="tabs">
       <button data-app="kana"><span class="jp">あ</span>chữ cái</button>
@@ -452,6 +480,7 @@ kbd{background:var(--sub);color:var(--bg);border-radius:4px;padding:1px 6px;font
       <button data-app="minna"><span class="jp">課</span>Minna 1–25</button>
       <button data-app="bothu"><span class="jp">部</span>Bộ thủ 214</button>
       <button data-app="rikusho"><span class="jp">書</span>Lục thư</button>
+      <button data-app="date"><span class="jp">日</span>Ngày tháng</button>
     </div>
     <button class="iconbtn" id="openSet" title="Cài đặt">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
@@ -478,6 +507,7 @@ kbd{background:var(--sub);color:var(--bg);border-radius:4px;padding:1px 6px;font
     <div class="res" id="res"></div>
     <div id="bt" style="display:none"></div>
     <div id="rk" style="display:none"></div>
+    <div id="dt" style="display:none"></div>
   </main>
 
   <footer>
@@ -492,6 +522,9 @@ kbd{background:var(--sub);color:var(--bg);border-radius:4px;padding:1px 6px;font
     <span class="ft-rk"><kbd>1</kbd>–<kbd>6</kbd> chọn đáp án</span>
     <span class="ft-rk"><kbd>enter</kbd> xác nhận / tiếp</span>
     <span class="ft-rk"><kbd>tab</kbd> lượt mới</span>
+    <span class="ft-dt">gõ đúng là tự qua câu</span>
+    <span class="ft-dt"><kbd>enter</kbd> kiểm tra / tiếp</span>
+    <span class="ft-dt"><kbd>tab</kbd> lượt mới</span>
   </footer>
 </div>
 
@@ -502,6 +535,8 @@ kbd{background:var(--sub);color:var(--bg);border-radius:4px;padding:1px 6px;font
 <script src="js/bothu.js"></script>
 <script src="data/rikusho.js"></script>
 <script src="js/rikusho.js"></script>
+<script src="data/ngay.js"></script>
+<script src="js/ngay.js"></script>
 <script>
 /* ============ storage ============ */
 const store={
@@ -840,7 +875,8 @@ const DEF={app:'kana',script:'hira',mode:'time',time:30,count:50,groups:{seion:t
   tLevel:'all',tMode:'passage',tTime:60,tPick:'random',kanji:true,trans:true,
   mType:'vocab',mPick:'mix',mOne:1,mLessons:[1],mMode:'count',mCount:20,mTime:60,mOrder:'random',mRecall:false,
   bMode:'table',bSel:[],bOnly:'all',bHide:'none',bQ:'type',bCount:20,bHint:false,bWrite:'trace',bCur:0,
-  rMode:'learn',rQ:'mix',rTypes:[],rCount:10,rHide:'none'};
+  rMode:'learn',rQ:'mix',rTypes:[],rCount:10,rHide:'none',
+  dMode:'quiz',dKind:'mix',dShow:'both',dOrder:'random',dCount:20,dHide:'none'};
 let cfg=Object.assign({},DEF,store.get('kanatype.cfg',{}));
 cfg.groups=Object.assign({},cfg.groups||{});cfg.rows=Object.assign({},cfg.rows||{});
 if(!Array.isArray(cfg.mLessons)||!cfg.mLessons.length) cfg.mLessons=[1];
@@ -867,6 +903,7 @@ function applyLook(){
   document.body.classList.toggle('minna-mode',cfg.app==='minna');
   document.body.classList.toggle('bt-mode',cfg.app==='bothu');
   document.body.classList.toggle('rk-mode',cfg.app==='rikusho');
+  document.body.classList.toggle('dt-mode',cfg.app==='date');
   document.body.classList.toggle('m-gram',cfg.app==='minna'&&cfg.mType==='gram');
   [...document.querySelectorAll('#tabs button')].forEach(b=>b.classList.toggle('on',b.dataset.app===cfg.app));
 }
@@ -936,15 +973,17 @@ let T=null,POOL=[],lineH=60,timer=null;
 const isMinna=()=>cfg.app==='minna';
 const isBt=()=>cfg.app==='bothu';
 const isRk=()=>cfg.app==='rikusho';
+const isDt=()=>cfg.app==='date';
 const isText=()=>cfg.app==='text'||cfg.app==='minna';
 const endsAtLast=()=>isMinna()?cfg.mMode==='count':isText()?cfg.tMode==='passage':cfg.mode==='count';
 
 function newTest(){
   clearInterval(timer);M_WRONG=[];
   applyLook();
-  $('#bt').style.display='none';$('#rk').style.display='none';
+  $('#bt').style.display='none';$('#rk').style.display='none';$('#dt').style.display='none';
   if(isBt()){btShow();return;}
   if(isRk()){rkShow();return;}
+  if(isDt()){dtShow();return;}
   T={tokens:[],idx:0,buf:'',bad:'',started:false,ended:false,t0:0,elapsed:0,ck:0,wk:0,secErr:0,hist:[],lastSec:0,recent:[],mistakes:{},okKana:0,allKana:0,okRoma:0,doneN:0,total:0,passages:[],base:0};
   wordsEl.innerHTML='';wordsEl.style.transform='';
   document.body.classList.remove('typing');$('#app').classList.remove('focus');
@@ -1339,6 +1378,7 @@ function renderBars(){
   const b1=$('#bar1'),b2=$('#bar2');
   if(isBt()){renderBtBars(b1,b2);return;}
   if(isRk()){renderRkBars(b1,b2);return;}
+  if(isDt()){renderDtBars(b1,b2);return;}
   if(isMinna()){renderMinnaBars(b1,b2);return;}
   if(isText()){
     let h=['all','n5','n4','n3','kata','long'].map(l=>opt(cfg.tLevel===l&&!useCustom,l==='all'?'tất cả':LV_NAME[l],'lv:'+l)).join('');
@@ -1383,6 +1423,7 @@ document.addEventListener('click',e=>{
   if(b.classList.contains('dis')) return;
   if(a.startsWith('bt')){btBarAct(a,v);return;}
   if(a.startsWith('rk')){rkBarAct(a,v);return;}
+  if(a.startsWith('dt')){dtBarAct(a,v);return;}
   if(a==='script') cfg.script=v;
   else if(a==='mode') cfg.mode=v;
   else if(a==='val'){if(cfg.mode==='time') cfg.time=+v; else cfg.count=+v;}
@@ -1711,6 +1752,7 @@ document.addEventListener('keydown',e=>{
   if(modalOpen){if(e.key==='Escape'){e.preventDefault();closeModal();}return;}
   if(isBt()){btKeydown(e);return;}
   if(isRk()){rkKeydown(e);return;}
+  if(isDt()){dtKeydown(e);return;}
   if((e.target.tagName==='INPUT'&&e.target!==hid)||e.target.tagName==='SELECT'||e.target.tagName==='TEXTAREA') return;
   if(e.key==='Tab'){e.preventDefault();newTest();return;}
   if(!T) return;

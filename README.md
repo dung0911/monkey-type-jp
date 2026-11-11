@@ -1,6 +1,6 @@
 # monkey-type-jp (KanaType)
 
-Luyện gõ romaji → hiragana / katakana, đoạn văn, và **Minna no Nihongo bài 1–25**.
+Luyện gõ romaji → hiragana / katakana, đoạn văn, và **Minna no Nihongo bài 1–25**, bộ thủ, lục thư và ngày tháng.
 
 Chạy: mở `index.html`, hoặc `python -m http.server` rồi vào http://localhost:8000.
 
@@ -30,6 +30,16 @@ Hiểu kanji được tạo ra như thế nào: 象形 tượng hình · 指事 
 - **🧠 luyện tập**: phân loại chữ · gõ romaji đoán âm On từ các chữ cùng họ âm · chọn bộ gợi nghĩa · ghép nghĩa các phần của chữ hội ý; câu sai được hỏi lại
 
 `data/rikusho.js` do tôi biên soạn tay (không lấy từ trang web nào), sửa trực tiếp được. Một số chữ có nhiều cách phân tích (đặc biệt 転注), nên coi đây là cách giải thích phổ biến để dễ nhớ chứ không phải kết luận duy nhất.
+
+## Tab "Ngày tháng" (日)
+
+Luyện đọc **ngày (mùng 1–31), tháng, thứ** bằng cách gõ romaji.
+
+- **📖 bảng**: 31 ngày · 12 tháng · 7 thứ · 何日/何月/何曜日, ô viền vàng là chỗ hay nhầm (4日 よっか, 14日, 17日, 19日, 20日 はつか, 24日, 27日, 29日; 4月 し · 7月 しち · 9月 く). Che cách đọc / che nghĩa, bấm vào ô bị che để xem
+- **⌨ luyện gõ**: mix · mùng 1–10 · ngày hay nhầm · cả 31 ngày · tháng · thứ · tháng + ngày (vd 7月4日 → shichigatsu yokka). Hiện kanji + nghĩa / chỉ kanji / chỉ nghĩa; ngẫu nhiên hoặc ưu tiên mục hay sai (lưu trong trình duyệt). Gõ đúng là tự qua câu, `enter` để kiểm tra, câu sai được hỏi lại sau vài câu
+- Chấp nhận cả `si/shi`, `ti/chi`, `tu/tsu`, `hu/fu`, `zi/ji`; ん trước nguyên âm/y gõ `nn` hoặc `n'` như bộ gõ IME
+
+Dữ liệu ở `data/ngay.js`, sửa trực tiếp được.
 
 ## Dữ liệu
 
