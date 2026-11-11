@@ -53,37 +53,28 @@ function dtNorm(s){
 }
 
 /* ---------- dữ liệu → các mục luyện ---------- */
-const DT_DAYS=NGAY.days.map(d=>({id:'d'+d.n,t:'day',n:d.n,k:d.n+'日',vi:d.n<=10?'mùng '+d.n:'ngày '+d.n,r:d.r,tip:d.tip||'',trap:!!d.trap,num:d.n}));
-const DT_MONTHS=NGAY.months.map(d=>({id:'m'+d.n,t:'month',n:d.n,k:d.n+'月',vi:'tháng '+d.n,r:d.r,tip:d.tip||'',trap:!!d.trap}));
-const DT_WEEKS=NGAY.weeks.map((d,i)=>({id:'w'+i,t:'week',k:d.k,vi:d.vi,r:d.r,tip:d.tip||''}));
-const DT_ASKS=NGAY.asks.map((d,i)=>({id:'q'+i,t:'ask',k:d.k,vi:d.vi,r:d.r,tip:''}));
-const DT_GROUPS=NGAY.groups.map(g=>({id:g.id,btn:g.btn,title:g.title,note:g.note,items:g.items.map((x,i)=>({id:'g'+g.id+i,t:g.id,k:x[0],vi:x[1],r:x[2],tip:x[3]||'',trap:!!x[4]}))}));
+const dtItem=(id,t,k,vi,r,tip,trap)=>({id,t,k,vi,r,tip:tip||'',trap:!!trap});
+const DT_DAYS=NGAY.days.map(d=>dtItem('d'+d.n,'day',d.n+'日',(d.n<=10?'mùng ':'ngày ')+d.n,d.r,d.tip,d.trap));
+const DT_MONTHS=NGAY.months.map(d=>dtItem('m'+d.n,'month',d.n+'月','tháng '+d.n,d.r,d.tip,d.trap));
+const DT_WEEKS=NGAY.weeks.map((d,i)=>dtItem('w'+i,'week',d.k,d.vi,d.r,d.tip));
+const DT_ASKS=NGAY.asks.map((d,i)=>dtItem('q'+i,'ask',d.k,d.vi,d.r));
+const DT_GROUPS=NGAY.groups.map(g=>({...g,items:g.items.map((x,i)=>dtItem('g'+g.id+i,g.id,x[0],x[1],x[2],x[3],x[4]))}));
 const DT_TYPES={day:'ngày',month:'tháng',week:'thứ',date:'tháng + ngày',ask:'câu hỏi'};
 DT_GROUPS.forEach(g=>{DT_TYPES[g.id]=g.title;});
 const DT_KINDS=[['mix','🔀 mix'],['mung','mùng 1–10'],['tricky','ngày hay nhầm'],['day','cả 31 ngày'],['month','tháng'],['week','thứ'],['date','tháng + ngày'],['ask','何～']].concat(DT_GROUPS.map(g=>[g.id,g.btn]));
 function dtDate(){
-  const m=DT_MONTHS[Math.random()*12|0],d=DT_DAYS[Math.random()*31|0];
-  const r=[];m.r.forEach(a=>d.r.forEach(b=>r.push(a+b)));
-  return {id:'x'+m.n+'.'+d.n,t:'date',k:m.n+'月'+d.n+'日',vi:'ngày '+d.n+' tháng '+m.n,r,tip:[m.tip,d.tip].filter(Boolean).join(' · '),trap:m.trap||d.trap};
+  const mi=Math.random()*12|0,di=Math.random()*31|0,m=DT_MONTHS[mi],d=DT_DAYS[di],M=mi+1,D=di+1;
+  const r=m.r.flatMap(a=>d.r.map(b=>a+b));
+  return dtItem('x'+M+'.'+D,'date',M+'月'+D+'日','ngày '+D+' tháng '+M,r,[m.tip,d.tip].filter(Boolean).join(' · '),m.trap||d.trap);
 }
-function dtPool(kind){
-  switch(kind){
-    case 'mung': return DT_DAYS.filter(x=>x.n<=10);
-    case 'tricky': return DT_DAYS.filter(x=>x.trap);
-    case 'day': return DT_DAYS.slice();
-    case 'month': return DT_MONTHS.slice();
-    case 'week': return DT_WEEKS.slice();
-    case 'ask': return DT_ASKS.slice();
-    case 'date': return null;
-    case 'mix': return DT_DAYS.concat(DT_MONTHS,DT_WEEKS,DT_ASKS,...DT_GROUPS.map(g=>g.items));
-    default: {const g=DT_GROUPS.find(x=>x.id===kind);return g?g.items.slice():DT_DAYS.slice();}
-  }
-}
+const DT_POOLS={mung:()=>DT_DAYS.slice(0,10),tricky:()=>DT_DAYS.filter(x=>x.trap),day:()=>DT_DAYS,month:()=>DT_MONTHS,week:()=>DT_WEEKS,ask:()=>DT_ASKS,
+  mix:()=>[].concat(DT_DAYS,DT_MONTHS,DT_WEEKS,DT_ASKS,...DT_GROUPS.map(g=>g.items))};
+const dtPool=kind=>DT_POOLS[kind]?DT_POOLS[kind]().slice():(DT_GROUPS.find(g=>g.id===kind)||{items:DT_DAYS}).items.slice();
 let DSTAT=null;
 const dtStat=()=>DSTAT||(DSTAT=store.get('kanatype.dstat',{}));
 function dtBuild(n){
   const kind=cfg.dKind,out=[];
-  if(kind==='date'){while(out.length<n) out.push(dtDate());return out;}
+  if(kind==='date') return Array.from({length:n},dtDate);
   const pool=dtPool(kind);
   if(kind==='mix'){for(let i=0;i<Math.max(1,Math.round(n/8));i++) pool.push(dtDate());}
   const weak=cfg.dOrder==='weak';
